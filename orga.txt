@@ -4,7 +4,7 @@ ORGANISATION :
     - plusieurs sous-fonctions pour aller chercher chaque info du pc
     - fonction principal de grabbing utilisant les sous-fonction pour update les variables contenant les infos du pc
         -> se lance toutes les 1 secondes
-        -> créer un fichier log toutes les heures + écris dans le dernier fichier log les infos du pc toutes les minutes
+        -> créé un fichier log toutes les heures + écris toutes les minutes les infos du pc dans le dernier fichier log
             -> format des logs : un seul dossier, un fichier/heure "format$date.txt", une save des valeurs/minute (donc 60 save par fichier)
 
     // PARTIE GRAPHIQUE
