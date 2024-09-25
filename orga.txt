@@ -10,3 +10,8 @@ ORGANISATION :
     // PARTIE GRAPHIQUE
     - plusieurs sous-fonctions qui chacune affiche une info du pc
     - fonction principale qui update tout l'interface graphique
+
+
+// LISTE INFO A RECUP
+    - memoire(MemTotal,  MemAvailable, MemFree, Cache, used:MemTotal-MemAvailable) : /proc/meminfo
+    - cpu(model name) : proc/cpuinfo
