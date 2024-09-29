@@ -69,6 +69,16 @@ print_bar_h() {
 	echo -en "$res${reset} $percent%";
 }
 
+main() {
+    stty -icanon -echo
+    trap "stty sane; exit" INT TERM
+	while true; do
+		clear_screen
+		info_proc
+		
+	done
+}
+
 clear_screen
 ##info_proc 2 2
 
