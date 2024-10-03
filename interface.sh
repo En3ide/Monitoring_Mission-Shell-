@@ -63,7 +63,7 @@ info_reduite() { # Jamel Bailleul
 	x=$((x+3));
 	y=3;
 	printf "\33[%d;%dH" "$x" "$y";
-	echo -en "${blue}CPU : ${reset}";
+	echo -en "${blue}CPU :${reset}";
 	max=$(recup_cpu total);
 	current=$(recup_cpu used);
 	print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" 25 50;
