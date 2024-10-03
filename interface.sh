@@ -21,16 +21,16 @@ clear_screen() {
 		for ((j=1;j<=$lines;j++)); do
 			if (( i == 1 )); then
 				printf "\33[%d;%dH" "$j" "$i";
-				echo -en "${blue}|${reset}";
+				echo -en "${blue}+${reset}";
 			elif (( j == 1 )); then
 				printf "\33[%d;%dH" "$j" "$i";
-				echo -en "${blue}_${reset}";
+				echo -en "${blue}+${reset}";
 			elif (( j == lines )); then
 				printf "\33[%d;%dH" "$j" "$i";
-				echo -en "${blue}_${reset}";
+				echo -en "${blue}+${reset}";
 			elif (( i == cols)); then
 				printf "\33[%d;%dH" "$j" "$i";
-				echo -en "${blue}|${reset}";
+				echo -en "${blue}+${reset}";
 			else
 				printf "\33[%d;%dH" "$j" "$i";
 				echo -en " ";
