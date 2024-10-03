@@ -1,19 +1,46 @@
 #!/bin/sh
 
-recup_mem() { #tout est en kB
-    info_mem=$(cat /proc/meminfo)
-    mem_total=$(echo "$info_mem" | grep "MemTotal" | awk '{print $2}') # mémoire total
-    mem_available=$(echo "$info_mem" | grep "MemAvailable" | awk '{print $2}') # mémoire disponible
-    mem_free=$(echo "$info_mem" | grep "MemFree" | awk '{print $2}') # mémoire libre
-    mem_cache=$(echo "$info_mem" | grep "Cached" | awk '{print $2}') # cache de la mémoire
-    mem_used=$((mem_total - mem_available)) # mémoire actuellement utilisé
+# Affiche la mémoire libre, utilisé, libre, utilisé et le cache de la mémoire en kB.
+recup_mem() { # Tim Lamour
+    test "$#" -ne 1 && echo "Un seul paramètre est requis. Utilisez 'total', 'available', 'free', 'cache', ou 'used'." && exit 1
+    param="$1" # recupere le premier argument comme paramètre
 
-    echo "$mem_total"
-    echo "$mem_available"
-    echo "$mem_free"
-    echo "$mem_cache"
-    echo "$mem_used"
+    # renvoie une chaine vide si le le fichier meminfo n'existe pas
+    if [ ! -f "/proc/meminfo" ]; then
+        echo "Le fichier /proc/meminfo n'existe pas "
+        exit 1
+    fi
+
+    info_mem=$(cat /proc/meminfo)
+    res=""
+
+    # renvoie l'info demande en parametre
+    case $param in
+        "total") # mémoire total
+            res=$(echo "$info_mem" | grep "MemTotal" | awk '{print $2}') 
+            ;;
+        "available") # mémoire disponible
+            res=$(echo "$info_mem" | grep "MemAvailable" | awk '{print $2}')
+            ;;
+        "free") # mémoire libre
+            res=$(echo "$info_mem" | grep "MemFree" | awk '{print $2}') 
+            ;;
+        "cache") # cache de la mémoire
+            res=$(echo "$info_mem" | grep "Cached" | awk '{print $2}') 
+            ;;
+        "used") # mémoire actuellement utilisé
+            mem_total=$(echo "$info_mem" | grep "MemTotal" | awk '{print $2}')
+            mem_available=$(echo "$info_mem" | grep "MemAvailable" | awk '{print $2}')
+            res=$((mem_total - mem_available)) 
+            ;;
+        *)
+            echo "Paramètre non reconnu. Utilisez 'total', 'available', 'free', 'cache', ou 'used'."
+            exit 1
+            ;;
+    esac
+    echo "$res"
 }
+
 
 get_cpu_usage() {
     # Lire les données initiales du CPU
@@ -48,4 +75,50 @@ recup_cpu() {
     echo "$cpu_name"
 
 }
-get_cpu_usage
+
+# Renvoie le pourcentage d'utilisation, l'utilisation et la VRAM total du GPU.
+recup_gpu() { # Tim Lamour
+    # Vérifie s'il y a exactement un paramètre
+    test "$#" -ne 1 && echo "Un seul paramètre est requis. Utilisez 'percent', 'vramUsed', 'vramTotal'." && exit 1
+
+    # On teste si les répertoires card0 ou card1 existent (card0 prioritaire)
+    path="/sys/class/drm/card"
+    if [ -d "${path}0" ]; then
+        path="${path}0"
+    elif [ -d "${path}1" ]; then
+        path="${path}1"
+    else
+        echo "Aucun GPU détecté."
+        exit 1
+    fi
+
+    # Si un répertoire a été trouvé
+    param=$1
+    res=""
+
+    # Renvoie l'info demandée en paramètre
+    case $param in
+        "percent") # Pourcentage d'utilisation (en %)
+            res=$(cat "${path}/device/gpu_busy_percent") 
+            ;;
+        "vramUsed") # VRAM utilisé (en kB)
+            res=$(cat "${path}/device/mem_info_vram_used") 
+            ;;
+        "vramTotal") # VRAM total (en kB)
+            res=$(cat "${path}/device/mem_info_vram_total")  
+            ;;
+        *)
+            echo "Paramètre non reconnu. Utilisez 'percent', 'vramUsed' ou 'vramTotal'."
+            exit 1
+            ;;
+    esac
+
+    # Affichage du résultat
+    echo "$res"
+}
+
+
+# Affiche la liste des processus (utilise la commande ps aux).
+recup_processus() { # Tim Lamour
+    ps aux
+}

@@ -4,3 +4,4 @@
 - uniq : permet de retirer les lignes doublons
 - awk '{print $n}' : permet de print le nieme mot de la ligne (séparé par espace)
 - awk -F@ '{print $n}' : permet de print le nieme mot de la ligne (sépare par le caractere @)
+- ps aux : affiche les processus en cours
