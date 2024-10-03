@@ -17,3 +17,4 @@ ORGANISATION :
     - cpu(model name) :  ? proc/cpuinfo
     - processus : commande ps aux
     - gpu : %, MemUsed, MemTotal : /sys/class/drm/card0/device ou /sys/class/drm/card1/device
+    - disk : 

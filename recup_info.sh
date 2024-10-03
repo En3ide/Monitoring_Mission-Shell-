@@ -122,3 +122,34 @@ recup_gpu() { # Tim Lamour
 recup_processus() { # Tim Lamour
     ps aux
 }
+
+# Affiche les pourcentages d'utilisations, les noms, l'espace total ou les l'espace utilisé des partitions de disques (sous forme de liste)
+recup_disk() { # Tim Lamour
+    test "$#" -ne 1 && echo "Un seul paramètre est requis. Utilisez 'percent', 'name', 'total', 'used'." && exit 1
+    param="$1" # recupere le premier argument comme paramètre
+
+    info_disk=$(df -h | grep '^/dev/')
+    res=""
+
+    case $param in
+        "percent")
+            res=$(echo "$info_disk" | awk '{print $5}')
+            ;;
+        "name")
+            res=$(echo "$info_disk" | awk '{print $1}')
+            ;;
+        "total")
+           res=$(echo "$info_disk" | awk '{print $2}')
+            ;;
+        "used")
+            res=$(echo "$info_disk" | awk '{print $3}')
+            ;;
+        *)
+            echo "Paramètre non reconnu. Utilisez 'percent', 'name', 'total', 'used'."
+            exit 1
+            ;;
+    esac
+    echo "$res"
+}
+
+recup_disk name
