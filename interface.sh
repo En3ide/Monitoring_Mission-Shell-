@@ -1,7 +1,6 @@
 #!/bin/bash
 #pour les couleur tu peux aussi utiliser "\033[38;5<code couleurs>m" code en 256
-
-source ./recup_info;
+. ./recup_info.sh
 
 red="\033[31m" #couleur caractères
 fred="\033[41m" #couleur de fond
@@ -65,6 +64,8 @@ info_reduite() { # Jamel Bailleul
 	y=3;
 	printf "\33[%d;%dH" "$x" "$y";
 	echo -en "${blue}CPU : ${reset}";
+	max=$(recup_cpu total);
+	current=$(recup_cpu used);
 	print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" 25 50;
 	#GPU
 	x=$((x+3));
@@ -113,18 +114,31 @@ print_bar_h() { # Jamel Bailleul
 main() {
     stty -icanon -echo
     trap "stty sane; exit" INT TERM
+	clear_screen
 	while true; do
-		clear_screen
-		info_proc
-		
+		tput
+		info_reduite
+		# Utilise la commande read avec l'option -n1 pour lire un seul caractère
+		read -n 1 -s input
+
+		# Si l'utilisateur appuie sur 'q', on sort de la boucle
+		if [ "$input" == "q" ]; then
+			echo "Au revoir!"
+			break
+		fi
+
+		# Pause de 1 seconde avant d'afficher à nouveau les info
+		#sleep 1
 	done
 }
 
-clear_screen
+main
+
+#clear_screen
 ##info_proc 2 2
-info_reduite
+#info_reduite
 ##print_bar_h "${blue}" 0 10 30 15
 
-test_x=$(tput cols)
-test_y=$(tput lines)
-printf "\33[%d;%dH" "$test_x" "$test_y";
+#test_x=$(tput cols)
+#test_y=$(tput lines)
+#printf "\33[%d;%dH" "$test_x" "$test_y";
