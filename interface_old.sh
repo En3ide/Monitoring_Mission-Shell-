@@ -1,4 +1,5 @@
 #!/bin/sh
+export LANG=en_US.UTF-8
 clear
 #pour les couleur tu peux aussi utiliser "\033[38;5<code couleurs>m" code en 256
 
@@ -89,7 +90,7 @@ main() {
 }
 
 clear_screen
-#info_reduite
+info_reduite
 
 test_x=$(tput cols)
 test_y=$(tput lines)
