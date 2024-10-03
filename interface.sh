@@ -50,6 +50,15 @@ info_proc() {
 	# info 3
 }
 
+info_reduite() {
+	#
+	x=2
+	y=2
+	printf "\33[%d;%dH" "$x" "$y";
+	echo -en "${blue}Memory : ${reset}";
+	print_bar_h ${blue} 3 $((cols - 3)) 50 25
+}
+
 print_bar_h() {
 	# $1 = couleur
 	# $2 = cols debut de barre
@@ -81,8 +90,8 @@ main() {
 
 clear_screen
 ##info_proc 2 2
-
-print_bar_h "${blue}" 0 10 30 15
+info_reduite
+##print_bar_h "${blue}" 0 10 30 15
 
 test_x=$(tput cols)
 test_y=$(tput lines)
