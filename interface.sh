@@ -1,5 +1,4 @@
 #!/bin/bash
-clear
 #pour les couleur tu peux aussi utiliser "\033[38;5<code couleurs>m" code en 256
 
 red="\033[31m" #couleur caractères
@@ -14,7 +13,7 @@ carre_vide="\u25A1"
 #if (( cols < 50 )); then 
 #if (( lines < 30 ))
 
-clear_screen() {
+clear_screen() { # Jamel Bailleul
 	cols=$(tput cols)
 	lines=$(tput lines)
 	for ((i=1;i<=$cols;i++)); do
@@ -50,7 +49,7 @@ info_proc() {
 	# info 3
 }
 
-info_reduite() {
+info_reduite() { # Jamel Bailleul
 	#Mémoire
 	x=2;
 	y=3;
@@ -77,7 +76,7 @@ info_reduite() {
 	print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" 25 50;
 }
 
-info_cpu() {
+info_cpu() { # Jamel Bailleul
 	# $1 = x lines
 	# $2 = y cols
 	# $3 = nb coeur
@@ -87,7 +86,7 @@ info_cpu() {
 	print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" 25 50;
 }
 
-print_bar_h() {
+print_bar_h() { # Jamel Bailleul
 	# $1 = couleur
 	# $2 = cols debut de barre
 	# $3 = cols fin de barre
