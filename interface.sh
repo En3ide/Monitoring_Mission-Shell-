@@ -1,6 +1,8 @@
 #!/bin/bash
 #pour les couleur tu peux aussi utiliser "\033[38;5<code couleurs>m" code en 256
 
+source ./recup_info;
+
 red="\033[31m" #couleur caractères
 fred="\033[41m" #couleur de fond
 green="\033[32m"
@@ -55,7 +57,9 @@ info_reduite() { # Jamel Bailleul
 	y=3;
 	printf "\33[%d;%dH" "$x" "$y";
 	echo -en "${blue}Memory : ${reset}";
-	print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" 25 50;
+	max=$(recup_mem total);
+	current=$(recup_mem used);
+	print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" "$current" "$max";
 	#CPU
 	x=$((x+3));
 	y=3;

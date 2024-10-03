@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Affiche la mémoire libre, utilisé, libre, utilisé et le cache de la mémoire en kB.
 recup_mem() { # Tim Lamour
