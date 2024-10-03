@@ -51,30 +51,59 @@ info_proc() {
 }
 
 info_reduite() {
-	#
-	x=2
-	y=3
+	#Mémoire
+	x=2;
+	y=3;
 	printf "\33[%d;%dH" "$x" "$y";
 	echo -en "${blue}Memory : ${reset}";
-	print_bar_h "${blue}" 10 $((cols - 4)) 50 25
+	print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" 25 50;
+	#CPU
+	x=$((x+3));
+	y=3;
+	printf "\33[%d;%dH" "$x" "$y";
+	echo -en "${blue}CPU : ${reset}";
+	print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" 25 50;
+	#GPU
+	x=$((x+3));
+	y=3;
+	printf "\33[%d;%dH" "$x" "$y";
+	echo -en "${blue}GPU : ${reset}";
+	print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" 25 50;
+	#Disk
+	x=$((x+3));
+	y=3;
+	printf "\33[%d;%dH" "$x" "$y";
+	echo -en "${blue}Disk : ${reset}";
+	print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" 25 50;
+}
+
+info_cpu() {
+	# $1 = x lines
+	# $2 = y cols
+	# $3 = nb coeur
+	# $4 = 
+	printf "\33[%d;%dH" "$1" "$2";
+	echo -en "${blue}CPU : ${reset}";
+	print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" 25 50;
 }
 
 print_bar_h() {
 	# $1 = couleur
 	# $2 = cols debut de barre
-	# $3 = lines fin de barre
-	# $4 = max var
-	# $5 = current var
-	local res=($1)
-	percent=$(( $5 * 100 / $4 ))
+	# $3 = cols fin de barre
+	# $4 = lines
+	# $5 = current va
+	# $6 = max var
+	res="$1"
+	percent=$(( $5 * 100 / $6 ))
 	for((i=$2;i<=$3 - 3;i++)); do
-		if (( ($i * 100) / ($3 - 4) <= percent )); then
+		if (( (($i * 100) / ($3 - 4)) <= percent )); then
 			res+="${carre_plein}";
 		else
 			res+="${reset}${carre_plein}";
 		fi
 	done
-	printf "\33[%d;%dH" "$2" "$4";
+	printf "\33[%d;%dH" "$4" "$2";
 	echo -en "$res${reset} $percent%";
 }
 
