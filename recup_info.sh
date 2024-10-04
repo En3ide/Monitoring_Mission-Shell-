@@ -43,36 +43,44 @@ recup_mem() { # Tim Lamour
 
 
 get_cpu_usage() {
-    # Lire les données initiales du CPU
-    read cpu a b c idle rest < /proc/stat
+    if ! read cpu a b c idle rest < /proc/stat; then
+        # Lire les données initiales du CPU
+        read cpu a b c idle rest < /proc/stat
 
-    # Somme de tous les temps d'activité
-    total=$((a+b+c+idle))
+        # Somme de tous les temps d'activité
+        total=$((a+b+c+idle))
 
-    # Pause pour une mesure à intervalle
-    sleep 1
+        # Pause pour une mesure à intervalle
+        sleep 1
 
-    # Lire les données du CPU après l'intervalle
-    read cpu a b c idle rest < /proc/stat
+        # Lire les données du CPU après l'intervalle
+        read cpu a b c idle rest < /proc/stat
 
-    # Somme de tous les temps d'activité après l'intervalle
-    total_new=$((a+b+c+idle))
+        # Somme de tous les temps d'activité après l'intervalle
+        total_new=$((a+b+c+idle))
 
-    # Calcul de la variation du total et de l'inactivité
-    total_delta=$((total_new - total))
-    idle_delta=$((idle - idle))
+        # Calcul de la variation du total et de l'inactivité
+        total_delta=$((total_new - total))
+        idle_delta=$((idle - idle))
 
-    # Calcul du pourcentage d'utilisation
-    cpu_usage=$((100 * (total_delta - idle_delta) / total_delta))
+        # Calcul du pourcentage d'utilisation
+        cpu_usage=$((100 * (total_delta - idle_delta) / total_delta))
 
-    echo "Utilisation globale du CPU : $cpu_usage %"
+        echo "Utilisation globale du CPU : $cpu_usage %"
+    else
+        exit 1
+    fi
 }
 
 recup_cpu() {
-    info_cpu=$(cat /proc/cpuinfo)
-    cpu_name=$(echo "$info_cpu" | grep "model name" | uniq | awk -F: '{print $2}' | sed 's/^ *//')
+    if ! cat /proc/cpuinfo; then
+        info_cpu=$(cat /proc/cpuinfo)
+        cpu_name=$(echo "$info_cpu" | grep "model name" | uniq | awk -F: '{print $2}' | sed 's/^ *//')
 
-    echo "$cpu_name"
+        echo "$cpu_name"
+    else
+        exit 1
+    fi
 }
 
 # Renvoie le pourcentage d'utilisation, l'utilisation et la VRAM total du GPU.
