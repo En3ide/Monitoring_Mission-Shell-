@@ -52,34 +52,47 @@ info_proc() {
 
 info_reduite() { # Jamel Bailleul
 	#Mémoire
-	x=2;
-	y=3;
-	printf "\33[%d;%dH" "$x" "$y";
-	echo -en "${blue}Memory : ${reset}";
-	max=$(recup_mem total);
-	current=$(recup_mem used);
-	print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" "$current" "$max";
+	if recup_mem "used"; then
+		x=2;
+		y=3;
+		printf "\33[%d;%dH" "$x" "$y";
+		echo -en "${blue}Memory : ${reset}";
+		max=$(recup_mem total);
+		current=$(recup_mem used);
+		print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" "$current" "$max";
+	fi
 	#CPU
-	x=$((x+3));
-	y=3;
-	printf "\33[%d;%dH" "$x" "$y";
-	echo -en "${blue}CPU :${reset}";
-	max=$(recup_cpu total);
-	current=$(recup_cpu used);
-	print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" 25 50;
+	if recup_cpu; then
+		x=$((x+3));
+		y=3;
+		printf "\33[%d;%dH" "$x" "$y";
+		echo -en "${blue}CPU : $(recup_cpu)${reset}";
+		if ((get_cpu_usage)); then
+			print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" 25 50;
+		fi
+	fi
 	#GPU
-	x=$((x+3));
-	y=3;
-	printf "\33[%d;%dH" "$x" "$y";
-	echo -en "${blue}GPU : ${reset}";
-	print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" 25 50;
+	if recup_gpu vramUsed; then
+		x=$((x+3));
+		y=3;
+		printf "\33[%d;%dH" "$x" "$y";
+		echo -en "${blue}GPU : ${reset}";
+		max=$(recup_gpu vramTotal);
+		current=$(recup_gpu vramUsed);
+		print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" "$current" "$max";
+	fi
 	#Disk
-	x=$((x+3));
-	y=3;
-	printf "\33[%d;%dH" "$x" "$y";
-	echo -en "${blue}Disk : ${reset}";
-	print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" 25 50;
+	if recup_disk used; then
+		x=$((x+3));
+		y=3;
+		printf "\33[%d;%dH" "$x" "$y";
+		max=$(recup_disk total);
+		current=$(recup_disk used);
+		echo -en "${blue}Disk : ${reset}";
+		print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" "$current" "$max";
+	fi
 }
+
 
 info_cpu() { # Jamel Bailleul
 	# $1 = x lines
@@ -115,8 +128,12 @@ main() {
     stty -icanon -echo
     trap "stty sane; exit" INT TERM
 	clear_screen
+	cols=$(tput cols)
+	lines=$(tput lines)
 	while true; do
-		tput
+		if (($(tput cols) != $cols || $(tput lines) != $lines)); then
+			clear_screen;
+		fi
 		info_reduite
 		# Utilise la commande read avec l'option -n1 pour lire un seul caractère
 		read -n 1 -s input
@@ -130,10 +147,11 @@ main() {
 		# Pause de 1 seconde avant d'afficher à nouveau les info
 		#sleep 1
 	done
+	stty sane
 }
 
 main
-
+stty sane
 #clear_screen
 ##info_proc 2 2
 #info_reduite

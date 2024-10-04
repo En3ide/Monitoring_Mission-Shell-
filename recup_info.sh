@@ -73,7 +73,6 @@ recup_cpu() {
     cpu_name=$(echo "$info_cpu" | grep "model name" | uniq | awk -F: '{print $2}' | sed 's/^ *//')
 
     echo "$cpu_name"
-
 }
 
 # Renvoie le pourcentage d'utilisation, l'utilisation et la VRAM total du GPU.
@@ -152,4 +151,5 @@ recup_disk() { # Tim Lamour
     echo "$res"
 }
 
-recup_disk name
+#recup_disk name
+#recup_mem total
