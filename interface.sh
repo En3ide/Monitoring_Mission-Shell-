@@ -52,47 +52,47 @@ info_proc() {
 
 info_reduite() { # Jamel Bailleul
 	#Mémoire
-	if recup_mem "used"; then
+	if recup_mem "used"; then # afficher la RAM
 		x=2;
 		y=3;
-		printf "\33[%d;%dH" "$x" "$y";
+		printf "\33[%d;%dH" "$x" "$y"; # Permet de placer le curseur au coordonner x y
 		echo -en "${blue}Memory : ${reset}";
-		max=$(recup_mem total);
-		current=$(recup_mem used);
-		print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" "$current" "$max";
+		max=$(recup_mem total); # recup la quantité max de la RAM
+		current=$(recup_mem used); # recup la quantité utilisé de la RAM
+		print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" "$current" "$max"; # afficher la bar d'état de la memoire
 	fi
 	#CPU
-	if recup_cpu; then
+	erreur=$(recup_cpu 2>&1);
+	if [[ $? -ne 1 ]]; then
 		x=$((x+3));
 		y=3;
-		printf "\33[%d;%dH" "$x" "$y";
+		printf "\33[%d;%dH" "$x" "$y"; # Permet de placer le curseur au coordonner x y
 		echo -en "${blue}CPU : $(recup_cpu)${reset}";
-		if ((get_cpu_usage)); then
-			print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" 25 50;
-		fi
+		# if ! get_cpu_usage; then
+		#	print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" 25 50; # afficher la bar d'état du cpu
+		#fi
 	fi
 	#GPU
-	if recup_gpu vramUsed; then
+	if ! recup_gpu vramUsed; then
 		x=$((x+3));
 		y=3;
-		printf "\33[%d;%dH" "$x" "$y";
+		printf "\33[%d;%dH" "$x" "$y"; # Permet de placer le curseur au coordonner x y
 		echo -en "${blue}GPU : ${reset}";
 		max=$(recup_gpu vramTotal);
 		current=$(recup_gpu vramUsed);
 		print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" "$current" "$max";
 	fi
 	#Disk
-	if recup_disk used; then
+	if ! recup_disk used; then
 		x=$((x+3));
 		y=3;
-		printf "\33[%d;%dH" "$x" "$y";
-		max=$(recup_disk total);
-		current=$(recup_disk used);
+		printf "\33[%d;%dH" "$x" "$y"; # Permet de placer le curseur au coordonner x y
+		max=$(recup_disk total | grep -o '[0-9.]*');
+		current=$(recup_disk used | grep -o '[0-9.]*');
 		echo -en "${blue}Disk : ${reset}";
-		print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" "$current" "$max";
+		print_bar_h "${blue}" "$y" $((cols - 2)) $(echo "$x + 1" | bc) "$current" "$max";
 	fi
 }
-
 
 info_cpu() { # Jamel Bailleul
 	# $1 = x lines
@@ -109,20 +109,26 @@ print_bar_h() { # Jamel Bailleul
 	# $2 = cols debut de barre
 	# $3 = cols fin de barre
 	# $4 = lines
-	# $5 = current va
+	# $5 = current var
 	# $6 = max var
 	res="$1"
-	percent=$(( $5 * 100 / $6 ))
-	for((i=$2;i<=$3 - 3;i++)); do
-		if (( (($i * 100) / ($3 - 4)) <= percent )); then
-			res+="${carre_plein}";
+	
+	# Utilisation de bc pour gérer les nombres à virgule
+	percent=$(echo "scale=2; $5 * 100 / $6" | bc)
+
+	for ((i=$2; i<=$3 - 3; i++)); do
+		# Vérification de la condition avec bc pour des calculs précis
+		if (( $(echo "$i * 100 / ($3 - 4)" | bc) <= percent )); then
+			res+="${carre_plein}"
 		else
-			res+="${reset}${carre_plein}";
+			res+="${reset}${carre_plein}"
 		fi
 	done
-	printf "\33[%d;%dH" "$4" "$2";
-	echo -en "$res${reset} $percent%";
+	
+	printf "\33[%d;%dH" "$4" "$2"
+	echo -en "$res${reset} $percent%"
 }
+
 
 main() {
     stty -icanon -echo

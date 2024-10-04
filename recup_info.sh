@@ -7,7 +7,6 @@ recup_mem() { # Tim Lamour
 
     # renvoie une chaine vide si le le fichier meminfo n'existe pas
     if [ ! -f "/proc/meminfo" ]; then
-        echo "Le fichier /proc/meminfo n'existe pas "
         exit 1
     fi
 
@@ -43,44 +42,36 @@ recup_mem() { # Tim Lamour
 
 
 get_cpu_usage() {
-    if ! read cpu a b c idle rest < /proc/stat; then
-        # Lire les données initiales du CPU
-        read cpu a b c idle rest < /proc/stat
+    # Lire les données initiales du CPU
+    read cpu a b c idle rest < /proc/stat
 
-        # Somme de tous les temps d'activité
-        total=$((a+b+c+idle))
+    # Somme de tous les temps d'activité
+    total=$((a+b+c+idle))
 
-        # Pause pour une mesure à intervalle
-        sleep 1
+    # Pause pour une mesure à intervalle
+    sleep 1
 
-        # Lire les données du CPU après l'intervalle
-        read cpu a b c idle rest < /proc/stat
+    # Lire les données du CPU après l'intervalle
+    read cpu a b c idle rest < /proc/stat
 
-        # Somme de tous les temps d'activité après l'intervalle
-        total_new=$((a+b+c+idle))
+    # Somme de tous les temps d'activité après l'intervalle
+    total_new=$((a+b+c+idle))
 
-        # Calcul de la variation du total et de l'inactivité
-        total_delta=$((total_new - total))
-        idle_delta=$((idle - idle))
+    # Calcul de la variation du total et de l'inactivité
+    total_delta=$((total_new - total))
+    idle_delta=$((idle - idle))
 
-        # Calcul du pourcentage d'utilisation
-        cpu_usage=$((100 * (total_delta - idle_delta) / total_delta))
+    # Calcul du pourcentage d'utilisation
+    cpu_usage=$((100 * (total_delta - idle_delta) / total_delta))
 
-        echo "Utilisation globale du CPU : $cpu_usage %"
-    else
-        exit 1
-    fi
+    echo "Utilisation globale du CPU : $cpu_usage %"
 }
 
 recup_cpu() {
-    if ! cat /proc/cpuinfo; then
-        info_cpu=$(cat /proc/cpuinfo)
-        cpu_name=$(echo "$info_cpu" | grep "model name" | uniq | awk -F: '{print $2}' | sed 's/^ *//')
+    info_cpu=$(cat /proc/cpuinfo)
+    cpu_name=$(echo "$info_cpu" | grep "model name" | uniq | awk -F: '{print $2}' | sed 's/^ *//')
 
-        echo "$cpu_name"
-    else
-        exit 1
-    fi
+    echo "$cpu_name"
 }
 
 # Renvoie le pourcentage d'utilisation, l'utilisation et la VRAM total du GPU.
@@ -90,15 +81,13 @@ recup_gpu() { # Tim Lamour
 
     # On teste si les répertoires card0 ou card1 existent (card0 prioritaire)
     path="/sys/class/drm/card"
-    if [ -d "${path}0" ]; then
+    if [ -d "${path}0" ] && [ -f "${path}0/device/gpu_busy_percent" ]; then
         path="${path}0"
-    elif [ -d "${path}1" ]; then
+    elif [ -d "${path}1" ] && [ -f "${path}1/device/gpu_busy_percent" ]; then
         path="${path}1"
     else
-        echo "Aucun GPU détecté."
         exit 1
     fi
-
     # Si un répertoire a été trouvé
     param=$1
     res=""
