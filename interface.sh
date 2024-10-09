@@ -112,10 +112,10 @@ print_bar_h() { # Jamel Bailleul
 	# $5 = current var
 	# $6 = max var
 	res="$1"
-	
+	echo "etape 1 "
 	# Utilisation de bc pour gérer les nombres à virgule
 	percent=$(echo "scale=2; $5 * 100 / $6" | bc)
-
+	echo "étape 2"
 	for ((i=$2; i<=$3 - 3; i++)); do
 		# Vérification de la condition avec bc pour des calculs précis
 		if (( $(echo "$i * 100 / ($3 - 4)" | bc) <= percent )); then
