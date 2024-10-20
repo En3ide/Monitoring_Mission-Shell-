@@ -145,6 +145,7 @@ recup_disk() { # Tim Lamour
             exit 1
             ;;
     esac
+    res=$(echo "$res" | grep -o '[0-9]*.');
     echo "$res"
 }
 
