@@ -1,0 +1,4 @@
+font_color_default="black"
+color_default="red"
+lang_default="en"
+os_default="linux"

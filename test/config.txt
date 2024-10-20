@@ -1,0 +1,4 @@
+font_color=white
+color=blue
+lang=fr
+os=ubuntu

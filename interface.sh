@@ -2,12 +2,20 @@
 #pour les couleur tu peux aussi utiliser "\033[38;5<code couleurs>m" code en 256
 . ./recup_info.sh
 
+# Définir les valeurs par défaut
+local font_color_default="black"
+local color_default="red"
+local lang_default="en"
+local os_default="ubuntu"
+local 
+
 red="\033[31m" #couleur caractères
 fred="\033[41m" #couleur de fond
 green="\033[32m"
 yellow="\033[33m"
-blue="\033[34m"
+blue="\033[34m" # bleu
 reset="\033[0m"
+
 
 carre_plein="\u2588"
 carre_vide="\u25A1"
@@ -21,16 +29,16 @@ clear_screen() { # Jamel Bailleul
 		for ((j=1;j<=$lines;j++)); do
 			if (( i == 1 )); then
 				printf "\33[%d;%dH" "$j" "$i";
-				echo -en "${blue}+${reset}";
+				echo -en "${!color_default}+${reset}";
 			elif (( j == 1 )); then
 				printf "\33[%d;%dH" "$j" "$i";
-				echo -en "${blue}+${reset}";
+				echo -en "${!color_default}+${reset}";
 			elif (( j == lines )); then
 				printf "\33[%d;%dH" "$j" "$i";
-				echo -en "${blue}+${reset}";
+				echo -en "${!color_default}+${reset}";
 			elif (( i == cols)); then
 				printf "\33[%d;%dH" "$j" "$i";
-				echo -en "${blue}+${reset}";
+				echo -en "${!color_default}+${reset}";
 			else
 				printf "\33[%d;%dH" "$j" "$i";
 				echo -en " ";
@@ -42,7 +50,7 @@ clear_screen() { # Jamel Bailleul
 info_proc() {
 	# info 1
 	printf "\33[%d;%dH" "$x" "$y";
-	echo -en "${blue}salut les boys${reset}";
+	echo -en "${!color_default}salut les boys${reset}";
 	# info 2
 	local x_plus_2=$((x + 3))
 	printf "\33[%d;%dH" "$x_plus_2" "$y";
@@ -56,10 +64,10 @@ info_reduite() { # Jamel Bailleul
 		x=2;
 		y=3;
 		printf "\33[%d;%dH" "$x" "$y"; # Permet de placer le curseur au coordonner x y
-		echo -en "${blue}Memory : ${reset}";
+		echo -en "${!color_default}Memory : ${reset}";
 		max=$(recup_mem total); # recup la quantité max de la RAM
 		current=$(recup_mem used); # recup la quantité utilisé de la RAM
-		print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" "$current" "$max"; # afficher la bar d'état de la memoire
+		print_bar_h "${!color_default}" "$y" $((cols - 2)) "$((x + 1))" "$current" "$max"; # afficher la bar d'état de la memoire
 	fi
 	#CPU
 	erreur=$(recup_cpu 2>&1);
@@ -67,9 +75,9 @@ info_reduite() { # Jamel Bailleul
 		x=$((x+3));
 		y=3;
 		printf "\33[%d;%dH" "$x" "$y"; # Permet de placer le curseur au coordonner x y
-		echo -en "${blue}CPU : $(recup_cpu)${reset}";
+		echo -en "${!color_default}CPU : $(recup_cpu)${reset}";
 		# if ! get_cpu_usage; then
-		#	print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" 25 50; # afficher la bar d'état du cpu
+		#	print_bar_h "${color_default}" "$y" $((cols - 2)) "$((x + 1))" 25 50; # afficher la bar d'état du cpu
 		#fi
 	fi
 	#GPU
@@ -77,10 +85,10 @@ info_reduite() { # Jamel Bailleul
 		x=$((x+3));
 		y=3;
 		printf "\33[%d;%dH" "$x" "$y"; # Permet de placer le curseur au coordonner x y
-		echo -en "${blue}GPU : ${reset}";
+		echo -en "${!color_default}GPU : ${reset}";
 		max=$(recup_gpu vramTotal);
 		current=$(recup_gpu vramUsed);
-		print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" "$current" "$max";
+		print_bar_h "${!color_default}" "$y" $((cols - 2)) "$((x + 1))" "$current" "$max";
 	fi
 	#Disk
 	if ! recup_disk used; then
@@ -89,8 +97,8 @@ info_reduite() { # Jamel Bailleul
 		printf "\33[%d;%dH" "$x" "$y"; # Permet de placer le curseur au coordonner x y
 		max=$(recup_disk total | grep -o '[0-9.]*');
 		current=$(recup_disk used | grep -o '[0-9.]*');
-		echo -en "${blue}Disk : ${reset}";
-		print_bar_h "${blue}" "$y" $((cols - 2)) $(echo "$x + 1" | bc) "$current" "$max";
+		echo -en "${!color_default}Disk : ${reset}";
+		print_bar_h "${!color_default}" "$y" $((cols - 2)) $(echo "$x + 1" | bc) "$current" "$max";
 	fi
 }
 
@@ -100,8 +108,8 @@ info_cpu() { # Jamel Bailleul
 	# $3 = nb coeur
 	# $4 = 
 	printf "\33[%d;%dH" "$1" "$2";
-	echo -en "${blue}CPU : ${reset}";
-	print_bar_h "${blue}" "$y" $((cols - 2)) "$((x + 1))" 25 50;
+	echo -en "${!color_default}CPU : ${reset}";
+	print_bar_h "${!color_default}" "$y" $((cols - 2)) "$((x + 1))" 25 50;
 }
 
 print_bar_h() { # Jamel Bailleul
@@ -130,10 +138,33 @@ print_bar_h() { # Jamel Bailleul
 	echo -en "$res${reset} $percent%"
 }
 
+exporter_variables() {
+    local fichier="$1"
+
+    if [[ -f "$fichier" ]]; then # Vérifie si le fichier existe
+        while IFS='=' read -r cle valeur; do # Boucle pour lire chaque ligne du fichier
+            if [[ -n "$cle" && -n "$valeur" ]]; then
+                export "$cle"="$valeur" # Exporter chaque clé comme une variable d'environnement
+            fi
+        done < "$fichier"
+        echo "Les variables d'environnement ont été définies."
+    else
+        echo "Le fichier '$fichier' n'existe pas."
+    fi
+}
 
 main() {
-    stty -icanon -echo
+    # prepare la zone de texte pour ne pas afficher le curseur ou les caratère taper
+	stty -icanon -echo
     trap "stty sane; exit" INT TERM
+
+	# vérifie la presence de d'un fichier de config
+	if [ -f "$1" ]; then
+		exporter_variables $1
+	else
+		echo "Non, le fichier '$1' n'existe pas."
+	fi
+
 	clear_screen
 	cols=$(tput cols)
 	lines=$(tput lines)
@@ -157,12 +188,12 @@ main() {
 	stty sane
 }
 
-main
+main $1 $2 $3 $4 $5 $6 $7
 stty sane
 #clear_screen
 ##info_proc 2 2
 #info_reduite
-##print_bar_h "${blue}" 0 10 30 15
+##print_bar_h "${color_default}" 0 10 30 15
 
 #test_x=$(tput cols)
 #test_y=$(tput lines)
