@@ -18,6 +18,16 @@ reset="\033[0m"
 carre_plein="\u2588"
 carre_vide="\u25A1"
 
+generate_random() {  # Jamel Bailleul
+    local min=$1
+    local max=$2
+    # Utiliser $RANDOM pour générer un nombre aléatoire
+    local range=$((max - min + 1))
+    local random_number=$((RANDOM % range + min))
+
+    echo "$random_number"
+}
+
 clear_screen() { # Jamel Bailleul
 	cols=$(tput cols)
 	lines=$(tput lines)
@@ -55,50 +65,60 @@ info_proc() {
 
 info_reduite() { # Jamel Bailleul
 	#Mémoire
-	if recup_mem "used"; then # afficher la RAM
+	if recup_mem "used" >/dev/null 2>&1; then # afficher la RAM
 		x=2
 		y=3
 		printf "\33[%d;%dH" "$x" "$y" # Permet de placer le curseur au coordonner x y
 		echo -en "${!color_default}Memory : ${reset}"
-		max=5 #$(recup_mem total) # recup la quantité max de la RAM
-		current=3 #$(recup_mem used) # recup la quantité utilisé de la RAM
+		max=100 #$(recup_mem total) # recup la quantité max de la RAM
+		current=$(generate_random 1 $max) #$(recup_mem used) # recup la quantité utilisé de la RAM
 		print_bar_h "${!color_default}" "$y" $((cols - 2)) "$((x + 1))" "$current" "$max" # afficher la bar d'état de la memoire
 	fi
 	#CPU
 	erreur=$(recup_cpu 2>&1)
 	if (( $? != 1 )); then
-		x=$((x+3))
-		y=3
-		printf "\33[%d;%dH" "$x" "$y" # Permet de placer le curseur au coordonner x y
+		cpu_x=$((x+3))
+		cpu_y=3
+		printf "\33[%d;%dH" "$cpu_x" "$cpu_y" # Permet de placer le curseur au coordonner x y
 		echo -en "${!color_default}CPU : $(recup_cpu)${reset}"
         #bar cpu
-        max=5 #$(recup_gpu vramTotal)
-		current=3 #$(recup_gpu vramUsed)
-		print_bar_h "${!color_default}" "$y" $((cols - 2)) "$((x + 1))" "$current" "$max"
+        max=100 #$(recup_gpu vramTotal)
+		current=$(generate_random 1 $max) #$(recup_gpu vramUsed)
+		print_bar_h "${!color_default}" "$cpu_y" $((cols - 2)) "$((cpu_x + 1))" "$current" "$max"
 	fi
 	#GPU
-	if recup_gpu vramUsed; then
-        echo "shiiittt"
-		x=$((x+3))
-		y=3
-		printf "\33[%d;%dH" "$x" "$y" # Permet de placer le curseur au coordonner x y
+	if recup_gpu vramUsed >/dev/null 2>&1; then
+		gpu_x=$((cpu_x+3))
+		gpu_y=3
+		printf "\33[%d;%dH" "$gpu_x" "$gpu_y" # Permet de placer le curseur au coordonner x y
 		echo -en "${!color_default}GPU : ${reset}"
-		max=5 #$(recup_gpu vramTotal)
-		current=3 #$(recup_gpu vramUsed)
-		print_bar_h "${!color_default}" "$y" $((cols - 2)) "$((x + 1))" "$current" "$max"
-	fi
-    echo "baaamm"
+		max=100 #$(recup_gpu vramTotal)
+		current=$(generate_random 1 $max) #$(recup_gpu vramUsed)
+		print_bar_h "${!color_default}" "$gpu_y" $((cols - 2)) "$((gpu_x + 1))" "$current" "$max"
+    else
+        gpu_x=$((cpu_x+3))
+		gpu_y=3
+		printf "\33[%d;%dH" "$gpu_x" "$gpu_y" # Permet de placer le curseur au coordonner x y
+		echo -en "${!color_default}GPU : info sur les gpu impossible à trouver${reset}"
+        max=100 #$(recup_gpu vramTotal)
+		current=$(generate_random 1 $max) #$(recup_gpu vramUsed)
+		print_bar_h "${!color_default}" "$gpu_y" $((cols - 2)) "$((gpu_x + 1))" "$current" "$max"
+    fi
 	#Disk
-	if ! recup_disk used; then
-        echo "shiitttt"
-		x=$((x+3))
-		y=3
-		printf "\33[%d;%dH" "$x" "$y" # Permet de placer le curseur au coordonner x y
-		max=5 #$(recup_disk total | grep -o '[0-9.]*')
-		current=3 #$(recup_disk used | grep -o '[0-9.]*')
+	if recup_disk used >/dev/null 2>&1; then
+		disk_x=$((gpu_x+3))
+		disk_y=3
+		printf "\33[%d;%dH" "$disk_x" "$disk_y" # Permet de placer le curseur au coordonner x y
+		max=100 #$(recup_disk total | grep -o '[0-9.]*')
+		current=$(generate_random 1 $max) #$(recup_disk used | grep -o '[0-9.]*')
 		echo -en "${!color_default}Disk : ${reset}"
-		print_bar_h "${!color_default}" "$y" $((cols - 2)) $(echo "$x + 1" | bc) "$current" "$max"
-	fi
+		print_bar_h "${!color_default}" "$disk_y" $((cols - 2)) $(echo "$disk_x + 1" | bc) "$current" "$max"
+	else
+        disk_x=$((x+3))
+		disk_y=3
+		printf "\33[%d;%dH" "$disk_x" "$disk_y" # Permet de placer le curseur au coordonner x y
+		echo -en "${!color_default}Disk : info sur les disk impossible à trouver${reset}"
+    fi
 }
 
 info_cpu() { # Jamel Bailleul
@@ -140,7 +160,7 @@ print_bar_h() { # Jamel Bailleul
 	echo -en "$res${reset} $percent%"
 }
 
-exporter_variables() {
+exporter_variables() {  # Jamel Bailleul
     local fichier="$1"
 
     if [[ -f "$fichier" ]]; then # Vérifie si le fichier existe
@@ -155,7 +175,7 @@ exporter_variables() {
     fi
 }
 
-install_bc_if_not_installed() {
+install_bc_if_not_installed() {  # Jamel Bailleul
     if ! command -v bc &> /dev/null; then # Vérifie si bc est installé
         # Installation de bc
         sudo apt update -y > /dev/null 2>&1
@@ -163,7 +183,7 @@ install_bc_if_not_installed() {
     fi
 }
 
-main() {
+main() {  # Jamel Bailleul
     # prepare la zone de texte pour ne pas afficher le curseur ou les caractères taper
 	stty -icanon -echo
     trap "stty sane; exit" INT TERM
@@ -178,19 +198,23 @@ main() {
 	clear_screen
 	cols=$(tput cols)
 	lines=$(tput lines)
+    #while true; do
+    #    # Utilise la commande read avec l'option -n1 pour lire un seul caractère
+	#	read -n 1 -s input
+    #	# Si l'utilisateur appuie sur 'q', on sort de la boucle
+	#	if [[ "$input" == "q" ]]; then
+    #        printf "\33[%d;%dH" "$lines" "0"
+	#		echo "Au revoir!"
+    #        stty sane
+	#		exit 1
+	#	fi
+    #done &
+
 	while true; do
 		if (( $(tput cols) != $cols || $(tput lines) != $lines )); then
 			clear_screen
 		fi
 		info_reduite
-		# Utilise la commande read avec l'option -n1 pour lire un seul caractère
-		read -n 1 -s input
-
-		# Si l'utilisateur appuie sur 'q', on sort de la boucle
-		if [[ "$input" == "q" ]]; then
-			echo "Au revoir!"
-			break
-		fi
 
 		# Pause de 1 seconde avant d'afficher à nouveau les info
 		#sleep 1
