@@ -89,37 +89,32 @@ generate_random() {  # Jamel Bailleul
 }
 
 clear_screen() { # Jamel Bailleul
-	cols=$(tput cols)
-	lines=$(tput lines)
-	if !$1; then
-		separeteur=0
-	else
-		separeteur=$1
-	fi
-	for ((i=1;i<=$cols;i++)); do
-		for ((j=1;j<=$lines;j++)); do
-			if (( i == 1 )); then
-				printf "\33[%d;%dH" "$j" "$i"
-				echo -en "${!font_color_default}${!color_limiteur}${!climit}${reset}"
-			elif (( j == 1 )); then
-				printf "\33[%d;%dH" "$j" "$i"
-				echo -en "${!font_color_default}${!color_limiteur}${!climit}${reset}"
-			elif (( j == lines )); then
-				printf "\33[%d;%dH" "$j" "$i"
-				echo -en "${!font_color_default}${!color_limiteur}${!climit}${reset}"
-			elif (( i == separeteur )); then
-				printf "\33[%d;%dH" "$j" "$i"
-				echo -en "${!font_color_default}${!color_limiteur}${!climit}${reset}"
-			elif (( i == cols)); then
-				printf "\33[%d;%dH" "$j" "$i"
-				echo -en "${!font_color_default}${!color_limiteur}${!climit}${reset}"
-			else
-				printf "\33[%d;%dH" "$j" "$i"
-				echo -en "${!font_color_default}${!color_limiteur}" " " "${reset}"
-			fi
-		done
-	done
+    cols=$(tput cols)
+    lines=$(tput lines)
+    
+    # Définir la position du séparateur
+    if [ -z "$1" ]; then
+        separateur=0
+    else
+        separateur=$1
+    fi
+
+    # Effacer et redessiner l'écran
+    for ((i=1; i<=cols; i++)); do
+        for ((j=1; j<=lines; j++)); do
+            printf "\033[%d;%dH" "$j" "$i"  # Positionnement du curseur
+
+            if (( i == 1 || i == cols || j == 1 || j == lines || i == separateur )); then
+                # Afficher la bordure
+                echo -en "${!font_color_default}${!color_limiteur}${!climit}${reset}"
+            else
+                # Remplir avec un espace vide
+                echo -en "${!font_color_default}${!color_limiteur} ${reset}"
+            fi
+        done
+    done
 }
+
 
 info_reduite() { # Jamel Bailleul
     # Mémoire
