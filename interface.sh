@@ -326,3 +326,4 @@ main() {  # Jamel Bailleul
 
 main "$@"
 stty sane
+#bit
