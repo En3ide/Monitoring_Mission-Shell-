@@ -154,7 +154,7 @@ affiche_proc() { # Jamel Bailleul
 	text=$(ps -eo %cpu,%mem,pid,user,cmd --sort=-%cpu)
 
     # Boucle pour afficher chaque processus dans la zone délimitée
-    for (( i=$start_line; i < end_line; i++ )); do
+    for (( i=$(($start_line - 1)); i < end_line; i++ )); do
 
 		# Obtenir la première ligne de "text"
 		first_line=$(echo "$text" | head -n 1)
@@ -208,7 +208,7 @@ print_bar_h() { # Jamel Bailleul
 	done
 	
 	printf "\33[%d;%dH" "$4" "$2"
-	echo -en "${!font_color_default}${!color_default}$res${!font_color_default}${!color_default} $percent%${reset}"
+	echo -en "${!font_color_default}${!color_default}$res${!font_color_default}${!color_default}$percent%${reset}"
 }
 
 config_file() {  # Jamel Bailleul
