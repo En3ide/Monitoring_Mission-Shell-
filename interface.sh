@@ -3,21 +3,78 @@
 . ./recup_info.sh
 
 # Définir les valeurs par défaut
-font_color_default="fwhite"
-color_default="red"
+font_color_default="BG_WHITE"
+color_default="RED"
 lang_default="en"
 os_default="ubuntu"
+climit="full_block"
+color_limiteur="BLUE"
+color_bar_cpu="YELLOW"
+color_bar_gpu="GREEN"
+color_bar_memory="MAGENTA"
+color_bar_disk="BLUE"
+color_proc="BLACK"
 
-red="\033[31m" #couleur caractères
-fred="\033[41m" #couleur de fond
-fwhite="\033[48;5;255m"  # Fond blanc
-green="\033[32m"
-yellow="\033[33m"
-blue="\033[34m" # bleu
-reset="\033[0m"
+# Variables pour les couleurs de texte (foreground)
+BLACK="\033[30m"
+RED="\033[31m"
+GREEN="\033[32m"
+YELLOW="\033[33m"
+BLUE="\033[34m"
+MAGENTA="\033[35m"
+CYAN="\033[36m"
+WHITE="\033[37m"
+RESET="\033[0m"
+
+# Variables pour les couleurs de fond (background)
+BG_BLACK="\033[40m"
+BG_RED="\033[41m"
+BG_GREEN="\033[42m"
+BG_YELLOW="\033[43m"
+BG_BLUE="\033[44m"
+BG_MAGENTA="\033[45m"
+BG_CYAN="\033[46m"
+BG_WHITE="\033[47m"
+
+# Variables pour les couleurs claires (bright foreground)
+BRIGHT_BLACK="\033[90m"
+BRIGHT_RED="\033[91m"
+BRIGHT_GREEN="\033[92m"
+BRIGHT_YELLOW="\033[93m"
+BRIGHT_BLUE="\033[94m"
+BRIGHT_MAGENTA="\033[95m"
+BRIGHT_CYAN="\033[96m"
+BRIGHT_WHITE="\033[97m"
+
+# Variables pour les couleurs claires de fond (bright background)
+BRIGHT_BG_BLACK="\033[100m"
+BRIGHT_BG_RED="\033[101m"
+BRIGHT_BG_GREEN="\033[102m"
+BRIGHT_BG_YELLOW="\033[103m"
+BRIGHT_BG_BLUE="\033[104m"
+BRIGHT_BG_MAGENTA="\033[105m"
+BRIGHT_BG_CYAN="\033[106m"
+BRIGHT_BG_WHITE="\033[107m"
 
 carre_plein="\u2588"
 carre_vide="\u25A1"
+
+# Caractères Unicode de type carré
+full_block="█"             # Full Block
+upper_half_block="▀"       # Upper Half Block
+lower_half_block="▄"       # Lower Half Block
+left_half_block="▌"        # Left Half Block
+right_half_block="▐"       # Right Half Block
+light_shade="░"            # Light Shade
+medium_shade="▒"           # Medium Shade
+dark_shade="▓"             # Dark Shade
+white_square="▢"           # White Square
+black_circle="●"           # Black Circle
+white_circle="○"           # White Circle
+black_diamond="◆"          # Black Diamond
+white_diamond="◇"          # White Diamond
+black_star="★"             # Black Star
+white_star="☆"             # White Star
 
 generate_random() {  # Jamel Bailleul
     local min=$1
@@ -41,35 +98,25 @@ clear_screen() { # Jamel Bailleul
 		for ((j=1;j<=$lines;j++)); do
 			if (( i == 1 )); then
 				printf "\33[%d;%dH" "$j" "$i"
-				echo -en "${!font_color_default}${!color_default}+${reset}"
+				echo -en "${!font_color_default}${!color_limiteur}${!climit}${reset}"
 			elif (( j == 1 )); then
 				printf "\33[%d;%dH" "$j" "$i"
-				echo -en "${!font_color_default}${!color_default}+${reset}"
+				echo -en "${!font_color_default}${!color_limiteur}${!climit}${reset}"
 			elif (( j == lines )); then
 				printf "\33[%d;%dH" "$j" "$i"
-				echo -en "${!font_color_default}${!color_default}+${reset}"
+				echo -en "${!font_color_default}${!color_limiteur}${!climit}${reset}"
 			elif (( i == separeteur )); then
 				printf "\33[%d;%dH" "$j" "$i"
-				echo -en "${!font_color_default}${!color_default}+${reset}"
+				echo -en "${!font_color_default}${!color_limiteur}${!climit}${reset}"
 			elif (( i == cols)); then
 				printf "\33[%d;%dH" "$j" "$i"
-				echo -en "${!font_color_default}${!color_default}+${reset}"
+				echo -en "${!font_color_default}${!color_limiteur}${!climit}${reset}"
 			else
 				printf "\33[%d;%dH" "$j" "$i"
-				echo -en "${!font_color_default}${!color_default}" " " "${reset}"
+				echo -en "${!font_color_default}${!color_limiteur}" " " "${reset}"
 			fi
 		done
 	done
-}
-
-info_proc() {
-	# info 1
-	printf "\33[%d;%dH" "$x" "$y"
-	echo -en "${!font_color_default}${!color_default}salut les boys${reset}"
-	# info 2
-	local x_plus_2=$((x + 3))
-	printf "\33[%d;%dH" "$x_plus_2" "$y"
-	echo -en "${reset}${carre_plein}${reset}"
 }
 
 info_reduite() { # Jamel Bailleul
@@ -81,7 +128,7 @@ info_reduite() { # Jamel Bailleul
         echo -en "${!font_color_default}${!color_default}Memory : ${reset}"
         max=100 #$(recup_mem total) # recup la quantité max de la RAM
         current=$(generate_random 1 $max) #$(recup_mem used) # recup la quantité utilisée de la RAM
-        print_bar_h "${!font_color_default}${!color_default}" "$y" "$3" "$((x + 1))" "$current" "$max" # afficher la barre d'état de la mémoire
+        print_bar_h "${!font_color_default}${!color_bar_memory}" "$y" "$3" "$((x + 1))" "$current" "$max" # afficher la barre d'état de la mémoire
     fi
 
     # CPU
@@ -94,7 +141,7 @@ info_reduite() { # Jamel Bailleul
         # bar cpu
         max=100 #$(recup_gpu vramTotal)
         current=$(generate_random 1 $max) #$(recup_gpu vramUsed)
-        print_bar_h "${!font_color_default}${!color_default}" "$cpu_y" "$3" "$((cpu_x + 1))" "$current" "$max"
+        print_bar_h "${!font_color_default}${!color_bar_cpu}" "$cpu_y" "$3" "$((cpu_x + 1))" "$current" "$max"
     fi
 
     # GPU
@@ -105,7 +152,7 @@ info_reduite() { # Jamel Bailleul
         echo -en "${!font_color_default}${!color_default}GPU : ${reset}"
         max=100 #$(recup_gpu vramTotal)
         current=$(generate_random 1 $max) #$(recup_gpu vramUsed)
-        print_bar_h "${!font_color_default}${!color_default}" "$gpu_y" "$3" "$((gpu_x + 1))" "$current" "$max"
+        print_bar_h "${!font_color_default}${!color_bar_gpu}" "$gpu_y" "$3" "$((gpu_x + 1))" "$current" "$max"
     else
         gpu_x=$((cpu_x + 3))
         gpu_y=3
@@ -121,7 +168,7 @@ info_reduite() { # Jamel Bailleul
         max=100 #$(recup_disk total | grep -o '[0-9.]*')
         current=$(generate_random 1 $max) #$(recup_disk used | grep -o '[0-9.]*')
         echo -en "${!font_color_default}${!color_default}Disk : ${reset}"
-        print_bar_h "${!font_color_default}${!color_default}" "$disk_y" "$3" "$((disk_x + 1))" "$current" "$max"
+        print_bar_h "${!font_color_default}${!color_bar_disk}" "$disk_y" "$3" "$((disk_x + 1))" "$current" "$max"
     else
         disk_x=$((x + 3))
         disk_y=3
@@ -163,7 +210,7 @@ affiche_proc() { # Jamel Bailleul
 		# Afficher les 15 premiers caractères de la première ligne au milieu de l'écran
 		printf "\033[%d;%dH" "$i" "$start_col"  # Positionne le curseur
 		nb_char=$(($end_col - $start_col))
-		echo -en "${!font_color_default}${!color_default}${first_line:0:${nb_char}}"
+		echo -en "${!font_color_default}${!color_proc}${first_line:0:${nb_char}}"
 		text=$(echo "$text" | sed '1d')
     done
 }
