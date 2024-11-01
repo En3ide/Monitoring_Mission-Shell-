@@ -134,7 +134,7 @@ info_scinder() { # Jamel Bailleul
     info_reduite 2 3 $((($max_cols / 2) - 2))
 
     # Appel de la fonction affiche_proc avec les colonnes et lignes ajustées
-    affiche_proc $cols_proc $lines_proc $(($max_line - 2)) $max_cols
+    affiche_proc $cols_proc $lines $(( max_line - 2)) $(tput cols)
 }
 
 affiche_proc() { # Jamel Bailleul
@@ -154,7 +154,7 @@ affiche_proc() { # Jamel Bailleul
 
 		# Afficher les 15 premiers caractères de la première ligne au milieu de l'écran
 		printf "\033[%d;%dH" "$i" "$start_col"  # Positionne le curseur
-		echo -en "${!font_color_default}${!color_default}${first_line:0:$(($end_col - $start_col ))}"
+		echo -en "${!font_color_default}${!color_default}${first_line:0:15}"
 		text=$(echo "$text" | sed '1d')
     done
 }
