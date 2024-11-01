@@ -129,11 +129,11 @@ info_scinder() { # Jamel Bailleul
     local lines_proc=$((lines / 2)) # Moitié des lignes pour diviser la zone
 
     # Appel de la fonction info_reduite avec les paramètres ajustés
-    info_reduite 2 3 $((cols_proc - 2))
+    info_reduite 2 3 $((($(tput cols) / 2) - 2 ))
 
     # Appel de la fonction affiche_proc avec les colonnes et lignes ajustées
     # Utilise $(tput lines) pour obtenir le nombre total de lignes du terminal
-    affiche_proc $cols_proc $lines_proc $(( $(tput lines) - 2 ))
+    affiche_proc cols_proc lines_proc $(( $(tput lines) - 2 ))
 }
 
 
@@ -149,7 +149,7 @@ affiche_proc() { # Jamel Bailleul
     # Boucle pour afficher chaque processus dans la zone délimitée
     for (( i=0; i<$((end_line - start_line)) && i<${#lignes[@]}; i++ )); do
         printf "\33[%d;%dH" "$((start_line + i))" "$start_col"
-        echo "${lignes[$i]:0:$((end_col - start_col))}"  # Affiche chaque ligne jusqu'à la limite des colonnes
+        echo -en "${lignes[$i]:0:$((end_col - start_col))}"  # Affiche chaque ligne jusqu'à la limite des colonnes
     done
 }
 
@@ -190,7 +190,7 @@ print_bar_h() { # Jamel Bailleul
 	done
 	
 	printf "\33[%d;%dH" "$4" "$2"
-	echo -en "${!font_color_default}$res${reset} $percent% "
+	echo -en "${!font_color_default}${!color_default}$res${!font_color_default}${!color_default} $percent%${reset}"
 }
 
 config_file() {  # Jamel Bailleul
@@ -245,6 +245,7 @@ main() {  # Jamel Bailleul
 
 	while true; do
 		if (( $(tput cols) != $cols || $(tput lines) != $lines )); then
+			clear
 			clear_screen
 		fi
 		
