@@ -231,7 +231,7 @@ print_bar_h() { # Jamel Bailleul
     max_tmp_bar=$(echo "$max_tmp_bar" | tr -d '.')
     current_tmp_bar=$(echo "$5" | tr -cd '0-9')
     current_tmp_bar=$(echo "$current_tmp_bar" | tr -d '.')
-	percent=$(($current_tmp_bar * 100 / $max_tmp_bar))
+	percent=$(($current_tmp_bar * 99 / $max_tmp_bar))
 
 	#echo "étape 2"
 	for ((i=$2; i<=$3 - 3; i++)); do
