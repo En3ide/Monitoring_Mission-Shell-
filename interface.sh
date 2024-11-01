@@ -3,17 +3,19 @@
 . ./recup_info.sh
 
 # Définir les valeurs par défaut
-font_color_default="BG_WHITE"
+font_color_default="BG_BLACK"
 color_default="RED"
 lang_default="en"
 os_default="ubuntu"
 climit="full_block"
+char_bar_plein="dark_shade"
+char_bar_vide="light_shade"
 color_limiteur="BLUE"
 color_bar_cpu="YELLOW"
 color_bar_gpu="GREEN"
 color_bar_memory="MAGENTA"
 color_bar_disk="BLUE"
-color_proc="BLACK"
+color_proc="BRIGHT_WHITE"
 
 # Variables pour les couleurs de texte (foreground)
 BLACK="\033[30m"
@@ -126,7 +128,7 @@ info_reduite() { # Jamel Bailleul
         y=$2
         printf "\33[%d;%dH" "$x" "$y" # Placer le curseur aux coordonnées x y
         echo -en "${!font_color_default}${!color_default}Memory : ${reset}"
-        max=100 #$(recup_mem total) # recup la quantité max de la RAM
+        max=99 #$(recup_mem total) # recup la quantité max de la RAM
         current=$(generate_random 1 $max) #$(recup_mem used) # recup la quantité utilisée de la RAM
         print_bar_h "${!font_color_default}${!color_bar_memory}" "$y" "$3" "$((x + 1))" "$current" "$max" # afficher la barre d'état de la mémoire
     fi
@@ -139,7 +141,7 @@ info_reduite() { # Jamel Bailleul
         printf "\33[%d;%dH" "$cpu_x" "$cpu_y" # Placer le curseur aux coordonnées x y
         echo -en "${!font_color_default}${!color_default}CPU : $(recup_cpu)${reset}"
         # bar cpu
-        max=100 #$(recup_gpu vramTotal)
+        max=99 #$(recup_gpu vramTotal)
         current=$(generate_random 1 $max) #$(recup_gpu vramUsed)
         print_bar_h "${!font_color_default}${!color_bar_cpu}" "$cpu_y" "$3" "$((cpu_x + 1))" "$current" "$max"
     fi
@@ -150,7 +152,7 @@ info_reduite() { # Jamel Bailleul
         gpu_y=3
         printf "\33[%d;%dH" "$gpu_x" "$gpu_y" # Placer le curseur aux coordonnées x y
         echo -en "${!font_color_default}${!color_default}GPU : ${reset}"
-        max=100 #$(recup_gpu vramTotal)
+        max=99 #$(recup_gpu vramTotal)
         current=$(generate_random 1 $max) #$(recup_gpu vramUsed)
         print_bar_h "${!font_color_default}${!color_bar_gpu}" "$gpu_y" "$3" "$((gpu_x + 1))" "$current" "$max"
     else
@@ -165,7 +167,7 @@ info_reduite() { # Jamel Bailleul
         disk_x=$((gpu_x + 3))
         disk_y=3
         printf "\33[%d;%dH" "$disk_x" "$disk_y" # Placer le curseur aux coordonnées x y
-        max=100 #$(recup_disk total | grep -o '[0-9.]*')
+        max=99 #$(recup_disk total | grep -o '[0-9.]*')
         current=$(generate_random 1 $max) #$(recup_disk used | grep -o '[0-9.]*')
         echo -en "${!font_color_default}${!color_default}Disk : ${reset}"
         print_bar_h "${!font_color_default}${!color_bar_disk}" "$disk_y" "$3" "$((disk_x + 1))" "$current" "$max"
@@ -215,20 +217,6 @@ affiche_proc() { # Jamel Bailleul
     done
 }
 
-
-
-
-
-info_cpu() { # Jamel Bailleul
-	# $1 = x lines
-	# $2 = y cols
-	# $3 = nb coeur
-	# $4 = 
-	printf "\33[%d;%dH" "$1" "$2"
-	echo -en "${!font_color_default}${!color_default}CPU : ${reset}"
-	print_bar_h "${!font_color_default}${!color_default}" "$y" $((cols - 2)) "$((x + 1))" 25 50
-}
-
 print_bar_h() { # Jamel Bailleul
 	# $1 = couleur
 	# $2 = cols debut de barre
@@ -248,9 +236,9 @@ print_bar_h() { # Jamel Bailleul
 	#echo "étape 2"
 	for ((i=$2; i<=$3 - 3; i++)); do
 		if (( $(echo "$i * 100 / ($3 - 4)" | bc) <= percent )); then
-			res+="${!font_color_default}${carre_plein}"
+			res+="${!font_color_default}${!char_bar_plein}"
 		else
-			res+="${reset}${carre_plein}"
+			res+="${reset}${!char_bar_vide}"
 		fi
 	done
 	
@@ -286,6 +274,7 @@ main() {  # Jamel Bailleul
 	stty -icanon -echo
     trap "stty sane; exit" INT TERM
 	tput civis # Rendre le curseur invisible
+	trap 'echo -en "${reset}";stty sane;clear; exit' SIGINT
 
 	# vérifie la présence d'un fichier de config
 	if [[ -f "$1" ]]; then
