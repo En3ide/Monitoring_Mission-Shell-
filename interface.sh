@@ -122,10 +122,37 @@ info_reduite() { # Jamel Bailleul
     fi
 }
 
-info_scinder() {
-	$1 #cols
-	$2 #lines
+info_scinder() { # Jamel Bailleul
+    local cols="$1"  # Colonne de début
+    local lines="$2" # Ligne de début
+    local cols_proc=$((cols / 2)) # Moitié des colonnes pour diviser la zone
+    local lines_proc=$((lines / 2)) # Moitié des lignes pour diviser la zone
+
+    # Appel de la fonction info_reduite avec les paramètres ajustés
+    info_reduite 2 3 $((cols_proc - 2))
+
+    # Appel de la fonction affiche_proc avec les colonnes et lignes ajustées
+    # Utilise $(tput lines) pour obtenir le nombre total de lignes du terminal
+    affiche_proc $cols_proc $lines_proc $(( $(tput lines) - 2 ))
 }
+
+
+affiche_proc() { # Jamel Bailleul
+    local start_col="$1"   # Colonne de début
+    local start_line="$2"  # Ligne de début
+    local end_line="$3"    # Ligne de fin
+    local end_col="$4"     # Colonne de fin
+
+    local processus=$(recup_processus)
+    mapfile -t lignes < <(echo "$processus")  # Lit chaque ligne dans le tableau `lignes`
+
+    # Boucle pour afficher chaque processus dans la zone délimitée
+    for (( i=0; i<$((end_line - start_line)) && i<${#lignes[@]}; i++ )); do
+        printf "\33[%d;%dH" "$((start_line + i))" "$start_col"
+        echo "${lignes[$i]:0:$((end_col - start_col))}"  # Affiche chaque ligne jusqu'à la limite des colonnes
+    done
+}
+
 
 info_cpu() { # Jamel Bailleul
 	# $1 = x lines
@@ -156,14 +183,14 @@ print_bar_h() { # Jamel Bailleul
 	#echo "étape 2"
 	for ((i=$2; i<=$3 - 3; i++)); do
 		if (( $(echo "$i * 100 / ($3 - 4)" | bc) <= percent )); then
-			res+="${carre_plein}"
+			res+="${!font_color_default}${carre_plein}"
 		else
 			res+="${reset}${carre_plein}"
 		fi
 	done
 	
 	printf "\33[%d;%dH" "$4" "$2"
-	echo -en "$res${reset} $percent%"
+	echo -en "${!font_color_default}$res${reset} $percent% "
 }
 
 config_file() {  # Jamel Bailleul
@@ -221,7 +248,7 @@ main() {  # Jamel Bailleul
 			clear_screen
 		fi
 		
-		if (( $(tput cols) <= 30 || $(tput lines) <= 15)); then
+		if (( $(tput cols) <= 30 | $(tput lines) <= 15)); then
 			info_reduite 2 3 $(($(tput cols)-2))
 		else
 			info_scinder

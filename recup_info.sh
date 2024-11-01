@@ -16,21 +16,21 @@ recup_mem() { # Tim Lamour
     # renvoie l'info demande en parametre
     case $param in
         "total") # mémoire total
-            res=$(echo "$info_mem" | grep "MemTotal" | awk '{print $2}') 
+            res=$(echo "$info_mem" | grep "MemTotal" | awk '{print $2}')
             ;;
         "available") # mémoire disponible
             res=$(echo "$info_mem" | grep "MemAvailable" | awk '{print $2}')
             ;;
         "free") # mémoire libre
-            res=$(echo "$info_mem" | grep "MemFree" | awk '{print $2}') 
+            res=$(echo "$info_mem" | grep "MemFree" | awk '{print $2}')
             ;;
         "cache") # cache de la mémoire
-            res=$(echo "$info_mem" | grep "Cached" | awk '{print $2}') 
+            res=$(echo "$info_mem" | grep "Cached" | awk '{print $2}')
             ;;
         "used") # mémoire actuellement utilisé
             mem_total=$(echo "$info_mem" | grep "MemTotal" | awk '{print $2}')
             mem_available=$(echo "$info_mem" | grep "MemAvailable" | awk '{print $2}')
-            res=$((mem_total - mem_available)) 
+            res=$((mem_total - mem_available))
             ;;
         *)
             echo "Paramètre non reconnu. Utilisez 'total', 'available', 'free', 'cache', ou 'used'."

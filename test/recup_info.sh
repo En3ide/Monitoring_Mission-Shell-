@@ -151,3 +151,4 @@ recup_disk() { # Tim Lamour
 
 #recup_disk name
 #recup_mem total
+recup_processus
