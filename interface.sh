@@ -146,7 +146,7 @@ affiche_proc() { # Jamel Bailleul
 	text=$(ps -eo %cpu,%mem,pid,user,cmd --sort=-%cpu)
 
     # Boucle pour afficher chaque processus dans la zone délimitée
-    for (( i=0; i < end_line; i++ )); do
+    for (( i=$start_line; i < end_line; i++ )); do
 
 		# Obtenir la première ligne de "text"
 		first_line=$(echo "$text" | head -n 1)
@@ -262,7 +262,7 @@ main() {  # Jamel Bailleul
 		if (( $(tput cols) <= 30 | $(tput lines) <= 15)); then
 			info_reduite 2 3 $(($(tput cols)-2))
 		else
-			info_scinder
+			info_scinder 2 3
 		fi
 
 		# Pause de 1 seconde avant d'afficher à nouveau les info
