@@ -2,13 +2,12 @@
 
 # Affiche la mémoire libre, utilisé, libre, utilisé et le cache de la mémoire en kB.
 recup_mem() { # Tim Lamour
-    test "$#" -ne 1 && echo "Un seul paramètre est requis. Utilisez 'total', 'available', 'free', 'cache', ou 'used'." && exit 1
-    param="$1" # recupere le premier argument comme paramètre
+    test "$#" -ne 1 && echo "Un seul paramètre est requis. Utilisez 'total', 'available', 'free', 'cache', ou 'used'." && return 1
 
-    # renvoie une chaine vide si le le fichier meminfo n'existe pas
-    if [ ! -f "/proc/meminfo" ]; then
-        return 1
-    fi
+    # test si le fichier meminfo existe
+    test ! -f "/proc/meminfo" && echo "Le fichier meminfo n'existe pas" && return 1
+
+    param="$1" # recupere le premier argument comme paramètre
 
     info_mem=$(cat /proc/meminfo)
     res=""
@@ -16,21 +15,21 @@ recup_mem() { # Tim Lamour
     # renvoie l'info demande en parametre
     case $param in
         "total") # mémoire total
-            res=$(echo "$info_mem" | grep "MemTotal" | awk '{print $2}')
+            res=$(echo "$info_mem" | grep "MemTotal" | awk '{print $2}') 
             ;;
         "available") # mémoire disponible
             res=$(echo "$info_mem" | grep "MemAvailable" | awk '{print $2}')
             ;;
         "free") # mémoire libre
-            res=$(echo "$info_mem" | grep "MemFree" | awk '{print $2}')
+            res=$(echo "$info_mem" | grep "MemFree" | awk '{print $2}') 
             ;;
         "cache") # cache de la mémoire
-            res=$(echo "$info_mem" | grep "Cached" | awk '{print $2}')
+            res=$(echo "$info_mem" | grep "Cached" | awk '{print $2}') 
             ;;
         "used") # mémoire actuellement utilisé
             mem_total=$(echo "$info_mem" | grep "MemTotal" | awk '{print $2}')
             mem_available=$(echo "$info_mem" | grep "MemAvailable" | awk '{print $2}')
-            res=$((mem_total - mem_available))
+            res=$((mem_total - mem_available)) 
             ;;
         *)
             echo "Paramètre non reconnu. Utilisez 'total', 'available', 'free', 'cache', ou 'used'."
@@ -40,39 +39,70 @@ recup_mem() { # Tim Lamour
     echo "$res"
 }
 
-
-get_cpu_usage() {
-    # Lire les données initiales du CPU
-    read cpu a b c idle rest < /proc/stat
-
-    # Somme de tous les temps d'activité
-    total=$((a+b+c+idle))
-
-    # Pause pour une mesure à intervalle
-    sleep 1
-
-    # Lire les données du CPU après l'intervalle
-    read cpu a b c idle rest < /proc/stat
-
-    # Somme de tous les temps d'activité après l'intervalle
-    total_new=$((a+b+c+idle))
-
-    # Calcul de la variation du total et de l'inactivité
-    total_delta=$((total_new - total))
-    idle_delta=$((idle - idle))
-
-    # Calcul du pourcentage d'utilisation
-    cpu_usage=$((100 * (total_delta - idle_delta) / total_delta))
-
-    echo "Utilisation globale du CPU : $cpu_usage %"
+recup_nb_core_cpu() {
+    nproc
 }
 
-recup_cpu() {
-    info_cpu=$(cat /proc/cpuinfo)
-    cpu_name=$(echo "$info_cpu" | grep "model name" | uniq | awk -F: '{print $2}' | sed 's/^ *//')
+# Renvoie les infos sur le cpu, usage : recup_cpu ['name' | 'cpu']
+recup_cpu() { 
+    # Vérifier le nombre de paramètres
+    test "$#" -ne 1 && echo "Usage : recup_cpu ['name' | 'cpu{0,1,n}']" && return 1
 
-    echo "$cpu_name"
+    # Si un seul paramètre, vérifier que c'est "name"
+    if [ "$#" -eq 1 ]; then
+        if [ "$1" == "name" ]; then
+            # Vérifier l'existence de /proc/cpuinfo et récupérer le nom du CPU
+            test ! -f /proc/cpuinfo && echo "Erreur : Le fichier /proc/cpuinfo n'existe pas" && return 2
+            cpu_name=$(grep "model name" /proc/cpuinfo | uniq | awk -F: '{print $2}' | sed 's/^ *//')
+            echo "$cpu_name"
+            return 0
+        elif [[ "$1" =~ ^cpu([0-9]+)?$ ]]; then
+            # Vérifier l'existence de /proc/stat pour récupérer les infos du CPU
+            test ! -f /proc/stat && echo "Erreur : Le fichier /proc/stat n'existe pas" && return 3
+            
+            nb_core=$(nproc)  # on recupere le nombre de coeur du cpu
+
+            # Extraire le numéro de CPU demandé
+            num=${BASH_REMATCH[1]:-""}
+            if [[ -z "$num" ]]; then
+                num="cpu"  # Total du CPU
+            else
+                # Vérifier que le numéro du coeur est valide
+                if [ "$num" -gt "$nb_core" ] || [ "$num" -lt 1 ]; then
+                    echo "Erreur : CPU $num inexistant. Nombre de cœurs : $nb_core."
+                    return 4
+                fi
+                num="cpu$((num - 1))" #Total du core num du CPU
+            fi
+
+            # Récupérer la ligne correspondant au CPU demandé dans /proc/stat
+            lign=$(grep "^$num " /proc/stat)
+
+            # Extraire les valeurs user, nice, system, idle
+            user=$(echo "$lign" | awk '{print $2}')
+            nice=$(echo "$lign" | awk '{print $3}')
+            system=$(echo "$lign" | awk '{print $4}')
+            idle=$(echo "$lign" | awk '{print $5}')
+
+            # Calculer le total de toutes les valeurs
+            total=$(echo "$lign" | awk '{sum=0; for(i=2; i<=NF; i++) sum+=$i; print sum}')
+
+            # Calculer l'utilisation du CPU en pourcentage
+            if [ "$total" -ne 0 ]; then
+                cpu_usage=$(( (user + nice + system) * 100 / total ))
+            else
+                cpu_usage=0
+            fi
+ 
+            echo "$cpu_usage"
+            return 0
+        fi
+    fi
+
+    # Message d'erreur si les paramètres sont incorrects
+    echo "Usage : recup_cpu ['name' | 'cpu{0,1,n}']" && return 5
 }
+
 
 # Renvoie le pourcentage d'utilisation, l'utilisation et la VRAM total du GPU.
 recup_gpu() { # Tim Lamour
@@ -151,3 +181,4 @@ recup_disk() { # Tim Lamour
 
 #recup_disk name
 #recup_mem total
+recup_cpu "$1"
