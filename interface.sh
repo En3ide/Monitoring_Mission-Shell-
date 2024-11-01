@@ -32,6 +32,11 @@ generate_random() {  # Jamel Bailleul
 clear_screen() { # Jamel Bailleul
 	cols=$(tput cols)
 	lines=$(tput lines)
+	if !$1; then
+		separeteur=0
+	else
+		separeteur=$1
+	fi
 	for ((i=1;i<=$cols;i++)); do
 		for ((j=1;j<=$lines;j++)); do
 			if (( i == 1 )); then
@@ -41,6 +46,9 @@ clear_screen() { # Jamel Bailleul
 				printf "\33[%d;%dH" "$j" "$i"
 				echo -en "${!font_color_default}${!color_default}+${reset}"
 			elif (( j == lines )); then
+				printf "\33[%d;%dH" "$j" "$i"
+				echo -en "${!font_color_default}${!color_default}+${reset}"
+			elif (( i == separeteur )); then
 				printf "\33[%d;%dH" "$j" "$i"
 				echo -en "${!font_color_default}${!color_default}+${reset}"
 			elif (( i == cols)); then
@@ -125,16 +133,16 @@ info_reduite() { # Jamel Bailleul
 info_scinder() { # Jamel Bailleul
     local cols="$1"  # Colonne de début
     local lines="$2" # Ligne de début
-    local cols_proc=$(( cols / 2)) # Moitié des colonnes pour diviser la zone
-    local lines_proc=$(( lines / 2)) # Moitié des lignes pour diviser la zone
     local max_cols=$(tput cols)
-    local max_line=$(tput lines)
+    local max_lines=$(tput lines)
+	local cols_proc=$(($max_cols / 2)) # Moitié des colonnes pour diviser la zone
+    local lines_proc=$(($max_lines / 2)) # Moitié des lignes pour diviser la zone
 
     # Appel de la fonction info_reduite avec les paramètres ajustés
-    info_reduite 2 3 $((($max_cols / 2) - 2))
+    info_reduite $cols $lines $((($max_cols / 2) - 2))
 
     # Appel de la fonction affiche_proc avec les colonnes et lignes ajustées
-    affiche_proc $cols_proc $lines $(( max_line - 2)) $(tput cols)
+    affiche_proc $(($cols_proc + 2)) $lines $(( max_lines - 2)) $(tput cols)
 }
 
 affiche_proc() { # Jamel Bailleul
@@ -154,7 +162,8 @@ affiche_proc() { # Jamel Bailleul
 
 		# Afficher les 15 premiers caractères de la première ligne au milieu de l'écran
 		printf "\033[%d;%dH" "$i" "$start_col"  # Positionne le curseur
-		echo -en "${!font_color_default}${!color_default}${first_line:0:15}"
+		nb_char=$(($end_col - $start_col))
+		echo -en "${!font_color_default}${!color_default}${first_line:0:${nb_char}}"
 		text=$(echo "$text" | sed '1d')
     done
 }
@@ -238,7 +247,11 @@ main() {  # Jamel Bailleul
 		echo "Non, le fichier '$1' n'existe pas."
 	fi
 
-	clear_screen
+	if (( $(tput cols) > 15 && $(tput lines) > 30 )); then 
+		clear_screen $(($(tput cols) / 2))
+	else
+		clear_screen
+	fi
 	cols=$(tput cols)
 	lines=$(tput lines)
     #while true; do
@@ -255,14 +268,18 @@ main() {  # Jamel Bailleul
 
 	while true; do
 		if (( $(tput cols) != $cols || $(tput lines) != $lines )); then
-			clear
+			if (( $(tput cols) > 15 && $(tput lines) > 30 )); then 
+				clear_screen $(($(tput cols) / 2))
+			else
+				clear_screen
+			fi
 			clear_screen
 		fi
 		
 		if (( $(tput cols) <= 30 | $(tput lines) <= 15)); then
 			info_reduite 2 3 $(($(tput cols)-2))
 		else
-			info_scinder 2 3
+			info_scinder 2 3 $(($(tput cols)-2))
 		fi
 
 		# Pause de 1 seconde avant d'afficher à nouveau les info
