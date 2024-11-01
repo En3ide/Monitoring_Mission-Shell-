@@ -65,93 +65,102 @@ info_proc() {
 }
 
 info_reduite() { # Jamel Bailleul
-	#Mémoire
-	if recup_mem "used" >/dev/null 2>&1; then # afficher la RAM
-		x=$1
-		y=$2
-		printf "\33[%d;%dH" "$x" "$y" # Permet de placer le curseur au coordonner x y
-		echo -en "${!font_color_default}${!color_default}Memory : ${reset}"
-		max=100 #$(recup_mem total) # recup la quantité max de la RAM
-		current=$(generate_random 1 $max) #$(recup_mem used) # recup la quantité utilisé de la RAM
-		print_bar_h "${!font_color_default}${!color_default}" "$y" "$3" "$((x + 1))" "$current" "$max" # afficher la bar d'état de la memoire
-	fi
-	#CPU
-	erreur=$(recup_cpu 2>&1)
-	if (( $? != 1 )); then
-		cpu_x=$((x+3))
-		cpu_y=3
-		printf "\33[%d;%dH" "$cpu_x" "$cpu_y" # Permet de placer le curseur au coordonner x y
-		echo -en "${!font_color_default}${!color_default}CPU : $(recup_cpu)${reset}"
-        #bar cpu
-        max=100 #$(recup_gpu vramTotal)
-		current=$(generate_random 1 $max) #$(recup_gpu vramUsed)
-		print_bar_h "${!font_color_default}${!color_default}" "$cpu_y" "$3" "$((cpu_x + 1))" "$current" "$max"
-	fi
-	#GPU
-	if recup_gpu vramUsed >/dev/null 2>&1; then
-		gpu_x=$((cpu_x+3))
-		gpu_y=3
-		printf "\33[%d;%dH" "$gpu_x" "$gpu_y" # Permet de placer le curseur au coordonner x y
-		echo -en "${!font_color_default}${!color_default}GPU : ${reset}"
-		max=100 #$(recup_gpu vramTotal)
-		current=$(generate_random 1 $max) #$(recup_gpu vramUsed)
-		print_bar_h "${!font_color_default}${!color_default}" "$gpu_y" "$3" "$((gpu_x + 1))" "$current" "$max"
-    else
-        gpu_x=$((cpu_x+3))
-		gpu_y=3
-		printf "\33[%d;%dH" "$gpu_x" "$gpu_y" # Permet de placer le curseur au coordonner x y
-		echo -en "${!font_color_default}${!color_default}GPU : info sur les gpu impossible à trouver${reset}"
-        max=100 #$(recup_gpu vramTotal)
-		current=$(generate_random 1 $max) #$(recup_gpu vramUsed)
-		print_bar_h "${!font_color_default}${!color_default}" "$gpu_y" "$3" "$((gpu_x + 1))" "$current" "$max"
+    # Mémoire
+    if recup_mem "used" >/dev/null 2>&1; then # afficher la RAM
+        x=$1
+        y=$2
+        printf "\33[%d;%dH" "$x" "$y" # Placer le curseur aux coordonnées x y
+        echo -en "${!font_color_default}${!color_default}Memory : ${reset}"
+        max=100 #$(recup_mem total) # recup la quantité max de la RAM
+        current=$(generate_random 1 $max) #$(recup_mem used) # recup la quantité utilisée de la RAM
+        print_bar_h "${!font_color_default}${!color_default}" "$y" "$3" "$((x + 1))" "$current" "$max" # afficher la barre d'état de la mémoire
     fi
-	#Disk
-	if recup_disk used >/dev/null 2>&1; then
-		disk_x=$((gpu_x+3))
-		disk_y=3
-		printf "\33[%d;%dH" "$disk_x" "$disk_y" # Permet de placer le curseur au coordonner x y
-		max=100 #$(recup_disk total | grep -o '[0-9.]*')
-		current=$(generate_random 1 $max) #$(recup_disk used | grep -o '[0-9.]*')
-		echo -en "${!font_color_default}${!color_default}Disk : ${reset}"
-		print_bar_h "${!font_color_default}${!color_default}" "$disk_y" "$3" $(echo "$disk_x + 1" | bc) "$current" "$max"
-	else
-        disk_x=$((x+3))
-		disk_y=3
-		printf "\33[%d;%dH" "$disk_x" "$disk_y" # Permet de placer le curseur au coordonner x y
-		echo -en "${!font_color_default}${!color_default}Disk : info sur les disk impossible à trouver${reset}"
+
+    # CPU
+    erreur=$(recup_cpu 2>&1)
+    if (( $? != 1 )); then
+        cpu_x=$((x + 3))
+        cpu_y=3
+        printf "\33[%d;%dH" "$cpu_x" "$cpu_y" # Placer le curseur aux coordonnées x y
+        echo -en "${!font_color_default}${!color_default}CPU : $(recup_cpu)${reset}"
+        # bar cpu
+        max=100 #$(recup_gpu vramTotal)
+        current=$(generate_random 1 $max) #$(recup_gpu vramUsed)
+        print_bar_h "${!font_color_default}${!color_default}" "$cpu_y" "$3" "$((cpu_x + 1))" "$current" "$max"
+    fi
+
+    # GPU
+    if recup_gpu vramUsed >/dev/null 2>&1; then
+        gpu_x=$((cpu_x + 3))
+        gpu_y=3
+        printf "\33[%d;%dH" "$gpu_x" "$gpu_y" # Placer le curseur aux coordonnées x y
+        echo -en "${!font_color_default}${!color_default}GPU : ${reset}"
+        max=100 #$(recup_gpu vramTotal)
+        current=$(generate_random 1 $max) #$(recup_gpu vramUsed)
+        print_bar_h "${!font_color_default}${!color_default}" "$gpu_y" "$3" "$((gpu_x + 1))" "$current" "$max"
+    else
+        gpu_x=$((cpu_x + 3))
+        gpu_y=3
+        printf "\33[%d;%dH" "$gpu_x" "$gpu_y" # Placer le curseur aux coordonnées x y
+        echo -en "${!font_color_default}${!color_default}GPU : info sur les GPU impossible à trouver${reset}"
+    fi
+
+    # Disk
+    if recup_disk used >/dev/null 2>&1; then
+        disk_x=$((gpu_x + 3))
+        disk_y=3
+        printf "\33[%d;%dH" "$disk_x" "$disk_y" # Placer le curseur aux coordonnées x y
+        max=100 #$(recup_disk total | grep -o '[0-9.]*')
+        current=$(generate_random 1 $max) #$(recup_disk used | grep -o '[0-9.]*')
+        echo -en "${!font_color_default}${!color_default}Disk : ${reset}"
+        print_bar_h "${!font_color_default}${!color_default}" "$disk_y" "$3" "$((disk_x + 1))" "$current" "$max"
+    else
+        disk_x=$((x + 3))
+        disk_y=3
+        printf "\33[%d;%dH" "$disk_x" "$disk_y" # Placer le curseur aux coordonnées x y
+        echo -en "${!font_color_default}${!color_default}Disk : info sur les disques impossible à trouver${reset}"
     fi
 }
 
 info_scinder() { # Jamel Bailleul
     local cols="$1"  # Colonne de début
     local lines="$2" # Ligne de début
-    local cols_proc=$((cols / 2)) # Moitié des colonnes pour diviser la zone
-    local lines_proc=$((lines / 2)) # Moitié des lignes pour diviser la zone
+    local cols_proc=$(( cols / 2)) # Moitié des colonnes pour diviser la zone
+    local lines_proc=$(( lines / 2)) # Moitié des lignes pour diviser la zone
+    local max_cols=$(tput cols)
+    local max_line=$(tput lines)
 
     # Appel de la fonction info_reduite avec les paramètres ajustés
-    info_reduite 2 3 $((($(tput cols) / 2) - 2 ))
+    info_reduite 2 3 $((($max_cols / 2) - 2))
 
     # Appel de la fonction affiche_proc avec les colonnes et lignes ajustées
-    # Utilise $(tput lines) pour obtenir le nombre total de lignes du terminal
-    affiche_proc cols_proc lines_proc $(( $(tput lines) - 2 ))
+    affiche_proc $cols_proc $lines_proc $(($max_line - 2)) $max_cols
 }
-
 
 affiche_proc() { # Jamel Bailleul
-    local start_col="$1"   # Colonne de début
-    local start_line="$2"  # Ligne de début
-    local end_line="$3"    # Ligne de fin
-    local end_col="$4"     # Colonne de fin
-
-    local processus=$(recup_processus)
-    mapfile -t lignes < <(echo "$processus")  # Lit chaque ligne dans le tableau `lignes`
+    local start_col=$1   # Colonne de début
+    local start_line=$2  # Ligne de début
+    local end_line=$3    # Nombre total de lignes à afficher
+    local end_col=$4     # Colonne de fin
+	# Récupérer le résultat de la commande ps dans la variable text
+	text=$(ps -eo %cpu,%mem,pid,user,cmd --sort=-%cpu)
 
     # Boucle pour afficher chaque processus dans la zone délimitée
-    for (( i=0; i<$((end_line - start_line)) && i<${#lignes[@]}; i++ )); do
-        printf "\33[%d;%dH" "$((start_line + i))" "$start_col"
-        echo -en "${lignes[$i]:0:$((end_col - start_col))}"  # Affiche chaque ligne jusqu'à la limite des colonnes
+    for (( i=0; i < end_line; i++ )); do
+
+		# Obtenir la première ligne de "text"
+		first_line=$(echo "$text" | head -n 1)
+		#first_15_chars=${first_line:0:15}	# Obtenir les 15 premiers caractères de la première ligne
+
+		# Afficher les 15 premiers caractères de la première ligne au milieu de l'écran
+		printf "\033[%d;%dH" "$i" "$start_col"  # Positionne le curseur
+		echo -en "${!font_color_default}${!color_default}${first_line:0:$(($end_col - $start_col ))}"
+		text=$(echo "$text" | sed '1d')
     done
 }
+
+
+
 
 
 info_cpu() { # Jamel Bailleul
@@ -220,6 +229,7 @@ main() {  # Jamel Bailleul
     # prepare la zone de texte pour ne pas afficher le curseur ou les caractères taper
 	stty -icanon -echo
     trap "stty sane; exit" INT TERM
+	tput civis # Rendre le curseur invisible
 
 	# vérifie la présence d'un fichier de config
 	if [[ -f "$1" ]]; then
