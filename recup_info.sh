@@ -168,7 +168,7 @@ recup_disk() { # Tim Lamour
            res=$(echo "$info_disk" | awk 'NR==2 {print $2}')
             ;;
         "used")
-            res=$(echo "$info_disk" | awk 'NR==2 {print $2}')
+            res=$(echo "$info_disk" | awk 'NR==2 {print $3}')
             ;;
         *)
             echo "Paramètre non reconnu. Utilisez 'percent', 'name', 'total', 'used'."
