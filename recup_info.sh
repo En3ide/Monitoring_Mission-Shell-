@@ -49,54 +49,52 @@ recup_cpu() {
     test "$#" -ne 1 && echo "Usage : recup_cpu ['name' | 'cpu{0,1,n}']" && return 1
 
     # Si un seul paramètre, vérifier que c'est "name"
-    if [ "$#" -eq 1 ]; then
-        if [ "$1" == "name" ]; then
-            # Vérifier l'existence de /proc/cpuinfo et récupérer le nom du CPU
-            test ! -f /proc/cpuinfo && echo "Erreur : Le fichier /proc/cpuinfo n'existe pas" && return 2
-            cpu_name=$(grep "model name" /proc/cpuinfo | uniq | awk -F: '{print $2}' | sed 's/^ *//')
-            echo "$cpu_name"
-            return 0
-        elif [[ "$1" =~ ^cpu([0-9]+)?$ ]]; then
-            # Vérifier l'existence de /proc/stat pour récupérer les infos du CPU
-            test ! -f /proc/stat && echo "Erreur : Le fichier /proc/stat n'existe pas" && return 3
-            
-            nb_core=$(nproc)  # on recupere le nombre de coeur du cpu
+    if [ "$1" == "name" ]; then
+        # Vérifier l'existence de /proc/cpuinfo et récupérer le nom du CPU
+        test ! -f /proc/cpuinfo && echo "Erreur : Le fichier /proc/cpuinfo n'existe pas" && return 2
+        cpu_name=$(grep "model name" /proc/cpuinfo | uniq | awk -F: '{print $2}' | sed 's/^ *//')
+        echo "$cpu_name"
+        return 0
+    elif [[ "$1" =~ ^cpu([0-9]+)?$ ]]; then
+        # Vérifier l'existence de /proc/stat pour récupérer les infos du CPU
+        test ! -f /proc/stat && echo "Erreur : Le fichier /proc/stat n'existe pas" && return 3
+        
+        nb_core=$(nproc)  # on recupere le nombre de coeur du cpu
 
-            # Extraire le numéro de CPU demandé
-            num=${BASH_REMATCH[1]:-""}
-            if [[ -z "$num" ]]; then
-                num="cpu"  # Total du CPU
-            else
-                # Vérifier que le numéro du coeur est valide
-                if [ "$num" -gt "$nb_core" ] || [ "$num" -lt 1 ]; then
-                    echo "Erreur : CPU $num inexistant. Nombre de cœurs : $nb_core."
-                    return 4
-                fi
-                num="cpu$((num - 1))" #Total du core num du CPU
+        # Extraire le numéro de CPU demandé
+        num=${BASH_REMATCH[1]:-""}
+        if [[ -z "$num" ]]; then
+            num="cpu"  # Total du CPU
+        else
+            # Vérifier que le numéro du coeur est valide
+            if [ "$num" -gt "$nb_core" ] || [ "$num" -lt 1 ]; then
+                echo "Erreur : CPU $num inexistant. Nombre de cœurs : $nb_core."
+                return 4
             fi
-
-            # Récupérer la ligne correspondant au CPU demandé dans /proc/stat
-            lign=$(grep "^$num " /proc/stat)
-
-            # Extraire les valeurs user, nice, system, idle
-            user=$(echo "$lign" | awk '{print $2}')
-            nice=$(echo "$lign" | awk '{print $3}')
-            system=$(echo "$lign" | awk '{print $4}')
-            idle=$(echo "$lign" | awk '{print $5}')
-
-            # Calculer le total de toutes les valeurs
-            total=$(echo "$lign" | awk '{sum=0; for(i=2; i<=NF; i++) sum+=$i; print sum}')
-
-            # Calculer l'utilisation du CPU en pourcentage
-            if [ "$total" -ne 0 ]; then
-                cpu_usage=$(( (user + nice + system) * 100 / total ))
-            else
-                cpu_usage=0
-            fi
- 
-            echo "$cpu_usage"
-            return 0
+            num="cpu$((num - 1))" #Total du core num du CPU
         fi
+
+        # Récupérer la ligne correspondant au CPU demandé dans /proc/stat
+        lign=$(grep "^$num " /proc/stat)
+
+        # Extraire les valeurs user, nice, system, idle
+        user=$(echo "$lign" | awk '{print $2}')
+        nice=$(echo "$lign" | awk '{print $3}')
+        system=$(echo "$lign" | awk '{print $4}')
+        idle=$(echo "$lign" | awk '{print $5}')
+
+        # Calculer le total de toutes les valeurs
+        total=$(echo "$lign" | awk '{sum=0; for(i=2; i<=NF; i++) sum+=$i; print sum}')
+
+        # Calculer l'utilisation du CPU en pourcentage
+        if [ "$total" -ne 0 ]; then
+            cpu_usage=$(( (user + nice + system) * 100 / total ))
+        else
+            cpu_usage=0
+        fi
+
+        echo "$cpu_usage"
+        return 0
     fi
 
     # Message d'erreur si les paramètres sont incorrects
@@ -176,5 +174,46 @@ recup_disk() { # Tim Lamour
             ;;
     esac
     res=$(echo "$res" | grep -o '[0-9]*.');
+    echo "$res"
+}
+
+get_interface_name() {
+    # Liste toutes les interfaces réseau disponibles
+    interfaces=$(ls /sys/class/net)
+
+    # Boucle pour vérifier chaque interface
+    for interface in $interfaces; do
+        # Vérifie si l'interface est active (état UP)
+        if [[ $(cat /sys/class/net/$interface/operstate) == "up" ]]; then
+            echo "$interface"
+            return 0
+        fi
+    done
+
+    # Si aucune interface active n'est trouvée
+    echo ""
+}
+
+# Renvoie le pourcentage d'utilisation, l'utilisation et la VRAM total du GPU.
+get_network_usage() { # Tim Lamour
+    test "$#" -ne 2 && echo "Usage : get_network_usage [download | upload] nom_interface_reseau" && return 1
+    test ! -f /proc/net/dev && echo "Erreur : Le fichier /proc/net/dev n'existe pas" && return 2
+
+    param="$1"
+    interface=$(grep "$2" /proc/net/dev)
+    
+    case "$param" in
+        "download")
+            res=$(echo "$interface" | awk '{print $2}')
+            ;;
+        "upload")
+            res=$(echo "$interface" | awk '{print $10}')
+            ;;
+        *)
+            echo "Paramètre non reconnu. Utilisez 'download' ou 'upload'."
+            return 1
+            ;;
+    esac
+
     echo "$res"
 }
