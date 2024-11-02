@@ -261,12 +261,22 @@ install_bc_if_not_installed() {  # Jamel Bailleul
     fi
 }
 
+reload_old_cmd() {
+    tput rmcup
+    stty "$1"
+}
+
 main() {  # Jamel Bailleul
-    # prepare la zone de texte pour ne pas afficher le curseur ou les caractères taper
+    # on sauvegarde l'état du terminal
+    old_stty=$(stty -g)
+    tput smcup
+
+    # prepare la zone de texte pour ne pas afficher le curseur ou les caractères tapés
 	stty -icanon -echo
-    trap "stty sane; exit" INT TERM
-	tput civis # Rendre le curseur invisible
-	trap 'echo -en "${reset}"; tput init; clear; exit' SIGINT
+    tput civis # Rendre le curseur invisible
+
+    # si le programme est interrompu avec ctrl+c, on remet l'état initial du terminal
+    trap 'tput rmcup; tput cnorm; stty "$old_stty"; exit' INT TERM
 
 	# vérifie la présence d'un fichier de config
 	if [[ -f "$1" ]]; then
@@ -312,8 +322,6 @@ main() {  # Jamel Bailleul
 		# Pause de 1 seconde avant d'afficher à nouveau les info
 		#sleep 1
 	done
-	stty sane
 }
 
 main "$@"
-stty sane
