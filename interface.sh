@@ -266,7 +266,7 @@ main() {  # Jamel Bailleul
 	stty -icanon -echo
     trap "stty sane; exit" INT TERM
 	tput civis # Rendre le curseur invisible
-	trap 'echo -en "${reset}";stty sane;clear; tput init; clear; exit' SIGINT
+	trap 'echo -en "${reset}"; tput init; clear; exit' SIGINT
 
 	# vérifie la présence d'un fichier de config
 	if [[ -f "$1" ]]; then
