@@ -56,5 +56,98 @@ cpu_usage() {
     local usage=$(echo "100 - $idle" | bc)
     echo "Utilisation CPU : ${usage}%"
 }
+
+network_info_v1() {
+    if [[ "$1" == "list" ]]; then
+        # Lister les noms des interfaces disponibles
+        awk -F':' '/:/ {print $1}' /proc/net/dev | tr -d ' '
+    elif [[ -n "$1" && -n "$2" ]]; then
+        local interface="$1"
+        local direction="$2"
+
+        # Vérifier si l'interface existe
+        if ! grep -q "^ *$interface:" /proc/net/dev; then
+            echo "L'interface '$interface' n'existe pas."
+            return 1
+        fi
+
+        # Récupérer les statistiques de l'interface
+        local stats=$(grep "^ *$interface:" /proc/net/dev | awk '{print $2, $3, $10, $11}')
+
+        # Extraire les valeurs nécessaires
+        local rx_bytes=$(echo "$stats" | awk '{print $1}')
+        local rx_errors=$(echo "$stats" | awk '{print $2}')
+        local tx_bytes=$(echo "$stats" | awk '{print $3}')
+        local tx_errors=$(echo "$stats" | awk '{print $4}')
+
+        case "$direction" in
+            "down")
+                echo "Octets reçus : $rx_bytes"
+                echo "Erreurs de réception : $rx_errors"
+                ;;
+            "up")
+                echo "Octets envoyés : $tx_bytes"
+                echo "Erreurs d'envoi : $tx_errors"
+                ;;
+            *)
+                echo "Option invalide. Utilisez 'down' ou 'up'."
+                return 1
+                ;;
+        esac
+    else
+        echo "Usage : network_info list"
+        echo "       network_info <interface> down"
+        echo "       network_info <interface> up"
+        return 1
+    fi
+}
+
+network_info() {
+    if [[ "$1" == "list" ]]; then
+        # Lister les noms des interfaces disponibles
+        awk -F':' '/:/ {print $1}' /proc/net/dev | tr -d ' '
+    elif [[ -n "$1" && -n "$2" ]]; then
+        local interface="$1"
+        local direction="$2"
+
+        # Vérifier si l'interface existe
+        if ! grep -q "^ *$interface:" /proc/net/dev; then
+            echo "L'interface '$interface' n'existe pas."
+            return 1
+        fi
+
+        # Récupérer les statistiques de l'interface
+        local stats=$(grep "^ *$interface:" /proc/net/dev | awk '{print $2, $3, $10, $11}')
+
+        # Extraire les valeurs nécessaires
+        local rx_bytes=$(echo "$stats" | awk '{print $1}')
+        local rx_errors=$(echo "$stats" | awk '{print $2}')
+        local tx_bytes=$(echo "$stats" | awk '{print $3}')
+        local tx_errors=$(echo "$stats" | awk '{print $4}')
+
+        case "$direction" in
+            "down")
+                echo "$rx_bytes $rx_errors"
+                ;;
+            "up")
+                echo "$tx_bytes $tx_errors"
+                ;;
+            *)
+                echo "Option invalide. Utilisez 'down' ou 'up'."
+                return 1
+                ;;
+        esac
+    else
+        echo "Usage : network_info list"
+        echo "       network_info <interface> down"
+        echo "       network_info <interface> up"
+        return 1
+    fi
+}
+
+
 # Appeler la fonction
-cpu_usage
+#cpu_usage
+network_info list
+echo ""
+network_info eth0 down
