@@ -117,22 +117,25 @@ clear_screen() { # Jamel Bailleul
 
 
 info_reduite() { # Jamel Bailleul
+	local position=0
     # Mémoire
     if recup_mem "used" >/dev/null 2>&1; then # afficher la RAM
-        x=$1
-        y=$2
+        x=$(($1 + (3 * position)))
+        y="$2"
+        position=$(( $position + 1))
         printf "\33[%d;%dH" "$x" "$y" # Placer le curseur aux coordonnées x y
-        echo -en "${!font_color_default}${!color_default}Memory : ${reset}"
-        max=99 #$(recup_mem total) # recup la quantité max de la RAM
-        current=$(generate_random 1 $max) #$(recup_mem used) # recup la quantité utilisée de la RAM
+        max=$(recup_mem "total") #$(recup_mem total) # recup la quantité max de la RAM
+        current=$(recup_mem "used") #$(recup_mem used) # recup la quantité utilisée de la RAM
+		echo -en "${!font_color_default}${!color_default}Memory : ${current}Kb / ${max}Kb${reset}"
         print_bar_h "${!font_color_default}${!color_bar_memory}" "$y" "$3" "$((x + 1))" "$current" "$max" # afficher la barre d'état de la mémoire
     fi
 
     # CPU
     erreur=$(recup_cpu 2>&1)
     if (( $? != 1 )); then
-        cpu_x=$((x + 3))
-        cpu_y=3
+        cpu_x=$(($1 + (3 * position)))
+        cpu_y="$2"
+        position=$(( $position + 1))
         printf "\33[%d;%dH" "$cpu_x" "$cpu_y" # Placer le curseur aux coordonnées x y
         echo -en "${!font_color_default}${!color_default}CPU : $(recup_cpu)${reset}"
         # bar cpu
@@ -143,35 +146,103 @@ info_reduite() { # Jamel Bailleul
 
     # GPU
     if recup_gpu vramUsed >/dev/null 2>&1; then
-        gpu_x=$((cpu_x + 3))
-        gpu_y=3
+        gpu_x=$(($1 + (3 * position)))
+        gpu_y="$2"
+        position=$(( $position + 1))
         printf "\33[%d;%dH" "$gpu_x" "$gpu_y" # Placer le curseur aux coordonnées x y
         echo -en "${!font_color_default}${!color_default}GPU : ${reset}"
         max=99 #$(recup_gpu vramTotal)
         current=$(generate_random 1 $max) #$(recup_gpu vramUsed)
         print_bar_h "${!font_color_default}${!color_bar_gpu}" "$gpu_y" "$3" "$((gpu_x + 1))" "$current" "$max"
-    else
-        gpu_x=$((cpu_x + 3))
-        gpu_y=3
-        printf "\33[%d;%dH" "$gpu_x" "$gpu_y" # Placer le curseur aux coordonnées x y
-        echo -en "${!font_color_default}${!color_default}GPU : info sur les GPU impossible à trouver${reset}"
     fi
 
     # Disk
     if recup_disk used >/dev/null 2>&1; then
-        disk_x=$((gpu_x + 3))
-        disk_y=3
+        disk_x=$(($1 + (3 * position)))
+        disk_y="$2"
+        position=$(( $position + 1))
+		max=$(recup_disk "total") #$(recup_disk total | grep -o '[0-9.]*')
+        current=$(recup_disk "used") #$(recup_disk used | grep -o '[0-9.]*')
         printf "\33[%d;%dH" "$disk_x" "$disk_y" # Placer le curseur aux coordonnées x y
-        max=99 #$(recup_disk total | grep -o '[0-9.]*')
-        current=$(generate_random 1 $max) #$(recup_disk used | grep -o '[0-9.]*')
-        echo -en "${!font_color_default}${!color_default}Disk : ${reset}"
+        echo -en "${!font_color_default}${!color_default}Disk : ${current}KOct / ${max}KOct${reset}"
         print_bar_h "${!font_color_default}${!color_bar_disk}" "$disk_y" "$3" "$((disk_x + 1))" "$current" "$max"
-    else
-        disk_x=$((x + 3))
-        disk_y=3
-        printf "\33[%d;%dH" "$disk_x" "$disk_y" # Placer le curseur aux coordonnées x y
-        echo -en "${!font_color_default}${!color_default}Disk : info sur les disques impossible à trouver${reset}"
     fi
+}
+
+info_scinder() { # Jamel Bailleul
+    local cols="$1"  # Colonne de début
+    local lines="$2" # Ligne de début
+    local max_cols=$(tput cols)
+    local max_lines=$(tput lines)
+	local cols_proc=$(($max_cols / 2)) # Moitié des colonnes pour diviser la zone
+    local lines_proc=$(($max_lines / 2)) # Moitié des lignes pour diviser la zone
+
+    # Appel de la fonction info_reduite avec les paramètres ajustés
+    info_reduite $cols $lines $((($max_cols / 2) - 2))
+
+    # Appel de la fonction affiche_proc avec les colonnes et lignes ajustées
+    affiche_proc $(($cols_proc + 2)) $lines $(( max_lines - 2)) $(tput cols)
+}
+
+affiche_proc() { # Jamel Bailleul
+    local start_col=$1   # Colonne de début
+    local start_line=$2  # Ligne de début
+    local end_line=$3    # Nombre total de lignes à afficher
+    local end_col=$4     # Colonne de fin
+	# Récupérer le résultat de la commande ps dans la variable text
+	text=$(ps -eo %cpu,%mem,pid,user,cmd --sort=-%cpu)
+
+    # Boucle pour afficher chaque processus dans la zone délimitée
+    for (( i=$(($start_line - 1)); i < end_line; i++ )); do
+
+		# Obtenir la première ligne de "text"
+		first_line=$(echo "$text" | head -n 1)
+		#first_15_chars=${first_line:0:15}	# Obtenir les 15 premiers caractères de la première ligne
+
+		# Afficher les 15 premiers caractères de la première ligne au milieu de l'écran
+		printf "\033[%d;%dH" "$i" "$start_col"  # Positionne le curseur
+		nb_char=$(($end_col - $start_col))
+		echo -en "${!font_color_default}${!color_proc}${first_line:0:${nb_char}}"
+		text=$(echo "$text" | sed '1d')
+    done
+}
+
+info_scinder() { # Jamel Bailleul
+    local cols="$1"  # Colonne de début
+    local lines="$2" # Ligne de début
+    local max_cols=$(tput cols)
+    local max_lines=$(tput lines)
+	local cols_proc=$(($max_cols / 2)) # Moitié des colonnes pour diviser la zone
+    local lines_proc=$(($max_lines / 2)) # Moitié des lignes pour diviser la zone
+
+    # Appel de la fonction info_reduite avec les paramètres ajustés
+    info_reduite $cols $lines $((($max_cols / 2) - 2))
+
+    # Appel de la fonction affiche_proc avec les colonnes et lignes ajustées
+    affiche_proc $(($cols_proc + 2)) $lines $(( max_lines - 2)) $(tput cols)
+}
+
+affiche_proc() { # Jamel Bailleul
+    local start_col=$1   # Colonne de début
+    local start_line=$2  # Ligne de début
+    local end_line=$3    # Nombre total de lignes à afficher
+    local end_col=$4     # Colonne de fin
+	# Récupérer le résultat de la commande ps dans la variable text
+	text=$(ps -eo %cpu,%mem,pid,user,cmd --sort=-%cpu)
+
+    # Boucle pour afficher chaque processus dans la zone délimitée
+    for (( i=$(($start_line - 1)); i < end_line; i++ )); do
+
+		# Obtenir la première ligne de "text"
+		first_line=$(echo "$text" | head -n 1)
+		#first_15_chars=${first_line:0:15}	# Obtenir les 15 premiers caractères de la première ligne
+
+		# Afficher les 15 premiers caractères de la première ligne au milieu de l'écran
+		printf "\033[%d;%dH" "$i" "$start_col"  # Positionne le curseur
+		nb_char=$(($end_col - $start_col))
+		echo -en "${!font_color_default}${!color_proc}${first_line:0:${nb_char}}"
+		text=$(echo "$text" | sed '1d')
+    done
 }
 
 info_scinder() { # Jamel Bailleul

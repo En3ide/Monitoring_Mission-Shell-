@@ -154,21 +154,21 @@ recup_disk() { # Tim Lamour
     test "$#" -ne 1 && echo "Un seul paramètre est requis. Utilisez 'percent', 'name', 'total', 'used'." && exit 1
     param="$1" # recupere le premier argument comme paramètre
 
-    info_disk=$(df -h | grep '^/dev/')
+    info_disk=$(df -h .)
     res=""
 
     case $param in
         "percent")
-            res=$(echo "$info_disk" | awk '{print $5}')
+            res=$(echo "$info_disk" | awk 'NR==2 {print $5}')
             ;;
         "name")
-            res=$(echo "$info_disk" | awk '{print $1}')
+            res=$(echo "$info_disk" | awk 'NR==2 {print $1}')
             ;;
         "total")
-           res=$(echo "$info_disk" | awk '{print $2}')
+           res=$(echo "$info_disk" | awk 'NR==2 {print $2}')
             ;;
         "used")
-            res=$(echo "$info_disk" | awk '{print $3}')
+            res=$(echo "$info_disk" | awk 'NR==2 {print $2}')
             ;;
         *)
             echo "Paramètre non reconnu. Utilisez 'percent', 'name', 'total', 'used'."
@@ -178,7 +178,3 @@ recup_disk() { # Tim Lamour
     res=$(echo "$res" | grep -o '[0-9]*.');
     echo "$res"
 }
-
-#recup_disk name
-#recup_mem total
-recup_cpu "$1"
