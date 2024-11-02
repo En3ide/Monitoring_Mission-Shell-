@@ -153,8 +153,8 @@ info_reduite() { # Jamel Bailleul
         position=$(( $position + 1))
         printf "\33[%d;%dH" "$gpu_x" "$gpu_y" # Placer le curseur aux coordonnées x y
         echo -en "${!font_color_default}${!color_default}GPU : ${reset}"
-        max=99 #$(recup_gpu vramTotal)
-        current=$(generate_random 1 $max) #$(recup_gpu vramUsed)
+        max=$(recup_gpu vramTotal) #$(recup_gpu vramTotal)
+        current=$(recup_gpu vramUsed) #$(recup_gpu vramUsed)
         print_bar_h "${!font_color_default}${!color_bar_gpu}" "$gpu_y" "$3" "$((gpu_x + 1))" "$current" "$max"
     fi
 
@@ -266,7 +266,7 @@ main() {  # Jamel Bailleul
 	stty -icanon -echo
     trap "stty sane; exit" INT TERM
 	tput civis # Rendre le curseur invisible
-	trap 'echo -en "${reset}";stty sane;clear; exit' SIGINT
+	trap 'echo -en "${reset}";stty sane;clear; tput init; exit' SIGINT
 
 	# vérifie la présence d'un fichier de config
 	if [[ -f "$1" ]]; then
