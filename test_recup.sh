@@ -148,6 +148,6 @@ network_info() {
 
 # Appeler la fonction
 #cpu_usage
-network_info list
-echo ""
-network_info eth0 down
+#network_info list
+#echo ""
+#network_info eth0 down
