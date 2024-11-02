@@ -267,12 +267,13 @@ reload_old_cmd() {
 }
 
 main() {  # Jamel Bailleul
+    read -t 0.1 -n 1 key
     # on sauvegarde l'état du terminal
     old_stty=$(stty -g)
     tput smcup
 
     # prepare la zone de texte pour ne pas afficher le curseur ou les caractères tapés
-	stty -icanon -echo
+    stty -icanon -echo
     tput civis # Rendre le curseur invisible
 
     # si le programme est interrompu avec ctrl+c, on remet l'état initial du terminal
@@ -322,6 +323,11 @@ main() {  # Jamel Bailleul
 		# Pause de 1 seconde avant d'afficher à nouveau les info
 		#sleep 1
 	done
+
+    # on remet l'état initial du terminal si l'utilisateur quitte normalement
+    tput rmcup
+    tput cnorm
+    stty "$old_stty"
 }
 
 main "$@"
