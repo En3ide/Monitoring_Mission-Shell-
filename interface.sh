@@ -89,19 +89,19 @@ generate_random() {  # Jamel Bailleul
 }
 
 clear_screen() { # Jamel Bailleul
-    cols=$(tput cols)
-    lines=$(tput lines)
+    local cols=$(tput cols)
+    local lines=$(tput lines)
+    local separateur="0"
     
     # Définir la position du séparateur
-    if [ -z "$1" ]; then
-        separateur=0
-    else
-        separateur=$1
+    if [ -n "$1" ]; then
+        separateur="$1"
     fi
 
     # Effacer et redessiner l'écran
-    for ((i=1; i<=cols; i++)); do
-        for ((j=1; j<=lines; j++)); do
+    local i j
+    for ((i = 1; i <= cols; i++)); do
+        for ((j = 1; j <= lines; j++)); do
             printf "\033[%d;%dH" "$j" "$i"  # Positionnement du curseur
 
             if (( i == 1 || i == cols || j == 1 || j == lines || i == separateur )); then
@@ -117,59 +117,60 @@ clear_screen() { # Jamel Bailleul
 
 
 info_reduite() { # Jamel Bailleul
-	local position=0
+    local position="0"
+
     # Mémoire
-    if recup_mem "used" >/dev/null 2>&1; then # afficher la RAM
-        x=$(($1 + (3 * position)))
-        y="$2"
-        position=$(( $position + 1))
+    local used_memory=$(recup_mem "used" 2>/dev/null)
+    if [ -n "$used_memory" ]; then # Afficher la RAM si une valeur a été récupérée
+        local x=$(($1 + (3 * position)))
+        local y="$2"
+        position=$((position + 1))
         printf "\33[%d;%dH" "$x" "$y" # Placer le curseur aux coordonnées x y
-        max=$(recup_mem "total") #$(recup_mem total) # recup la quantité max de la RAM
-        current=$(recup_mem "used") #$(recup_mem used) # recup la quantité utilisée de la RAM
-		echo -en "${!bg_color_default}${!font_color_default}Memory : ${current}Kb / ${max}Kb${reset}"
-        print_bar_h "${!bg_color_default}${!color_bar_memory}" "$y" "$3" "$((x + 1))" "$current" "$max" # afficher la barre d'état de la mémoire
+        local max_memory=$(recup_mem "total") # Récupération de la quantité maximale de RAM une seule fois
+        echo -en "${!bg_color_default}${!font_color_default}Memory : ${used_memory}Kb / ${max_memory}Kb${reset}"
+        print_bar_h "${!bg_color_default}${!color_bar_memory}" "$y" "$3" "$((x + 1))" "$used_memory" "$max_memory" # Afficher la barre d'état de la mémoire
     fi
 
     # CPU
-    #erreur=$(recup_cpu 2>&1)
-    #if (( $? != 1 )); then
-    if recup_cpu "name" >/dev/null 2>&1; then
-	    cpu_x=$(($1 + (3 * position)))
-        cpu_y="$2"
-        position=$(( $position + 1))
+    local cpu_name=$(recup_cpu "name" 2>/dev/null)
+    if [ -n "$cpu_name" ]; then # Afficher le CPU si une valeur a été récupérée
+        local cpu_x=$(($1 + (3 * position)))
+        local cpu_y="$2"
+        position=$((position + 1))
         printf "\33[%d;%dH" "$cpu_x" "$cpu_y" # Placer le curseur aux coordonnées x y
-		name_cpu=$(recup_cpu "name")
-        echo -en "${!bg_color_default}${!font_color_default}CPU : ${name_cpu:0:$(( $3 - 7 ))}${reset}"
-        # bar cpu
-        max=99 #$(recup_gpu vramTotal)
-        current=$(recup_cpu) #$(recup_gpu vramUsed)
-        print_bar_h "${!bg_color_default}${!color_bar_cpu}" "$cpu_y" "$3" "$((cpu_x + 1))" "$current" "$max"
+        echo -en "${!bg_color_default}${!font_color_default}CPU : ${cpu_name:0:$(( $3 - 7 ))}${reset}"
+        # Afficher la barre d'état du CPU
+        local max_cpu=99
+        local current_cpu=$(recup_cpu)
+        print_bar_h "${!bg_color_default}${!color_bar_cpu}" "$cpu_y" "$3" "$((cpu_x + 1))" "$current_cpu" "$max_cpu"
     fi
 
     # GPU
-    if recup_gpu vramUsed >/dev/null 2>&1; then
-        gpu_x=$(($1 + (3 * position)))
-        gpu_y="$2"
-        position=$(( $position + 1))
+    local used_gpu=$(recup_gpu "vramUsed" 2>/dev/null)
+    if [ -n "$used_gpu" ]; then # Afficher le GPU si une valeur a été récupérée
+        local gpu_x=$(($1 + (3 * position)))
+        local gpu_y="$2"
+        position=$((position + 1))
         printf "\33[%d;%dH" "$gpu_x" "$gpu_y" # Placer le curseur aux coordonnées x y
+        local max_gpu=$(recup_gpu "vramTotal") # Récupération de la quantité maximale de VRAM une seule fois
         echo -en "${!bg_color_default}${!font_color_default}GPU : ${reset}"
-        max=$(recup_gpu vramTotal) #$(recup_gpu vramTotal)
-        current=$(recup_gpu vramUsed) #$(recup_gpu vramUsed)
-        print_bar_h "${!bg_color_default}${!color_bar_gpu}" "$gpu_y" "$3" "$((gpu_x + 1))" "$current" "$max"
+        print_bar_h "${!bg_color_default}${!color_bar_gpu}" "$gpu_y" "$3" "$((gpu_x + 1))" "$used_gpu" "$max_gpu"
     fi
 
-    # Disk
-    if recup_disk used >/dev/null 2>&1; then
-        disk_x=$(($1 + (3 * position)))
-        disk_y="$2"
-        position=$(( $position + 1))
-		max=$(recup_disk "total") #$(recup_disk total | grep -o '[0-9.]*')
-        current=$(recup_disk "used") #$(recup_disk used | grep -o '[0-9.]*')
+    # Disque
+    local used_disk=$(recup_disk "used" 2>/dev/null)
+    if [ -n "$used_disk" ]; then # Afficher le disque si une valeur a été récupérée
+        local disk_x=$(($1 + (3 * position)))
+        local disk_y="$2"
+        position=$((position + 1))
+        local max_disk=$(recup_disk "total") # Récupération de la quantité maximale du disque une seule fois
         printf "\33[%d;%dH" "$disk_x" "$disk_y" # Placer le curseur aux coordonnées x y
-        echo -en "${!bg_color_default}${!font_color_default}Disk : ${current} / ${max}${reset}"
-        print_bar_h "${!bg_color_default}${!color_bar_disk}" "$disk_y" "$3" "$((disk_x + 1))" "$current" "$max"
+        echo -en "${!bg_color_default}${!font_color_default}Disk : ${used_disk} / ${max_disk}${reset}"
+        print_bar_h "${!bg_color_default}${!color_bar_disk}" "$disk_y" "$3" "$((disk_x + 1))" "$used_disk" "$max_disk"
     fi
 }
+
+
 
 info_scinder() { # Jamel Bailleul
     local cols="$1"  # Colonne de début
@@ -182,61 +183,64 @@ info_scinder() { # Jamel Bailleul
     # Appel de la fonction info_reduite avec les paramètres ajustés
     info_reduite $cols $lines $((($max_cols / 2) - 2))
 
-    # Appel de la fonction affiche_proc avec les colonnes et lignes ajustées
-    affiche_proc $(($cols_proc + 2)) $lines $(( max_lines - 2)) $(tput cols)
+    # Appel de la fonction affiche_processus avec les colonnes et lignes ajustées
+    affiche_processus $(($cols_proc + 2)) $lines $(( max_lines - 2)) $(tput cols)
 }
 
-affiche_proc() { # Jamel Bailleul
-    local start_col=$1   # Colonne de début
-    local start_line=$2  # Ligne de début
-    local end_line=$3    # Nombre total de lignes à afficher
-    local end_col=$4     # Colonne de fin
+affiche_processus() { # Jamel Bailleul
+    local start_col="$1"   # Colonne de début
+    local start_line="$2"  # Ligne de début
+    local end_line="$3"    # Nombre total de lignes à afficher
+    local end_col="$4"     # Colonne de fin
 	# Récupérer le résultat de la commande ps dans la variable text
-	text=$(ps -eo %cpu,%mem,pid,user,cmd --sort=-%cpu)
+	local text=$(ps -eo %cpu,%mem,pid,user,cmd --sort=-%cpu)
 
     # Boucle pour afficher chaque processus dans la zone délimitée
     for (( i=$(($start_line - 1)); i < end_line; i++ )); do
 
 		# Obtenir la première ligne de "text"
-		first_line=$(echo "$text" | head -n 1)
+		local first_line=$(echo "$text" | head -n 1)
 		#first_15_chars=${first_line:0:15}	# Obtenir les 15 premiers caractères de la première ligne
 
 		# Afficher les 15 premiers caractères de la première ligne au milieu de l'écran
 		printf "\033[%d;%dH" "$i" "$start_col"  # Positionne le curseur
-		nb_char=$(($end_col - $start_col))
+		local nb_char=$(($end_col - $start_col))
 		echo -en "${!bg_color_default}${!color_proc}${first_line:0:${nb_char}}"
 		text=$(echo "$text" | sed '1d')
     done
 }
 
 print_bar_h() { # Jamel Bailleul
-	# $1 = couleur
-	# $2 = cols debut de barre
-	# $3 = cols fin de barre
-	# $4 = lines
-	# $5 = current var
-	# $6 = max var
-	res="$1"
-	#echo "etape 1 "
-	# Utilisation de bc pour gérer les nombres à virgule
+    # $1 = couleur
+    # $2 = cols debut de barre
+    # $3 = cols fin de barre
+    # $4 = lines
+    # $5 = current var
+    # $6 = max var
+
+    # Gère les valeurs à virgules (on choisit de les retirer)
+    local res="$1"
+    
+    local max_tmp_bar current_tmp_bar
     max_tmp_bar=$(echo "$6" | tr -cd '0-9')
     max_tmp_bar=$(echo "$max_tmp_bar" | tr -d '.')
     current_tmp_bar=$(echo "$5" | tr -cd '0-9')
     current_tmp_bar=$(echo "$current_tmp_bar" | tr -d '.')
-	percent=$(($current_tmp_bar * 99 / $max_tmp_bar))
 
-	#echo "étape 2"
-	for ((i=$2; i<=$3 - 3; i++)); do
-		if (( $(echo "$i * 100 / ($3 - 4)" | bc) <= percent )); then
-			res+="${!bg_color_default}${!char_bar_plein}"
-		else
-			res+="${reset}${!char_bar_vide}"
-		fi
-	done
-	
-	printf "\33[%d;%dH" "$4" "$2"
-	echo -en "${!bg_color_default}${!font_color_default}$res${!bg_color_default}${!font_color_default}$percent%${reset}"
+    local percent=$(($current_tmp_bar * 99 / $max_tmp_bar))
+
+    for ((i=$2; i<=$3 - 3; i++)); do
+        if (( $(echo "$i * 100 / ($3 - 4)" | bc) <= percent )); then
+            res+="${!bg_color_default}${!char_bar_plein}"
+        else
+            res+="${reset}${!char_bar_vide}"
+        fi
+    done
+
+    printf "\33[%d;%dH" "$4" "$2"
+    echo -en "${!bg_color_default}${!font_color_default}$res${!bg_color_default}${!font_color_default}$percent%${reset}"
 }
+
 
 config_file() {  # Jamel Bailleul
     local fichier="$1"
@@ -256,28 +260,22 @@ config_file() {  # Jamel Bailleul
 install_bc_if_not_installed() {  # Jamel Bailleul
     if ! command -v bc &> /dev/null; then # Vérifie si bc est installé
         # Installation de bc
-        sudo apt update -y > /dev/null 2>&1
-        sudo apt install -y bc > /dev/null 2>&1
+        sudo "apt" "update" -y > /dev/null 2>&1
+        sudo "apt" "install" -y bc > /dev/null 2>&1
     fi
 }
 
-reload_old_cmd() {
-    tput rmcup
-    stty "$1"
-}
-
 main() {  # Jamel Bailleul
-    read -t 0.1 -n 1 key
     # on sauvegarde l'état du terminal
-    old_stty=$(stty -g)
-    tput smcup
+    local old_stty=$(stty -g)
+    tput "smcup"
 
     # prepare la zone de texte pour ne pas afficher le curseur ou les caractères tapés
     stty -icanon -echo
     tput civis # Rendre le curseur invisible
 
     # si le programme est interrompu avec ctrl+c, on remet l'état initial du terminal
-    trap 'tput rmcup; tput cnorm; stty "$old_stty"; exit' INT TERM
+    trap 'tput "rmcup"; tput "cnorm"; stty "$old_stty"; exit' INT TERM
 
 	# vérifie la présence d'un fichier de config
 	if [[ -f "$1" ]]; then
@@ -291,8 +289,8 @@ main() {  # Jamel Bailleul
 	else
 		clear_screen
 	fi
-	cols=$(tput cols)
-	lines=$(tput lines)
+	local cols=$(tput cols)
+	local lines=$(tput lines)
     #while true; do
     #    # Utilise la commande read avec l'option -n1 pour lire un seul caractère
 	#	read -n 1 -s input
@@ -325,8 +323,8 @@ main() {  # Jamel Bailleul
 	done
 
     # on remet l'état initial du terminal si l'utilisateur quitte normalement
-    tput rmcup
-    tput cnorm
+    tput "rmcup"
+    tput "cnorm"
     stty "$old_stty"
 }
 
