@@ -115,7 +115,6 @@ clear_screen() { # Jamel Bailleul
     done
 }
 
-
 info_reduite() { # Jamel Bailleul
     local position="0"
     local x y
@@ -144,7 +143,7 @@ info_reduite() { # Jamel Bailleul
         print_bar_h "${!bg_color_default}${!color_bar_memory}" "$y" "$3" "$(( x + 1 ))" "$used_memory" "$max_memory"
     fi
 
-    # CPU
+    # CPU (%)
     local cpu_name=$(recup_cpu "name" 2>/dev/null)
     if [ -n "$cpu_name" ]; then
         # Calcul de la position pour afficher les informations de CPU
@@ -158,7 +157,7 @@ info_reduite() { # Jamel Bailleul
         printf "\33[%d;%dH" "$x" "$y"
 
         # Afficher le nom du CPU avec une longueur limitée par la largeur disponible
-        echo -en "${!bg_color_default}${!font_color_default}CPU : ${cpu_name:0:$(( $3 - 7 ))}${reset}"
+        echo -en "${!bg_color_default}${!font_color_default}CPU % : ${cpu_name:0:$(( $3 - 7 ))}${reset}"
 
         # Récupération de l'utilisation actuelle du CPU en pourcentage et définition de la valeur maximale
         local max_cpu=99
@@ -168,8 +167,8 @@ info_reduite() { # Jamel Bailleul
         print_bar_h "${!bg_color_default}${!color_bar_cpu}" "$y" "$3" "$(( x + 1 ))" "$current_cpu" "$max_cpu"
     fi
 
-    # GPU
-    local used_gpu=$(recup_gpu "vramUsed" 2>/dev/null)
+    # GPU (%)
+    local used_gpu=$(recup_gpu "percent" 2>/dev/null)
     if [ -n "$used_gpu" ]; then
         # Calcul de la position pour afficher les informations de GPU
         x=$(( $1 + (3 * position) ))  # Position en ligne ajustée selon la position actuelle
@@ -182,13 +181,36 @@ info_reduite() { # Jamel Bailleul
         printf "\33[%d;%dH" "$x" "$y"
 
         # Récupération de la quantité totale de VRAM en Kb
-        local max_gpu=$(recup_gpu "vramTotal")
+        local max_gpu=99
 
         # Afficher l'en-tête de la section GPU
-        echo -en "${!bg_color_default}${!font_color_default}GPU : ${reset}"
+        echo -en "${!bg_color_default}${!font_color_default}GPU % : ${reset}"
 
         # Afficher la barre d'état pour l'utilisation de la VRAM
         print_bar_h "${!bg_color_default}${!color_bar_gpu}" "$y" "$3" "$(( x + 1 ))" "$used_gpu" "$max_gpu"
+    fi
+
+    # GPU (vram)
+    local used_vram_gpu=$(recup_gpu "vramUsed" 2>/dev/null)
+    if [ -n "$used_vram_gpu" ]; then
+        # Calcul de la position pour afficher les informations de GPU
+        x=$(( $1 + (3 * position) ))  # Position en ligne ajustée selon la position actuelle
+        y="$2"  # Position en colonne reçue en argument
+
+        # Incrémenter la position pour la prochaine section
+        position=$(( position + 1 ))
+
+        # Placer le curseur aux coordonnées (x, y) pour l'affichage
+        printf "\33[%d;%dH" "$x" "$y"
+
+        # Récupération de la quantité totale de VRAM en Kb
+        local max_vram_gpu=$(recup_gpu "vramTotal")
+
+        # Afficher l'en-tête de la section GPU
+        echo -en "${!bg_color_default}${!font_color_default}GPU VRAM : ${reset}"
+
+        # Afficher la barre d'état pour l'utilisation de la VRAM
+        print_bar_h "${!bg_color_default}${!color_bar_gpu}" "$y" "$3" "$(( x + 1 ))" "$used_vram_gpu" "$max_vram_gpu"
     fi
 
     # Disque
@@ -214,8 +236,6 @@ info_reduite() { # Jamel Bailleul
         print_bar_h "${!bg_color_default}${!color_bar_disk}" "$y" "$3" "$(( x + 1 ))" "$used_disk" "$max_disk"
     fi
 }
-
-
 
 info_scinder() { # Jamel Bailleul
     local cols="$1"  # Colonne de début
