@@ -118,55 +118,100 @@ clear_screen() { # Jamel Bailleul
 
 info_reduite() { # Jamel Bailleul
     local position="0"
+    local x y
+    local var_info
 
     # Mémoire
     local used_memory=$(recup_mem "used" 2>/dev/null)
-    if [ -n "$used_memory" ]; then # Afficher la RAM si une valeur a été récupérée
-        local x=$(($1 + (3 * position)))
-        local y="$2"
-        position=$((position + 1))
-        printf "\33[%d;%dH" "$x" "$y" # Placer le curseur aux coordonnées x y
-        local max_memory=$(recup_mem "total") # Récupération de la quantité maximale de RAM une seule fois
+    if [ -n "$used_memory" ]; then
+        # Calcul de la position pour afficher les informations de mémoire
+        x=$(( $1 + (3 * position) ))  # Position en ligne ajustée selon la position
+        y="$2"  # Position en colonne reçue en argument
+
+        # Incrémenter la position pour la prochaine section
+        position=$(( position + 1 ))
+
+        # Placer le curseur aux coordonnées (x, y) pour l'affichage
+        printf "\33[%d;%dH" "$x" "$y"
+
+        # Récupération de la quantité totale de RAM en Kb
+        local max_memory=$(recup_mem "total")
+
+        # Afficher les informations de mémoire sous forme de texte
         echo -en "${!bg_color_default}${!font_color_default}Memory : ${used_memory}Kb / ${max_memory}Kb${reset}"
-        print_bar_h "${!bg_color_default}${!color_bar_memory}" "$y" "$3" "$((x + 1))" "$used_memory" "$max_memory" # Afficher la barre d'état de la mémoire
+
+        # Afficher la barre d'état de la mémoire
+        print_bar_h "${!bg_color_default}${!color_bar_memory}" "$y" "$3" "$(( x + 1 ))" "$used_memory" "$max_memory"
     fi
 
     # CPU
     local cpu_name=$(recup_cpu "name" 2>/dev/null)
-    if [ -n "$cpu_name" ]; then # Afficher le CPU si une valeur a été récupérée
-        local cpu_x=$(($1 + (3 * position)))
-        local cpu_y="$2"
-        position=$((position + 1))
-        printf "\33[%d;%dH" "$cpu_x" "$cpu_y" # Placer le curseur aux coordonnées x y
+    if [ -n "$cpu_name" ]; then
+        # Calcul de la position pour afficher les informations de CPU
+        x=$(( $1 + (3 * position) ))  # Position en ligne ajustée selon la position actuelle
+        y="$2"  # Position en colonne reçue en argument
+
+        # Incrémenter la position pour la prochaine section
+        position=$(( position + 1 ))
+
+        # Placer le curseur aux coordonnées (x, y) pour l'affichage
+        printf "\33[%d;%dH" "$x" "$y"
+
+        # Afficher le nom du CPU avec une longueur limitée par la largeur disponible
         echo -en "${!bg_color_default}${!font_color_default}CPU : ${cpu_name:0:$(( $3 - 7 ))}${reset}"
-        # Afficher la barre d'état du CPU
+
+        # Récupération de l'utilisation actuelle du CPU en pourcentage et définition de la valeur maximale
         local max_cpu=99
-        local current_cpu=$(recup_cpu)
-        print_bar_h "${!bg_color_default}${!color_bar_cpu}" "$cpu_y" "$3" "$((cpu_x + 1))" "$current_cpu" "$max_cpu"
+        local current_cpu=$(recup_cpu "cpu")
+
+        # Afficher la barre d'état pour l'utilisation du CPU
+        print_bar_h "${!bg_color_default}${!color_bar_cpu}" "$y" "$3" "$(( x + 1 ))" "$current_cpu" "$max_cpu"
     fi
 
     # GPU
     local used_gpu=$(recup_gpu "vramUsed" 2>/dev/null)
-    if [ -n "$used_gpu" ]; then # Afficher le GPU si une valeur a été récupérée
-        local gpu_x=$(($1 + (3 * position)))
-        local gpu_y="$2"
-        position=$((position + 1))
-        printf "\33[%d;%dH" "$gpu_x" "$gpu_y" # Placer le curseur aux coordonnées x y
-        local max_gpu=$(recup_gpu "vramTotal") # Récupération de la quantité maximale de VRAM une seule fois
+    if [ -n "$used_gpu" ]; then
+        # Calcul de la position pour afficher les informations de GPU
+        x=$(( $1 + (3 * position) ))  # Position en ligne ajustée selon la position actuelle
+        y="$2"  # Position en colonne reçue en argument
+
+        # Incrémenter la position pour la prochaine section
+        position=$(( position + 1 ))
+
+        # Placer le curseur aux coordonnées (x, y) pour l'affichage
+        printf "\33[%d;%dH" "$x" "$y"
+
+        # Récupération de la quantité totale de VRAM en Kb
+        local max_gpu=$(recup_gpu "vramTotal")
+
+        # Afficher l'en-tête de la section GPU
         echo -en "${!bg_color_default}${!font_color_default}GPU : ${reset}"
-        print_bar_h "${!bg_color_default}${!color_bar_gpu}" "$gpu_y" "$3" "$((gpu_x + 1))" "$used_gpu" "$max_gpu"
+
+        # Afficher la barre d'état pour l'utilisation de la VRAM
+        print_bar_h "${!bg_color_default}${!color_bar_gpu}" "$y" "$3" "$(( x + 1 ))" "$used_gpu" "$max_gpu"
     fi
 
     # Disque
     local used_disk=$(recup_disk "used" 2>/dev/null)
-    if [ -n "$used_disk" ]; then # Afficher le disque si une valeur a été récupérée
-        local disk_x=$(($1 + (3 * position)))
-        local disk_y="$2"
-        position=$((position + 1))
-        local max_disk=$(recup_disk "total") # Récupération de la quantité maximale du disque une seule fois
-        printf "\33[%d;%dH" "$disk_x" "$disk_y" # Placer le curseur aux coordonnées x y
+    if [ -n "$used_disk" ]; then
+        # Calcul de la position pour afficher les informations de disque
+        x=$(( $1 + (3 * position) ))  # Position en ligne ajustée selon la position actuelle
+        y="$2"  # Position en colonne reçue en argument
+
+        # Incrémenter la position pour la prochaine section
+        position=$(( position + 1 ))
+
+        # Récupération de la quantité totale de disque en Mo
+        local max_disk=$(recup_disk "total")
+
+        # Placer le curseur aux coordonnées (x, y) pour l'affichage
+        printf "\33[%d;%dH" "$x" "$y"
+
+        # Afficher les informations de disque sous forme de texte
         echo -en "${!bg_color_default}${!font_color_default}Disk : ${used_disk} / ${max_disk}${reset}"
-        print_bar_h "${!bg_color_default}${!color_bar_disk}" "$disk_y" "$3" "$((disk_x + 1))" "$used_disk" "$max_disk"
+
+        # Afficher la barre d'état pour l'utilisation du disque
+        print_bar_h "${!bg_color_default}${!color_bar_disk}" "$y" "$3" "$(( x + 1 ))" "$used_disk" "$max_disk"
     fi
 }
 
@@ -220,7 +265,7 @@ print_bar_h() { # Jamel Bailleul
 
     # Gère les valeurs à virgules (on choisit de les retirer)
     local res="$1"
-    
+
     local max_tmp_bar current_tmp_bar
     max_tmp_bar=$(echo "$6" | tr -cd '0-9')
     max_tmp_bar=$(echo "$max_tmp_bar" | tr -d '.')
