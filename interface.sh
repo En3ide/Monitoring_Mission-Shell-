@@ -3,30 +3,30 @@
 . ./recup_info.sh
 
 # Définir les valeurs par défaut
-font_color_default="BG_BLACK"
-color_default="RED"
+bg_color_default="BG_BLACK"
+font_color_default="FONT_RED"
 lang_default="en"
 os_default="ubuntu"
 climit="full_block"
 char_bar_plein="dark_shade"
 char_bar_vide="light_shade"
-color_limiteur="BLUE"
-color_bar_cpu="YELLOW"
-color_bar_gpu="GREEN"
-color_bar_memory="MAGENTA"
-color_bar_disk="BLUE"
-color_proc="BRIGHT_WHITE"
+color_limiteur="FONT_BLUE"
+color_bar_cpu="FONT_YELLOW"
+color_bar_gpu="FONT_GREEN"
+color_bar_memory="FONT_MAGENTA"
+color_bar_disk="FONT_BLUE"
+color_proc="FONT_BRIGHT_WHITE"
 
 # Variables pour les couleurs de texte (foreground)
-BLACK="\033[30m"
-RED="\033[31m"
-GREEN="\033[32m"
-YELLOW="\033[33m"
-BLUE="\033[34m"
-MAGENTA="\033[35m"
-CYAN="\033[36m"
-WHITE="\033[37m"
-RESET="\033[0m"
+FONT_BLACK="\033[30m"
+FONT_RED="\033[31m"
+FONT_GREEN="\033[32m"
+FONT_YELLOW="\033[33m"
+FONT_BLUE="\033[34m"
+FONT_MAGENTA="\033[35m"
+FONT_CYAN="\033[36m"
+FONT_WHITE="\033[37m"
+FONT_RESET="\033[0m"
 
 # Variables pour les couleurs de fond (background)
 BG_BLACK="\033[40m"
@@ -39,24 +39,24 @@ BG_CYAN="\033[46m"
 BG_WHITE="\033[47m"
 
 # Variables pour les couleurs claires (bright foreground)
-BRIGHT_BLACK="\033[90m"
-BRIGHT_RED="\033[91m"
-BRIGHT_GREEN="\033[92m"
-BRIGHT_YELLOW="\033[93m"
-BRIGHT_BLUE="\033[94m"
-BRIGHT_MAGENTA="\033[95m"
-BRIGHT_CYAN="\033[96m"
-BRIGHT_WHITE="\033[97m"
+FONT_BRIGHT_BLACK="\033[90m"
+FONT_BRIGHT_RED="\033[91m"
+FONT_BRIGHT_GREEN="\033[92m"
+FONT_BRIGHT_YELLOW="\033[93m"
+FONT_BRIGHT_BLUE="\033[94m"
+FONT_BRIGHT_MAGENTA="\033[95m"
+FONT_BRIGHT_CYAN="\033[96m"
+FONT_BRIGHT_WHITE="\033[97m"
 
 # Variables pour les couleurs claires de fond (bright background)
-BRIGHT_BG_BLACK="\033[100m"
-BRIGHT_BG_RED="\033[101m"
-BRIGHT_BG_GREEN="\033[102m"
-BRIGHT_BG_YELLOW="\033[103m"
-BRIGHT_BG_BLUE="\033[104m"
-BRIGHT_BG_MAGENTA="\033[105m"
-BRIGHT_BG_CYAN="\033[106m"
-BRIGHT_BG_WHITE="\033[107m"
+BG_BRIGHT_BLACK="\033[100m"
+BG_BRIGHT_RED="\033[101m"
+BG_BRIGHT_GREEN="\033[102m"
+BG_BRIGHT_YELLOW="\033[103m"
+BG_BRIGHT_BLUE="\033[104m"
+BG_BRIGHT_MAGENTA="\033[105m"
+BG_BRIGHT_CYAN="\033[106m"
+BG_BRIGHT_WHITE="\033[107m"
 
 carre_plein="\u2588"
 carre_vide="\u25A1"
@@ -106,10 +106,10 @@ clear_screen() { # Jamel Bailleul
 
             if (( i == 1 || i == cols || j == 1 || j == lines || i == separateur )); then
                 # Afficher la bordure
-                echo -en "${!font_color_default}${!color_limiteur}${!climit}${reset}"
+                echo -en "${!bg_color_default}${!color_limiteur}${!climit}${reset}"
             else
                 # Remplir avec un espace vide
-                echo -en "${!font_color_default}${!color_limiteur} ${reset}"
+                echo -en "${!bg_color_default}${!color_limiteur} ${reset}"
             fi
         done
     done
@@ -126,8 +126,8 @@ info_reduite() { # Jamel Bailleul
         printf "\33[%d;%dH" "$x" "$y" # Placer le curseur aux coordonnées x y
         max=$(recup_mem "total") #$(recup_mem total) # recup la quantité max de la RAM
         current=$(recup_mem "used") #$(recup_mem used) # recup la quantité utilisée de la RAM
-		echo -en "${!font_color_default}${!color_default}Memory : ${current}Kb / ${max}Kb${reset}"
-        print_bar_h "${!font_color_default}${!color_bar_memory}" "$y" "$3" "$((x + 1))" "$current" "$max" # afficher la barre d'état de la mémoire
+		echo -en "${!bg_color_default}${!font_color_default}Memory : ${current}Kb / ${max}Kb${reset}"
+        print_bar_h "${!bg_color_default}${!color_bar_memory}" "$y" "$3" "$((x + 1))" "$current" "$max" # afficher la barre d'état de la mémoire
     fi
 
     # CPU
@@ -139,11 +139,11 @@ info_reduite() { # Jamel Bailleul
         position=$(( $position + 1))
         printf "\33[%d;%dH" "$cpu_x" "$cpu_y" # Placer le curseur aux coordonnées x y
 		name_cpu=$(recup_cpu "name")
-        echo -en "${!font_color_default}${!color_default}CPU : ${name_cpu:0:$(( $3 - 7 ))}${reset}"
+        echo -en "${!bg_color_default}${!font_color_default}CPU : ${name_cpu:0:$(( $3 - 7 ))}${reset}"
         # bar cpu
         max=99 #$(recup_gpu vramTotal)
         current=$(recup_cpu) #$(recup_gpu vramUsed)
-        print_bar_h "${!font_color_default}${!color_bar_cpu}" "$cpu_y" "$3" "$((cpu_x + 1))" "$current" "$max"
+        print_bar_h "${!bg_color_default}${!color_bar_cpu}" "$cpu_y" "$3" "$((cpu_x + 1))" "$current" "$max"
     fi
 
     # GPU
@@ -152,10 +152,10 @@ info_reduite() { # Jamel Bailleul
         gpu_y="$2"
         position=$(( $position + 1))
         printf "\33[%d;%dH" "$gpu_x" "$gpu_y" # Placer le curseur aux coordonnées x y
-        echo -en "${!font_color_default}${!color_default}GPU : ${reset}"
+        echo -en "${!bg_color_default}${!font_color_default}GPU : ${reset}"
         max=$(recup_gpu vramTotal) #$(recup_gpu vramTotal)
         current=$(recup_gpu vramUsed) #$(recup_gpu vramUsed)
-        print_bar_h "${!font_color_default}${!color_bar_gpu}" "$gpu_y" "$3" "$((gpu_x + 1))" "$current" "$max"
+        print_bar_h "${!bg_color_default}${!color_bar_gpu}" "$gpu_y" "$3" "$((gpu_x + 1))" "$current" "$max"
     fi
 
     # Disk
@@ -166,8 +166,8 @@ info_reduite() { # Jamel Bailleul
 		max=$(recup_disk "total") #$(recup_disk total | grep -o '[0-9.]*')
         current=$(recup_disk "used") #$(recup_disk used | grep -o '[0-9.]*')
         printf "\33[%d;%dH" "$disk_x" "$disk_y" # Placer le curseur aux coordonnées x y
-        echo -en "${!font_color_default}${!color_default}Disk : ${current} / ${max}${reset}"
-        print_bar_h "${!font_color_default}${!color_bar_disk}" "$disk_y" "$3" "$((disk_x + 1))" "$current" "$max"
+        echo -en "${!bg_color_default}${!font_color_default}Disk : ${current} / ${max}${reset}"
+        print_bar_h "${!bg_color_default}${!color_bar_disk}" "$disk_y" "$3" "$((disk_x + 1))" "$current" "$max"
     fi
 }
 
@@ -204,7 +204,7 @@ affiche_proc() { # Jamel Bailleul
 		# Afficher les 15 premiers caractères de la première ligne au milieu de l'écran
 		printf "\033[%d;%dH" "$i" "$start_col"  # Positionne le curseur
 		nb_char=$(($end_col - $start_col))
-		echo -en "${!font_color_default}${!color_proc}${first_line:0:${nb_char}}"
+		echo -en "${!bg_color_default}${!color_proc}${first_line:0:${nb_char}}"
 		text=$(echo "$text" | sed '1d')
     done
 }
@@ -228,14 +228,14 @@ print_bar_h() { # Jamel Bailleul
 	#echo "étape 2"
 	for ((i=$2; i<=$3 - 3; i++)); do
 		if (( $(echo "$i * 100 / ($3 - 4)" | bc) <= percent )); then
-			res+="${!font_color_default}${!char_bar_plein}"
+			res+="${!bg_color_default}${!char_bar_plein}"
 		else
 			res+="${reset}${!char_bar_vide}"
 		fi
 	done
 	
 	printf "\33[%d;%dH" "$4" "$2"
-	echo -en "${!font_color_default}${!color_default}$res${!font_color_default}${!color_default}$percent%${reset}"
+	echo -en "${!bg_color_default}${!font_color_default}$res${!bg_color_default}${!font_color_default}$percent%${reset}"
 }
 
 config_file() {  # Jamel Bailleul
