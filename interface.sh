@@ -17,6 +17,7 @@ color_bar_gpu="FONT_GREEN"
 color_bar_memory="FONT_MAGENTA"
 color_bar_disk="FONT_BLUE"
 color_proc="FONT_BRIGHT_WHITE"
+update_log_time=60
 
 # Variables pour les couleurs de texte (foreground)
 FONT_BLACK="\033[30m"
@@ -417,7 +418,8 @@ main() {  # Jamel Bailleul
     # Créer le logfile
     create_logfile
 
-    local logfile_enabled=1
+    local logfile_enabled=0
+    local start_time="$SECONDS"
 	while true; do
 		if (( $(tput cols) != $cols || $(tput lines) != $lines )); then
 			if (( $(tput cols) > 15 && $(tput lines) > 20 )); then 
@@ -433,8 +435,13 @@ main() {  # Jamel Bailleul
 			info_scinder 2 3 "$(($(tput cols)-2))" "$logfile_enabled"
 		fi
 
-		# Pause de 1 seconde avant d'afficher à nouveau les info
-		#sleep 1
+        # Ecris dans les logs toutes les update_log_time secondes
+        if (( SECONDS - start_time >= update_log_time )); then
+            logfile_enabled=1       # Active l'écriture dans le log
+            start_time=$SECONDS     # Réinitialise le compteur de temps
+        else
+            logfile_enabled=0       # Désactive l'écriture dans le log
+        fi
 	done
 
     # on remet l'état initial du terminal si l'utilisateur quitte normalement
