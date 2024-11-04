@@ -1,6 +1,7 @@
 #!/bin/bash
 #pour les couleur tu peux aussi utiliser "\033[38;5<code couleurs>m" code en 256
 . ./recup_info.sh
+. ./update_log.sh
 
 # Définir les valeurs par défaut
 bg_color_default="BG_BLACK"
@@ -91,7 +92,7 @@ generate_random() {  # Jamel Bailleul
 clear_screen() { # Jamel Bailleul
     local cols=$(tput cols)
     local lines=$(tput lines)
-    local separateur="0"
+    local separateur=0
     
     # Définir la position du séparateur
     if [ -n "$1" ]; then
@@ -116,9 +117,14 @@ clear_screen() { # Jamel Bailleul
 }
 
 info_reduite() { # Jamel Bailleul
-    local position="0"
+    local position=0
     local x y
     local var_info
+    local percent
+
+    # logfile
+    local logfile_content=""
+    local logfile_enabled="$4"
 
     # Mémoire
     local used_memory=$(recup_mem "used" 2>/dev/null)
@@ -135,17 +141,26 @@ info_reduite() { # Jamel Bailleul
 
         # Récupération de la quantité totale de RAM en Kb
         local max_memory=$(recup_mem "total")
+        
+        # Calculer le pourcentage
+        percent=$(calculate_percent "$used_memory" "$max_memory")
+
+        # Concatener dans le contenu à rajouter au logfile si demandé
+        if [ "$logfile_enabled" == 1 ]; then
+            logfile_content="$logfile_content Memory => Used_memory : $used_memory'kb'      Total_memory : $max_memory'kb'      Usage : $percent%\n"
+        fi
 
         # Afficher les informations de mémoire sous forme de texte
         echo -en "${!bg_color_default}${!font_color_default}Memory : ${used_memory}Kb / ${max_memory}Kb${reset}"
 
         # Afficher la barre d'état de la mémoire
-        print_bar_h "${!bg_color_default}${!color_bar_memory}" "$y" "$3" "$(( x + 1 ))" "$used_memory" "$max_memory"
+        print_bar_h "${!bg_color_default}${!color_bar_memory}" "$y" "$3" "$(( x + 1 ))" "$percent"
     fi
 
     # CPU (%)
     local cpu_name=$(recup_cpu "name" 2>/dev/null)
-    if [ -n "$cpu_name" ]; then
+    local used_cpu=$(recup_cpu "cpu" 2>/dev/null)
+    if [[ -n "$cpu_name" && -n "$used_cpu" ]]; then
         # Calcul de la position pour afficher les informations de CPU
         x=$(( $1 + (3 * position) ))  # Position en ligne ajustée selon la position actuelle
         y="$2"  # Position en colonne reçue en argument
@@ -156,15 +171,22 @@ info_reduite() { # Jamel Bailleul
         # Placer le curseur aux coordonnées (x, y) pour l'affichage
         printf "\33[%d;%dH" "$x" "$y"
 
+        # Valeur maximal en pourcentage du CPU
+        local max_cpu=99
+        
+        # Calculer le pourcentage
+        percent=$(calculate_percent "$used_cpu" "$max_cpu")
+
+        # Concatener dans le contenu à rajouter au logfile si demandé
+        if [ "$logfile_enabled" == 1 ]; then
+            logfile_content="$logfile_content CPU => Usage : $percent%\n"
+        fi
+
         # Afficher le nom du CPU avec une longueur limitée par la largeur disponible
         echo -en "${!bg_color_default}${!font_color_default}CPU % : ${cpu_name:0:$(( $3 - 7 ))}${reset}"
 
-        # Récupération de l'utilisation actuelle du CPU en pourcentage et définition de la valeur maximale
-        local max_cpu=99
-        local current_cpu=$(recup_cpu "cpu")
-
         # Afficher la barre d'état pour l'utilisation du CPU
-        print_bar_h "${!bg_color_default}${!color_bar_cpu}" "$y" "$3" "$(( x + 1 ))" "$current_cpu" "$max_cpu"
+        print_bar_h "${!bg_color_default}${!color_bar_cpu}" "$y" "$3" "$(( x + 1 ))" "$percent"
     fi
 
     # GPU (%)
@@ -180,14 +202,22 @@ info_reduite() { # Jamel Bailleul
         # Placer le curseur aux coordonnées (x, y) pour l'affichage
         printf "\33[%d;%dH" "$x" "$y"
 
-        # Récupération de la quantité totale de VRAM en Kb
+        # Valeur maximal en pourcentage du GPU
         local max_gpu=99
+
+        # Calculer le pourcentage
+        percent=$(calculate_percent "$used_gpu" "$max_gpu")
+
+        # Concatener dans le contenu à rajouter au logfile si demandé
+        if [ "$logfile_enabled" == 1 ]; then
+            logfile_content="$logfile_content GPU => usage : $percent%\n"
+        fi
 
         # Afficher l'en-tête de la section GPU
         echo -en "${!bg_color_default}${!font_color_default}GPU % : ${reset}"
 
         # Afficher la barre d'état pour l'utilisation de la VRAM
-        print_bar_h "${!bg_color_default}${!color_bar_gpu}" "$y" "$3" "$(( x + 1 ))" "$used_gpu" "$max_gpu"
+        print_bar_h "${!bg_color_default}${!color_bar_gpu}" "$y" "$3" "$(( x + 1 ))" "$percent"
     fi
 
     # GPU (vram)
@@ -206,11 +236,19 @@ info_reduite() { # Jamel Bailleul
         # Récupération de la quantité totale de VRAM en Kb
         local max_vram_gpu=$(recup_gpu "vramTotal")
 
+        # Calculer le pourcentage
+        percent=$(calculate_percent "$used_vram_gpu" "$max_vram_gpu")
+
+        # Concatener dans le contenu à rajouter au logfile si demandé
+        if [ "$logfile_enabled" == 1 ]; then
+            logfile_content="$logfile_content GPU VRAM => Used_memory : $used_vram_gpu'Kb'      Total_memory : $max_vram_gpu'Kb'      Usage : $percent%\n"
+        fi
+
         # Afficher l'en-tête de la section GPU
         echo -en "${!bg_color_default}${!font_color_default}GPU VRAM : ${reset}"
 
         # Afficher la barre d'état pour l'utilisation de la VRAM
-        print_bar_h "${!bg_color_default}${!color_bar_gpu}" "$y" "$3" "$(( x + 1 ))" "$used_vram_gpu" "$max_vram_gpu"
+        print_bar_h "${!bg_color_default}${!color_bar_gpu}" "$y" "$3" "$(( x + 1 ))" "$percent"
     fi
 
     # Disque
@@ -223,33 +261,48 @@ info_reduite() { # Jamel Bailleul
         # Incrémenter la position pour la prochaine section
         position=$(( position + 1 ))
 
+        # Placer le curseur aux coordonnées (x, y) pour l'affichage
+        printf "\33[%d;%dH" "$x" "$y"
+
         # Récupération de la quantité totale de disque en Mo
         local max_disk=$(recup_disk "total")
 
-        # Placer le curseur aux coordonnées (x, y) pour l'affichage
-        printf "\33[%d;%dH" "$x" "$y"
+        # Calculer le pourcentage
+        percent=$(calculate_percent "$used_disk" "$max_disk")
+
+        # Concatener dans le contenu à rajouter au logfile si demandé
+        if [ "$logfile_enabled" == 1 ]; then
+            logfile_content="$logfile_content Disk => Used_disk : $used_disk'Mo'      Total_disk : $max_disk'Mo'      Usage : $percent%\n"
+        fi
 
         # Afficher les informations de disque sous forme de texte
         echo -en "${!bg_color_default}${!font_color_default}Disk : ${used_disk} / ${max_disk}${reset}"
 
         # Afficher la barre d'état pour l'utilisation du disque
-        print_bar_h "${!bg_color_default}${!color_bar_disk}" "$y" "$3" "$(( x + 1 ))" "$used_disk" "$max_disk"
+        print_bar_h "${!bg_color_default}${!color_bar_disk}" "$y" "$3" "$(( x + 1 ))" "$percent"
+    fi
+
+    # On écrit dans les logs si c'est demandé en paramètre
+    if [ "$logfile_enabled" == 1 ]; then
+        write_in_logfile "$logfile_content"
     fi
 }
 
 info_scinder() { # Jamel Bailleul
     local cols="$1"  # Colonne de début
     local lines="$2" # Ligne de début
+    local logfile_enabled="$4"
+
     local max_cols=$(tput cols)
     local max_lines=$(tput lines)
 	local cols_proc=$(($max_cols / 2)) # Moitié des colonnes pour diviser la zone
     local lines_proc=$(($max_lines / 2)) # Moitié des lignes pour diviser la zone
 
     # Appel de la fonction info_reduite avec les paramètres ajustés
-    info_reduite $cols $lines $((($max_cols / 2) - 2))
+    info_reduite "$cols" "$lines" "$((($max_cols / 2) - 2))" "$logfile_enabled"
 
     # Appel de la fonction affiche_processus avec les colonnes et lignes ajustées
-    affiche_processus $(($cols_proc + 2)) $lines $(( max_lines - 2)) $(tput cols)
+    affiche_processus "$(($cols_proc + 2))" "$lines" "$(( max_lines - 2))" "$(tput cols)"
 }
 
 affiche_processus() { # Jamel Bailleul
@@ -280,20 +333,13 @@ print_bar_h() { # Jamel Bailleul
     # $2 = cols debut de barre
     # $3 = cols fin de barre
     # $4 = lines
-    # $5 = current var
-    # $6 = max var
+    # $5 = percent
 
-    # Gère les valeurs à virgules (on choisit de les retirer)
-    local res="$1"
-
-    local max_tmp_bar current_tmp_bar
-    max_tmp_bar=$(echo "$6" | tr -cd '0-9')
-    max_tmp_bar=$(echo "$max_tmp_bar" | tr -d '.')
-    current_tmp_bar=$(echo "$5" | tr -cd '0-9')
     current_tmp_bar=$(echo "$current_tmp_bar" | tr -d '.')
 
-    local percent=$(($current_tmp_bar * 99 / $max_tmp_bar))
+    local percent="$5"
 
+    local res="$1"
     for ((i=$2; i<=$3 - 3; i++)); do
         if (( $(echo "$i * 100 / ($3 - 4)" | bc) <= percent )); then
             res+="${!bg_color_default}${!char_bar_plein}"
@@ -350,7 +396,7 @@ main() {  # Jamel Bailleul
 	fi
 
 	if (( $(tput cols) > 15 && $(tput lines) > 30 )); then 
-		clear_screen $(($(tput cols) / 2))
+		clear_screen "$(($(tput cols) / 2))"
 	else
 		clear_screen
 	fi
@@ -368,19 +414,23 @@ main() {  # Jamel Bailleul
 	#	fi
     #done &
 
+    # Créer le logfile
+    create_logfile
+
+    local logfile_enabled=1
 	while true; do
 		if (( $(tput cols) != $cols || $(tput lines) != $lines )); then
 			if (( $(tput cols) > 15 && $(tput lines) > 20 )); then 
-				clear_screen $(($(tput cols) / 2))
+				clear_screen "$(($(tput cols) / 2))"
 			else
 				clear_screen
 			fi
 		fi
 		
 		if (( $(tput cols) <= 50 | $(tput lines) <= 20)); then
-			info_reduite 2 3 $(($(tput cols)-2))
+			info_reduite 2 3 "$(($(tput cols)-2))" "$logfile_enabled"
 		else
-			info_scinder 2 3 $(($(tput cols)-2))
+			info_scinder 2 3 "$(($(tput cols)-2))" "$logfile_enabled"
 		fi
 
 		# Pause de 1 seconde avant d'afficher à nouveau les info

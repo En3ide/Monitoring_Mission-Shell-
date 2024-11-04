@@ -1,0 +1,16 @@
+----------------------------- 2024-11-04 01:17:18 -----------------------------
+ Memory => Used_memory : 4985760'kb'      Total_memory : 15094620'kb'      Usage : 32%
+ CPU => Usage : 2%
+ GPU => usage : 0%
+ GPU VRAM => Used_memory : 823123968'Kb'      Total_memory : 1073741824'Kb'      Usage : 75%
+ Disk => Used_disk : 32G'Mo'      Total_disk : 96G'Mo'      Usage : 33%
+
+
+----------------------------- 2024-11-04 01:17:20 -----------------------------
+ Memory => Used_memory : 4999184'kb'      Total_memory : 15094620'kb'      Usage : 32%
+ CPU => Usage : 2%
+ GPU => usage : 0%
+ GPU VRAM => Used_memory : 825221120'Kb'      Total_memory : 1073741824'Kb'      Usage : 76%
+ Disk => Used_disk : 32G'Mo'      Total_disk : 96G'Mo'      Usage : 33%
+
+
