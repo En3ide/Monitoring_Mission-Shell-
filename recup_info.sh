@@ -45,7 +45,7 @@ recup_nb_core_cpu() {
 }
 
 # Renvoie les infos sur le cpu, usage : recup_cpu ['name' | 'cpu']
-recup_cpu() { 
+recup_cpu() { # Tim Lamour
     # Vérifier le nombre de paramètres
     test "$#" -ne 1 && echo "Usage : recup_cpu ['name' | 'cpu{0,1,n}']" && return 1
 
@@ -185,7 +185,7 @@ recup_disk() { # Tim Lamour
     echo "$res"
 }
 
-get_interface_name() {
+get_interface_name() { # Tim Lamour
     # Liste toutes les interfaces réseau disponibles
     local interfaces=$(ls /sys/class/net)
 

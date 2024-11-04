@@ -117,7 +117,7 @@ clear_screen() { # Jamel Bailleul
     done
 }
 
-info_reduite() { # Jamel Bailleul
+info_reduite() { # Jamel Bailleul & Tim Lamour
     local position=0
     local x y
     local var_info
@@ -377,7 +377,7 @@ install_bc_if_not_installed() {  # Jamel Bailleul
     fi
 }
 
-main() {  # Jamel Bailleul
+main() {  # Jamel Bailleul & Tim Lamour
     # on sauvegarde l'état du terminal
     local old_stty=$(stty -g)
     tput "smcup"
