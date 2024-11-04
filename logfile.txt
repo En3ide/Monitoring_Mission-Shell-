@@ -1,40 +1,6 @@
------------------------------ 2024-11-04 18:36:12 -----------------------------
- Memory => Used_memory : 4232860'kb'      Total_memory : 15094620'kb'      Usage : 27%
- CPU => Usage : 2%
- GPU => usage : 0%
- GPU VRAM => Used_memory : 924160000'Kb'      Total_memory : 1073741824'Kb'      Usage : 85%
- Disk => Used_disk : 32G'Mo'      Total_disk : 96G'Mo'      Usage : 33%
-
-
------------------------------ 2024-11-04 18:37:13 -----------------------------
- Memory => Used_memory : 4105944'kb'      Total_memory : 15094620'kb'      Usage : 26%
- CPU => Usage : 2%
- GPU => usage : 0%
- GPU VRAM => Used_memory : 907960320'Kb'      Total_memory : 1073741824'Kb'      Usage : 83%
- Disk => Used_disk : 32G'Mo'      Total_disk : 96G'Mo'      Usage : 33%
-
-
------------------------------ 2024-11-04 18:38:13 -----------------------------
- Memory => Used_memory : 4188880'kb'      Total_memory : 15094620'kb'      Usage : 27%
- CPU => Usage : 2%
- GPU => usage : 0%
- GPU VRAM => Used_memory : 902680576'Kb'      Total_memory : 1073741824'Kb'      Usage : 83%
- Disk => Used_disk : 32G'Mo'      Total_disk : 96G'Mo'      Usage : 33%
-
-
------------------------------ 2024-11-04 18:39:13 -----------------------------
- Memory => Used_memory : 4142044'kb'      Total_memory : 15094620'kb'      Usage : 27%
- CPU => Usage : 3%
- GPU => usage : 0%
- GPU VRAM => Used_memory : 916893696'Kb'      Total_memory : 1073741824'Kb'      Usage : 84%
- Disk => Used_disk : 32G'Mo'      Total_disk : 96G'Mo'      Usage : 33%
-
-
------------------------------ 2024-11-04 18:40:13 -----------------------------
- Memory => Used_memory : 4112900'kb'      Total_memory : 15094620'kb'      Usage : 26%
- CPU => Usage : 3%
- GPU => usage : 0%
- GPU VRAM => Used_memory : 908746752'Kb'      Total_memory : 1073741824'Kb'      Usage : 83%
- Disk => Used_disk : 32G'Mo'      Total_disk : 96G'Mo'      Usage : 33%
+----------------------------- 2024-11-05 00:11:04 -----------------------------
+ Memory => Used_memory : 742848'kb'      Total_memory : 2984740'kb'      Usage : 24%
+ CPU => Usage : 13%
+ Disk => Used_disk : 91G'Mo'      Total_disk : 119G'Mo'      Usage : 75%
 
 
