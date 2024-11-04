@@ -1,0 +1,13 @@
+bg_color=BG_BLACK
+font_color=FONT_MAGENTA
+os_default=ubuntu
+climit=unicode_full_block
+char_bar_plein=unicode_dark_shade
+char_bar_vide=unicode_light_shade
+color_limiteur=FONT_BLUE
+color_bar_cpu=FONT_YELLOW
+color_bar_gpu=FONT_GREEN
+color_bar_memory=FONT_MAGENTA
+color_bar_disk=FONT_BLUE
+color_proc=FONT_BRIGHT_WHITE
+update_log_time=60

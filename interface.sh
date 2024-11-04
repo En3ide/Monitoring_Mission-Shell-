@@ -4,13 +4,12 @@
 . ./update_log.sh
 
 # Définir les valeurs par défaut
-bg_color_default="BG_BLACK"
-font_color_default="FONT_RED"
-lang_default="en"
+bg_color="BG_BLACK"
+font_color="FONT_RED"
 os_default="ubuntu"
-climit="full_block"
-char_bar_plein="dark_shade"
-char_bar_vide="light_shade"
+climit="unicode_full_block"
+char_bar_plein="unicode_dark_shade"
+char_bar_vide="unicode_light_shade"
 color_limiteur="FONT_BLUE"
 color_bar_cpu="FONT_YELLOW"
 color_bar_gpu="FONT_GREEN"
@@ -64,21 +63,24 @@ carre_plein="\u2588"
 carre_vide="\u25A1"
 
 # Caractères Unicode de type carré
-full_block="█"             # Full Block
-upper_half_block="▀"       # Upper Half Block
-lower_half_block="▄"       # Lower Half Block
-left_half_block="▌"        # Left Half Block
-right_half_block="▐"       # Right Half Block
-light_shade="░"            # Light Shade
-medium_shade="▒"           # Medium Shade
-dark_shade="▓"             # Dark Shade
-white_square="▢"           # White Square
-black_circle="●"           # Black Circle
-white_circle="○"           # White Circle
-black_diamond="◆"          # Black Diamond
-white_diamond="◇"          # White Diamond
-black_star="★"             # Black Star
-white_star="☆"             # White Star
+unicode_full_block="█"             # Bloc complet (Full Block)
+unicode_upper_half_block="▀"       # Demi-bloc supérieur (Upper Half Block)
+unicode_lower_half_block="▄"       # Demi-bloc inférieur (Lower Half Block)
+unicode_left_half_block="▌"        # Demi-bloc gauche (Left Half Block)
+unicode_right_half_block="▐"       # Demi-bloc droit (Right Half Block)
+
+unicode_light_shade="░"            # Ombrage léger (Light Shade)
+unicode_medium_shade="▒"           # Ombrage moyen (Medium Shade)
+unicode_dark_shade="▓"             # Ombrage foncé (Dark Shade)
+
+unicode_white_square="▢"           # Carré blanc (White Square)
+unicode_black_circle="●"           # Cercle noir (Black Circle)
+unicode_white_circle="○"           # Cercle blanc (White Circle)
+unicode_black_diamond="◆"          # Losange noir (Black Diamond)
+unicode_white_diamond="◇"          # Losange blanc (White Diamond)
+unicode_black_star="★"             # Étoile noire (Black Star)
+unicode_white_star="☆"             # Étoile blanche (White Star)
+
 
 generate_random() {  # Jamel Bailleul
     local min=$1
@@ -108,10 +110,10 @@ clear_screen() { # Jamel Bailleul
 
             if (( i == 1 || i == cols || j == 1 || j == lines || i == separateur )); then
                 # Afficher la bordure
-                echo -en "${!bg_color_default}${!color_limiteur}${!climit}${reset}"
+                echo -en "${!bg_color}${!color_limiteur}${!climit}${reset}"
             else
                 # Remplir avec un espace vide
-                echo -en "${!bg_color_default}${!color_limiteur} ${reset}"
+                echo -en "${!bg_color}${!color_limiteur} ${reset}"
             fi
         done
     done
@@ -152,10 +154,10 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
         fi
 
         # Afficher les informations de mémoire sous forme de texte
-        echo -en "${!bg_color_default}${!font_color_default}Memory : ${used_memory}Kb / ${max_memory}Kb${reset}"
+        echo -en "${!bg_color}${!font_color}Memory : ${used_memory}Kb / ${max_memory}Kb${reset}"
 
         # Afficher la barre d'état de la mémoire
-        print_bar_h "${!bg_color_default}${!color_bar_memory}" "$y" "$3" "$(( x + 1 ))" "$percent"
+        print_bar_h "${!bg_color}${!color_bar_memory}" "$y" "$3" "$(( x + 1 ))" "$percent"
     fi
 
     # CPU (%)
@@ -184,10 +186,10 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
         fi
 
         # Afficher le nom du CPU avec une longueur limitée par la largeur disponible
-        echo -en "${!bg_color_default}${!font_color_default}CPU % : ${cpu_name:0:$(( $3 - 7 ))}${reset}"
+        echo -en "${!bg_color}${!font_color}CPU % : ${cpu_name:0:$(( $3 - 7 ))}${reset}"
 
         # Afficher la barre d'état pour l'utilisation du CPU
-        print_bar_h "${!bg_color_default}${!color_bar_cpu}" "$y" "$3" "$(( x + 1 ))" "$percent"
+        print_bar_h "${!bg_color}${!color_bar_cpu}" "$y" "$3" "$(( x + 1 ))" "$percent"
     fi
 
     # GPU (%)
@@ -215,10 +217,10 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
         fi
 
         # Afficher l'en-tête de la section GPU
-        echo -en "${!bg_color_default}${!font_color_default}GPU % : ${reset}"
+        echo -en "${!bg_color}${!font_color}GPU % : ${reset}"
 
         # Afficher la barre d'état pour l'utilisation de la VRAM
-        print_bar_h "${!bg_color_default}${!color_bar_gpu}" "$y" "$3" "$(( x + 1 ))" "$percent"
+        print_bar_h "${!bg_color}${!color_bar_gpu}" "$y" "$3" "$(( x + 1 ))" "$percent"
     fi
 
     # GPU (vram)
@@ -246,10 +248,10 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
         fi
 
         # Afficher l'en-tête de la section GPU
-        echo -en "${!bg_color_default}${!font_color_default}GPU VRAM : ${reset}"
+        echo -en "${!bg_color}${!font_color}GPU VRAM : ${reset}"
 
         # Afficher la barre d'état pour l'utilisation de la VRAM
-        print_bar_h "${!bg_color_default}${!color_bar_gpu}" "$y" "$3" "$(( x + 1 ))" "$percent"
+        print_bar_h "${!bg_color}${!color_bar_gpu}" "$y" "$3" "$(( x + 1 ))" "$percent"
     fi
 
     # Disque
@@ -277,10 +279,10 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
         fi
 
         # Afficher les informations de disque sous forme de texte
-        echo -en "${!bg_color_default}${!font_color_default}Disk : ${used_disk} / ${max_disk}${reset}"
+        echo -en "${!bg_color}${!font_color}Disk : ${used_disk} / ${max_disk}${reset}"
 
         # Afficher la barre d'état pour l'utilisation du disque
-        print_bar_h "${!bg_color_default}${!color_bar_disk}" "$y" "$3" "$(( x + 1 ))" "$percent"
+        print_bar_h "${!bg_color}${!color_bar_disk}" "$y" "$3" "$(( x + 1 ))" "$percent"
     fi
 
     # On écrit dans les logs si c'est demandé en paramètre
@@ -324,7 +326,7 @@ affiche_processus() { # Jamel Bailleul
 		# Afficher les 15 premiers caractères de la première ligne au milieu de l'écran
 		printf "\033[%d;%dH" "$i" "$start_col"  # Positionne le curseur
 		local nb_char=$(($end_col - $start_col))
-		echo -en "${!bg_color_default}${!color_proc}${first_line:0:${nb_char}}"
+		echo -en "${!bg_color}${!color_proc}${first_line:0:${nb_char}}"
 		text=$(echo "$text" | sed '1d')
     done
 }
@@ -343,21 +345,21 @@ print_bar_h() { # Jamel Bailleul
     local res="$1"
     for ((i=$2; i<=$3 - 3; i++)); do
         if (( $(echo "$i * 100 / ($3 - 4)" | bc) <= percent )); then
-            res+="${!bg_color_default}${!char_bar_plein}"
+            res+="${!bg_color}${!char_bar_plein}"
         else
             res+="${reset}${!char_bar_vide}"
         fi
     done
 
     printf "\33[%d;%dH" "$4" "$2"
-    echo -en "${!bg_color_default}${!font_color_default}$res${!bg_color_default}${!font_color_default}$percent%${reset}"
+    echo -en "${!bg_color}${!font_color}$res${!bg_color}${!font_color}$percent%${reset}"
 }
 
 
 config_file() {  # Jamel Bailleul
     local fichier="$1"
 
-    if [[ -f "$fichier" ]]; then # Vérifie si le fichier existe
+    if [ -f "$fichier" ]; then # Vérifie si le fichier existe
         while IFS='=' read -r cle valeur; do # Boucle pour lire chaque ligne du fichier
             if [[ -n "$cle" && -n "$valeur" ]]; then
                 export "$cle=$valeur" # Exporter chaque clé comme une variable d'environnement
@@ -390,7 +392,7 @@ main() {  # Jamel Bailleul & Tim Lamour
     trap 'tput "rmcup"; tput "cnorm"; stty "$old_stty"; exit' INT TERM
 
 	# vérifie la présence d'un fichier de config
-	if [[ -f "$1" ]]; then
+	if [ -f "$1" ]; then
 		config_file "$1"
 	else
 		echo "Non, le fichier '$1' n'existe pas."
