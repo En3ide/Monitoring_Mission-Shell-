@@ -1,153 +1,168 @@
+#!/bin/bash
+#pour les couleur tu peux aussi utiliser "\033[38;5<code couleurs>m" code en 256
 . ./recup_info.sh
+. ./update_log.sh
 
-#recup_disk "used"
-#recup_disk "total"
+# Définir les valeurs par défaut
+bg_color="BG_BLACK"
+font_color="FONT_RED"
+os_default="ubuntu"
+climit="unicode_full_block"
+char_bar_plein="unicode_dark_shade"
+char_bar_vide="unicode_light_shade"
+color_limiteur="FONT_BLUE"
+color_bar_cpu="FONT_YELLOW"
+color_bar_gpu="FONT_GREEN"
+color_bar_memory="FONT_MAGENTA"
+color_bar_disk="FONT_BLUE"
+color_proc="FONT_BRIGHT_WHITE"
+update_log_time=60
 
-cpu_usage_proc_stat() {
-    # Lire les premières valeurs de la ligne "cpu" dans /proc/stat
-    local cpu=($(grep '^cpu ' /proc/stat))
-    local idle1=${cpu[4]} # Temps d'inactivité initial
-    local total1=0
+# Variables pour les couleurs de texte (foreground)
+FONT_BLACK="\033[30m"
+FONT_RED="\033[31m"
+FONT_GREEN="\033[32m"
+FONT_YELLOW="\033[33m"
+FONT_BLUE="\033[34m"
+FONT_MAGENTA="\033[35m"
+FONT_CYAN="\033[36m"
+FONT_WHITE="\033[37m"
+FONT_RESET="\033[0m"
 
-    # Calculer le total initial des temps CPU
-    for value in "${cpu[@]:1}"; do
-        total1=$((total1 + value))
-    done
+# Variables pour les couleurs de fond (background)
+BG_BLACK="\033[40m"
+BG_RED="\033[41m"
+BG_GREEN="\033[42m"
+BG_YELLOW="\033[43m"
+BG_BLUE="\033[44m"
+BG_MAGENTA="\033[45m"
+BG_CYAN="\033[46m"
+BG_WHITE="\033[47m"
 
-    # Pause d'une seconde
-    sleep 1
+# Variables pour les couleurs claires (bright foreground)
+FONT_BRIGHT_BLACK="\033[90m"
+FONT_BRIGHT_RED="\033[91m"
+FONT_BRIGHT_GREEN="\033[92m"
+FONT_BRIGHT_YELLOW="\033[93m"
+FONT_BRIGHT_BLUE="\033[94m"
+FONT_BRIGHT_MAGENTA="\033[95m"
+FONT_BRIGHT_CYAN="\033[96m"
+FONT_BRIGHT_WHITE="\033[97m"
 
-    # Lire les valeurs finales de la ligne "cpu" dans /proc/stat
-    cpu=($(grep '^cpu ' /proc/stat))
-    local idle2=${cpu[4]} # Temps d'inactivité final
-    local total2=0
+# Variables pour les couleurs claires de fond (bright background)
+BG_BRIGHT_BLACK="\033[100m"
+BG_BRIGHT_RED="\033[101m"
+BG_BRIGHT_GREEN="\033[102m"
+BG_BRIGHT_YELLOW="\033[103m"
+BG_BRIGHT_BLUE="\033[104m"
+BG_BRIGHT_MAGENTA="\033[105m"
+BG_BRIGHT_CYAN="\033[106m"
+BG_BRIGHT_WHITE="\033[107m"
 
-    # Calculer le total final des temps CPU
-    for value in "${cpu[@]:1}"; do
-        total2=$((total2 + value))
-    done
+carre_plein="\u2588"
+carre_vide="\u25A1"
 
-    # Calculer la différence de temps total et de temps d'inactivité
-    local total_diff=$((total2 - total1))
-    local idle_diff=$((idle2 - idle1))
+# Caractères Unicode de type carré
+unicode_full_block="█"             # Bloc complet (Full Block)
+unicode_upper_half_block="▀"       # Demi-bloc supérieur (Upper Half Block)
+unicode_lower_half_block="▄"       # Demi-bloc inférieur (Lower Half Block)
+unicode_left_half_block="▌"        # Demi-bloc gauche (Left Half Block)
+unicode_right_half_block="▐"       # Demi-bloc droit (Right Half Block)
 
-    # Calculer le pourcentage d'utilisation du CPU
-    local usage=$((100 * (total_diff - idle_diff) / total_diff))
+unicode_light_shade="░"            # Ombrage léger (Light Shade)
+unicode_medium_shade="▒"           # Ombrage moyen (Medium Shade)
+unicode_dark_shade="▓"             # Ombrage foncé (Dark Shade)
 
-    echo "Utilisation CPU : $usage%"
-}
+unicode_white_square="▢"           # Carré blanc (White Square)
+unicode_black_circle="●"           # Cercle noir (Black Circle)
+unicode_white_circle="○"           # Cercle blanc (White Circle)
+unicode_black_diamond="◆"          # Losange noir (Black Diamond)
+unicode_white_diamond="◇"          # Losange blanc (White Diamond)
+unicode_black_star="★"             # Étoile noire (Black Star)
+unicode_white_star="☆"             # Étoile blanche (White Star)
 
-cpu_usage_top() {
-    # Utiliser top en mode batch et en filtrant la ligne avec %Cpu(s)
-    local usage=$(top -bn1 | grep "Cpu(s)" | awk '{print 100 - $8}')
-    echo "Utilisation CPU : ${usage}%"
-}
+print_cpu() {
+    local max_cols="$3"
+    local max_lines="$4"
+    local cpu_="$5"
+    local used_cpu=$(recup_cpu "cpu${cpu_}" 2>/dev/null)
+    if [[ -n "$used_cpu" ]]; then
+        x=1
+        y=1
+        position=$(( position + 1 ))
+        cpu_=1
+        printf "\33[%d;%dH" "$x" "$y"
 
-cpu_usage_vmstat() {
-    # Utiliser vmstat et prendre la deuxième ligne (car la première est un en-tête)
-    local idle=$(vmstat 1 2 | tail -1 | awk '{print $15}')
-    local usage=$((100 - idle))
-    echo "Utilisation CPU : ${usage}%"
-}
+        local max_cpu=99
 
-cpu_usage() {
-    # Utiliser mpstat et prendre le dernier champ (idle) pour tous les CPU
-    local idle=$(mpstat 1 1 | tail -1 | awk '{print $NF}')
-    local usage=$(echo "100 - $idle" | bc)
-    echo "Utilisation CPU : ${usage}%"
-}
+        percent=$(calculate_percent "$used_cpu" "$max_cpu")
 
-network_info_v1() {
-    if [[ "$1" == "list" ]]; then
-        # Lister les noms des interfaces disponibles
-        awk -F':' '/:/ {print $1}' /proc/net/dev | tr -d ' '
-    elif [[ -n "$1" && -n "$2" ]]; then
-        local interface="$1"
-        local direction="$2"
-
-        # Vérifier si l'interface existe
-        if ! grep -q "^ *$interface:" /proc/net/dev; then
-            echo "L'interface '$interface' n'existe pas."
-            return 1
-        fi
-
-        # Récupérer les statistiques de l'interface
-        local stats=$(grep "^ *$interface:" /proc/net/dev | awk '{print $2, $3, $10, $11}')
-
-        # Extraire les valeurs nécessaires
-        local rx_bytes=$(echo "$stats" | awk '{print $1}')
-        local rx_errors=$(echo "$stats" | awk '{print $2}')
-        local tx_bytes=$(echo "$stats" | awk '{print $3}')
-        local tx_errors=$(echo "$stats" | awk '{print $4}')
-
-        case "$direction" in
-            "down")
-                echo "Octets reçus : $rx_bytes"
-                echo "Erreurs de réception : $rx_errors"
-                ;;
-            "up")
-                echo "Octets envoyés : $tx_bytes"
-                echo "Erreurs d'envoi : $tx_errors"
-                ;;
-            *)
-                echo "Option invalide. Utilisez 'down' ou 'up'."
-                return 1
-                ;;
-        esac
-    else
-        echo "Usage : network_info list"
-        echo "       network_info <interface> down"
-        echo "       network_info <interface> up"
-        return 1
+        echo -en "${!bg_color}${!font_color}CPU : ${cpu_}${reset}"
+        # Afficher la barre d'état pour l'utilisation du CPU
+        print_bar_h "${!bg_color}${!color_bar_cpu}" "$y" "$max_cols" "$(( x + 1 ))" "$percent"
     fi
 }
 
-network_info() {
-    if [[ "$1" == "list" ]]; then
-        # Lister les noms des interfaces disponibles
-        awk -F':' '/:/ {print $1}' /proc/net/dev | tr -d ' '
-    elif [[ -n "$1" && -n "$2" ]]; then
-        local interface="$1"
-        local direction="$2"
+print_core() {
+    local max_cols="$3"
+    local max_lines="$4"
+    local position=0
+    local div=$(recup_nb_core_cpu)
+    local max_cpu=99
+    local x="$1"
+    local y="$2"
+    local fin_bar=$(($max_cols /2))
+    local i=1
+    for (( j=1; j <= div ; j++ )); do
+        if [[ $j == $((($div / 2) + 1 )) ]]; then
+            i=2
+            y=$fin_bar
+            position=0
+            fin_bar="$3"
+        fi
+        used_cpu=$(recup_cpu "cpu$((j))" 2>/dev/null)
+        if [[ -n "$used_cpu" ]]; then
+            x=$(( $1 + (3 * position) ))  # Position en ligne ajustée selon la position
 
-        # Vérifier si l'interface existe
-        if ! grep -q "^ *$interface:" /proc/net/dev; then
-            echo "L'interface '$interface' n'existe pas."
+            # Incrémenter la position pour la prochaine section
+            position=$(( position + 1 ))
+            printf "\33[%d;%dH" "$x" "$y"
+
+            percent=$(calculate_percent "$used_cpu" "$max_cpu")
+
+            echo -en "${!bg_color}${!font_color}CORE : ${j}${reset}"
+            # Afficher la barre d'état pour l'utilisation du CPU
+            print_bar_h "${!bg_color}${!color_bar_cpu}" "$y" "$(($fin_bar - 1))" "$(( x + 1 ))" "$percent"
+        else
             return 1
         fi
-
-        # Récupérer les statistiques de l'interface
-        local stats=$(grep "^ *$interface:" /proc/net/dev | awk '{print $2, $3, $10, $11}')
-
-        # Extraire les valeurs nécessaires
-        local rx_bytes=$(echo "$stats" | awk '{print $1}')
-        local rx_errors=$(echo "$stats" | awk '{print $2}')
-        local tx_bytes=$(echo "$stats" | awk '{print $3}')
-        local tx_errors=$(echo "$stats" | awk '{print $4}')
-
-        case "$direction" in
-            "down")
-                echo "$rx_bytes $rx_errors"
-                ;;
-            "up")
-                echo "$tx_bytes $tx_errors"
-                ;;
-            *)
-                echo "Option invalide. Utilisez 'down' ou 'up'."
-                return 1
-                ;;
-        esac
-    else
-        echo "Usage : network_info list"
-        echo "       network_info <interface> down"
-        echo "       network_info <interface> up"
-        return 1
-    fi
+    done
 }
 
+print_bar_h() { # Jamel Bailleul
+    # $1 = couleur
+    # $2 = cols debut de barre
+    # $3 = cols fin de barre
+    # $4 = lines
+    # $5 = percent
 
-# Appeler la fonction
-#cpu_usage
-#network_info list
-#echo ""
-#network_info eth0 down
+    current_tmp_bar=$(echo "$current_tmp_bar" | tr -d '.')
+
+    local percent="$5"
+
+    local res="$1"
+    for ((i=$2; i<=$3 - 3; i++)); do
+        if (( $(echo "$i * 100 / ($3 - 4)" | bc) <= percent )); then
+            res+="${!bg_color}${!char_bar_plein}"
+        else
+            res+="${reset}${!char_bar_vide}"
+        fi
+    done
+
+    printf "\33[%d;%dH" "$4" "$2"
+    echo -en "${!bg_color}${!font_color}$res${!bg_color}${!font_color}$percent%${reset}"
+}
+
+get_interface_name
+res=$(get_network_usage "download" "$get_interface_name")
+echo $res

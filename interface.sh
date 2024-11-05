@@ -119,7 +119,7 @@ clear_screen() { # Jamel Bailleul
     done
 }
 
-info_reduite() { # Jamel Bailleul & Tim Lamour
+info_reduite() { # Jamel Bailleul & Tim Lamour & ChatGPT
     local position=0
     local x y
     local var_info
@@ -158,38 +158,6 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
 
         # Afficher la barre d'état de la mémoire
         print_bar_h "${!bg_color}${!color_bar_memory}" "$y" "$3" "$(( x + 1 ))" "$percent"
-    fi
-
-    # CPU (%)
-    local cpu_name=$(recup_cpu "name" 2>/dev/null)
-    local used_cpu=$(recup_cpu "cpu" 2>/dev/null)
-    if [[ -n "$cpu_name" && -n "$used_cpu" ]]; then
-        # Calcul de la position pour afficher les informations de CPU
-        x=$(( $1 + (3 * position) ))  # Position en ligne ajustée selon la position actuelle
-        y="$2"  # Position en colonne reçue en argument
-
-        # Incrémenter la position pour la prochaine section
-        position=$(( position + 1 ))
-
-        # Placer le curseur aux coordonnées (x, y) pour l'affichage
-        printf "\33[%d;%dH" "$x" "$y"
-
-        # Valeur maximal en pourcentage du CPU
-        local max_cpu=99
-        
-        # Calculer le pourcentage
-        percent=$(calculate_percent "$used_cpu" "$max_cpu")
-
-        # Concatener dans le contenu à rajouter au logfile si demandé
-        if [ "$logfile_enabled" == 1 ]; then
-            logfile_content="$logfile_content CPU => Usage : $percent%\n"
-        fi
-
-        # Afficher le nom du CPU avec une longueur limitée par la largeur disponible
-        echo -en "${!bg_color}${!font_color}CPU % : ${cpu_name:0:$(( $3 - 7 ))}${reset}"
-
-        # Afficher la barre d'état pour l'utilisation du CPU
-        print_bar_h "${!bg_color}${!color_bar_cpu}" "$y" "$3" "$(( x + 1 ))" "$percent"
     fi
 
     # GPU (%)
@@ -285,10 +253,86 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
         print_bar_h "${!bg_color}${!color_bar_disk}" "$y" "$3" "$(( x + 1 ))" "$percent"
     fi
 
+    # CPU (%)
+    local cpu_name=$(recup_cpu "name" 2>/dev/null)
+    local used_cpu=$(recup_cpu "cpu" 2>/dev/null)
+    if [[ -n "$cpu_name" && -n "$used_cpu" ]]; then
+        # Calcul de la position pour afficher les informations de CPU
+        x=$(( $1 + (3 * position) ))  # Position en ligne ajustée selon la position actuelle
+        y="$2"  # Position en colonne reçue en argument
+
+        # Incrémenter la position pour la prochaine section
+        position=$(( position + 1 ))
+
+        # Placer le curseur aux coordonnées (x, y) pour l'affichage
+        printf "\33[%d;%dH" "$x" "$y"
+
+        # Valeur maximal en pourcentage du CPU
+        local max_cpu=99
+        
+        # Calculer le pourcentage
+        percent=$(calculate_percent "$used_cpu" "$max_cpu")
+
+        # Concatener dans le contenu à rajouter au logfile si demandé
+        if [ "$logfile_enabled" == 1 ]; then
+            logfile_content="$logfile_content CPU => Usage : $percent%\n"
+        fi
+
+        # Afficher le nom du CPU avec une longueur limitée par la largeur disponible
+        echo -en "${!bg_color}${!font_color}CPU % : ${cpu_name:0:$(( $3 - 7 ))}${reset}"
+
+        # Afficher la barre d'état pour l'utilisation du CPU
+        print_bar_h "${!bg_color}${!color_bar_cpu}" "$y" "$3" "$(( x + 1 ))" "$percent"
+    fi
+
+    local used_cpu=$(recup_cpu "cpu1" 2>/dev/null)
+    if [[ -n "$used_cpu" && $(tput lines) > 20 ]]; then
+        local position_tmp="$position"
+        local fin_bar=$(($3 /2))
+        local div=$(recup_nb_core_cpu)
+        local espace=1
+        for (( j=1; j <= div ; j++ )); do
+            if [[ $j == $((($div / 2) + 1 )) ]]; then
+                local i=2
+                local y=$fin_bar
+                local position="$position_tmp"
+                local fin_bar="$3"
+                local espace=0
+            fi
+            used_cpu=$(recup_cpu "cpu$((j))" 2>/dev/null)
+            if [[ -n "$used_cpu" ]]; then
+                x=$(( $1 + (3 * position) ))  # Position en ligne ajustée selon la position
+
+                # Incrémenter la position pour la prochaine section
+                position=$(( position + 1 ))
+
+                # Placer le curseur aux coordonnées (x, y) pour l'affichage
+                printf "\33[%d;%dH" "$x" "$y"
+
+                # Calculer le pourcentage
+                percent=$(calculate_percent "$used_cpu" "$max_cpu")
+                
+                # Concatener dans le contenu à rajouter au logfile si demandé
+                if [ "$logfile_enabled" == 1 ]; then
+                    logfile_content="$logfile_content CORE ${j} => Usage : $percent%\n"
+                fi
+
+                # Afficher le nom du CPU avec une longueur limitée par la largeur disponible
+                echo -en "${!bg_color}${!font_color}CORE : ${j}${reset}"
+
+                # Afficher la barre d'état pour l'utilisation du CPU
+                print_bar_h "${!bg_color}${!color_bar_cpu}" "$y" "$(($fin_bar - $espace))" "$(( x + 1 ))" "$percent"
+            else
+                return 1
+            fi
+        done
+    fi
+
     # On écrit dans les logs si c'est demandé en paramètre
     if [ "$logfile_enabled" == 1 ]; then
         write_in_logfile "$logfile_content"
     fi
+    
 }
 
 info_scinder() { # Jamel Bailleul
