@@ -2,15 +2,17 @@
 
 # Créer le fichier de log s'il existe pas déjà
 create_logfile() { # Tim Lamour
-   # On regarde si un fichier log existe déjà
-   for file in ./*; do
-      if [[ -f "$file" && "$(basename "$file")" == "logfile.txt" ]]; then
+   # On rewrite par défaut le logfile
+   # Si il y a un argument et qu'il vaut "true", on supprime le fichier log s'il existe
+   if [[ "$#" -eq 0 || "$1" == "true" ]]; then
+      if [[ -f "logfile.txt" ]]; then
          rm "logfile.txt"
       fi
-   done
-   # On le crééer si un fichier log n'existe pas
-   touch "logfile.txt"
-   chmod 644 "logfile.txt"
+      # On le crééer si un fichier log n'existe pas
+      touch "logfile.txt"
+      chmod 644 "logfile.txt"
+   fi
+
 }
 
 # Ecrire ce qui donné en paramètre dans le log file

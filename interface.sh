@@ -17,6 +17,7 @@ color_bar_memory="FONT_MAGENTA"
 color_bar_disk="FONT_BLUE"
 color_proc="FONT_BRIGHT_WHITE"
 update_log_time=60
+rewrite_log=true
 
 # Variables pour les couleurs de texte (foreground)
 FONT_BLACK="\033[30m"
@@ -527,7 +528,7 @@ main() {  # Jamel Bailleul & Tim Lamour
     #done &
 
     # Créer le logfile
-    create_logfile
+    create_logfile "$rewrite_log"
 
     local logfile_enabled=0
     local start_time="$SECONDS"
@@ -539,12 +540,6 @@ main() {  # Jamel Bailleul & Tim Lamour
 				clear_screen
 			fi
 		fi
-		
-		if (( $(tput cols) <= 50 | $(tput lines) <= 20)); then
-			info_reduite 2 3 "$(($(tput cols)-2))" "$logfile_enabled"
-		else
-			info_scinder 2 3 "$(($(tput cols)-2))" "$logfile_enabled"
-		fi
 
         # Ecris dans les logs toutes les update_log_time secondes
         if (( SECONDS - start_time >= update_log_time )); then
@@ -553,6 +548,12 @@ main() {  # Jamel Bailleul & Tim Lamour
         else
             logfile_enabled=0       # Désactive l'écriture dans le log
         fi
+		
+		if (( $(tput cols) <= 50 | $(tput lines) <= 20)); then
+			info_reduite 2 3 "$(($(tput cols)-2))" "$logfile_enabled"
+		else
+			info_scinder 2 3 "$(($(tput cols)-2))" "$logfile_enabled"
+		fi
 	done
 
     # on remet l'état initial du terminal si l'utilisateur quitte normalement

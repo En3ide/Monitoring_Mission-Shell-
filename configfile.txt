@@ -11,3 +11,4 @@ color_bar_memory=FONT_MAGENTA
 color_bar_disk=FONT_BLUE
 color_proc=FONT_BRIGHT_WHITE
 update_log_time=60
+rewrite_log=true
