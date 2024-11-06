@@ -34,7 +34,7 @@ Veuillez vous référer aux tableaux ci-dessous pour voir les variables possible
 
 
 ####  <ins>Variables configurables avec une [couleur](#couleurs-disponibles-)</ins> :
-| Nom de la variable     | Signification                                       | Valeur par défaut ([couleurs](#voici-les-couleurs-configurables-)) |
+| Nom de la variable     | Signification                                       | Valeur par défaut ([couleurs](#couleurs-disponibles-)) |
 |------------------------|-----------------------------------------------------|--------------------------------------------------------------------|
 | bg_color               | Couleur de fond de l'interface                      | `DARK_BLACK`                                                       |
 | font_color             | Couleur de la police principale                     | `DARK_RED`                                                         |
@@ -52,7 +52,7 @@ Veuillez vous référer aux tableaux ci-dessous pour voir les variables possible
 
 ####  <ins>Variables configurables avec un [caractère UNICODE](#caractères-unicode-disponibles-)</ins> :
 
-| Nom de la variable     | Signification                                         | Valeur par défaut ([caractère UNICODE](#voici-les-couleurs-configurables-)) |
+| Nom de la variable     | Signification                                         | Valeur par défaut ([caractère UNICODE](#caractères-unicode-disponibles-)) |
 |------------------------|-------------------------------------------------------|-----------------------------------------------------------------------------|
 | border_char            | Caractère représentant les bordures des fenêtres      | `unicode_full_block`                                                        |
 | full_bar_char          | Caractère représentant la barre de progression pleine | `unicode_dark_shade`                                                        |
