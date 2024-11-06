@@ -163,6 +163,4 @@ print_bar_h() { # Jamel Bailleul
     echo -en "${!bg_color}${!font_color}$res${!bg_color}${!font_color}$percent%${reset}"
 }
 
-get_interface_name
-res=$(get_network_usage "download" "$get_interface_name")
-echo $res
+get_network_usage "upload" $(get_interface_name)

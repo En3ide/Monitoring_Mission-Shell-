@@ -328,6 +328,55 @@ info_reduite() { # Jamel Bailleul & Tim Lamour & ChatGPT
         done
     fi
 
+    # Net
+    local inter_name=$(get_interface_name 2>/dev/null)
+    if [[ -n "$inter_name" ]]; then
+        # Calcul de la position pour afficher les informations de reseaux
+        x=$(( $1 + (3 * position) ))  # Position en ligne ajustée selon la position actuelle
+        y="$2"  # Position en colonne reçue en argument
+
+        # Incrémenter la position pour la prochaine section
+        position=$(( position + 1 ))
+
+        printf "\33[%d;%dH" "$x" "$(($y - 1))"
+        for ((i=0; i < $3 ; i++)); do
+            echo -en "${!bg_color}${!color_limiteur}${!climit}${reset}"
+        done
+        nb_inter=$( echo $inter_name | awk '{print NF}')
+        for (( i=1 ; i <= $nb_inter ; i++)); do
+            name=$(echo $inter_name | awk -v var="$variable" '{print var, $1}')
+            # Calcul de la position pour afficher les informations de reseaux
+            x=$(( $1 + (3 * position) - 2 ))  # Position en ligne ajustée selon la position actuelle
+            y="$2"  # Position en colonne reçue en argument
+
+            # Incrémenter la position pour la prochaine section
+            position=$(( position + 1 ))
+            
+            # Calculer le pourcentage
+            download=$(get_network_usage "download" $name)
+            upload=$(get_network_usage "upload" $name)
+
+            # Concatener dans le contenu à rajouter au logfile si demandé
+            if [ "$logfile_enabled" == 1 ]; then
+                logfile_content="$logfile_content $name => Download : $download Bytes | Upload = $upload Bytes\n"
+            fi
+
+            # Placer le curseur aux coordonnées (x, y) pour l'affichage
+            printf "\33[%d;%dH" "$x" "$y"
+            echo -en "${!bg_color}${!font_color}${!char_bar_vide}${name:0:$(( $3 - 7 ))} ${!char_bar_vide}${reset}"
+            printf "\33[%d;%dH" "$(($x + 1))" "$y"
+            if [[ $download -ne $(get_network_usage "download" $name) ]]; then
+                download_s=$(($download - $(get_network_usage "download" $name)))
+            fi
+            if [[ $upload -ne $(get_network_usage "upload" $name) ]]; then
+                upload_s=$(($upload - $(get_network_usage "upload" $name)))
+            fi
+            echo -en "${!bg_color}${!font_color}Download total : ${download:0:$(( $3 - 7 ))} Bytes | Download/s : ${download_s} Bytes/s${reset}"
+            printf "\33[%d;%dH" "$(($x + 2))" "$y"
+            echo -en "${!bg_color}${!font_color}Upload total : ${upload:0:$(( $3 - 7 ))} Bytes | Upload/s : ${upload_s} Bytes/s${reset}"
+        done
+    fi
+
     # On écrit dans les logs si c'est demandé en paramètre
     if [ "$logfile_enabled" == 1 ]; then
         write_in_logfile "$logfile_content"
