@@ -12,49 +12,117 @@ Il s'agit est un moniteur de système écrit en *Bash*. Il permet de surveiller 
 1. Vous pouvez utiliser la commande  : `./interface.sh`
 2. Lancer le processus avec le [fichier de configuration](#fichier-de-configuration) : `./interface.sh configfile.txt`
 
-## Fichier de log
-Un fichier de log ***logfile.txt*** se met à jour automatiquement, il y est écrit toutes les données récoltés par le processus.
+## Fichier de logs
+Un fichier de logs ***logfile.txt*** se met à jour automatiquement, il y est écrit toutes les données récoltés par le processus.
 La réinitialisation lors du lancement du processus et l'intervalle de temps (en secondes) sont configurables dans le [fichier de configuration ***configfile.txt***](#fichier-de-configuration).
 
 ## Fichier de configuration
-Le fichier de configuration ***configfile.txt*** permet de définir les couleurs de l'interface, l'intervalle en secondes du temps d'écriture et la réinitialisation du fichier des logs (fichier ***logfile.txt***).
+Le fichier de configuration ***configfile.txt*** permet de définir les [couleurs](#couleurs-disponibles-) de l'interface, l'intervalle en secondes du temps d'écriture et la réinitialisation du [fichier des logs](#fichier-de-logs) (fichier ***logfile.txt***).
 
-**Voici les _<ins>couleurs configurables</ins>_** :
+Il doit respecter la syntaxe suivante `nom_variable=valeur` avec une affectation par ligne. Si elle n'est pas respecté, le processus ne se lance.
+Certaines variables doivent obligatoirement avec une [couleur](#couleurs-disponibles-) ou un [caractère UNICODE](#caractères-unicode-disponibles-) comme valeur.
 
-| Nom de variable          | Couleur        |
-|--------------------------|----------------|
-| FONT_BLACK               | `#0A0A0A`      |
-| FONT_RED                 | `#B22222`      |
-| FONT_GREEN               | `#228B22`      |
-| FONT_YELLOW              | `#B8860B`      |
-| FONT_BLUE                | `#4682B4`      |
-| FONT_MAGENTA             | `#8B008B`      |
-| FONT_CYAN                | `#20B2AA`      |
-| FONT_WHITE               | `#D3D3D3`      |
-| FONT_BRIGHT_BLACK        | `#4B4B4B`      |
-| FONT_BRIGHT_RED          | `#FF6347`      |
-| FONT_BRIGHT_GREEN        | `#32CD32`      |
-| FONT_BRIGHT_YELLOW       | `#FFD700`      |
-| FONT_BRIGHT_BLUE         | `#1E90FF`      |
-| FONT_BRIGHT_MAGENTA      | `#FF00FF`      |
-| FONT_BRIGHT_CYAN         | `#00CED1`      |
-| FONT_BRIGHT_WHITE        | `#FFFFFF`      |
-| BG_BLACK                 | `#141414`      |
-| BG_RED                   | `#8B0000`      |
-| BG_GREEN                 | `#006400`      |
-| BG_YELLOW                | `#8B8B00`      |
-| BG_BLUE                  | `#00008B`      |
-| BG_MAGENTA               | `#8B008B`      |
-| BG_CYAN                  | `#008B8B`      |
-| BG_WHITE                 | `#C0C0C0`      |
-| BG_BRIGHT_BLACK          | `#2F4F4F`      |
-| BG_BRIGHT_RED            | `#FF4500`      |
-| BG_BRIGHT_GREEN          | `#7FFF00`      |
-| BG_BRIGHT_YELLOW         | `#FFD700`      |
-| BG_BRIGHT_BLUE           | `#4169E1`      |
-| BG_BRIGHT_MAGENTA        | `#DA70D6`      |
-| BG_BRIGHT_CYAN           | `#40E0D0`      |
-| BG_BRIGHT_WHITE          | `#F8F8FF`      |
+Voici un exemple :
+```
+bg_color=DARK_BLACK
+font_color=DARK_RED
+border_color=DARK_BLUE
+font_processus_color=BRIGHT_WHITE
+```
+
+Se référer aux tableaux ci-dessous pour voir les variables possibles ainsi que leurs valeurs.
 
 
+#####  <ins>Variables configurables avec une [couleur](#couleurs-disponibles)</ins> :
+| Nom de la variable     | Signification                                       | Valeur par défaut ([couleurs](#voici-les-couleurs-configurables-)) |
+|------------------------|-----------------------------------------------------|--------------------------------------------------------------------|
+| bg_color               | Couleur de fond de l'interface                      | `DARK_BLACK`                                                       |
+| font_color             | Couleur de la police principale                     | `DARK_RED`                                                         |
+| border_color           | Couleur de la bordure                               | `DARK_BLUE`                                                        |
+| font_processus_color   | Couleur de la police pour les processus affichés    | `BRIGHT_WHITE`                                                     |
+| full_cpu_bar_color     | Couleur de la barre de progression CPU (pleine)     | `DARK_YELLOW`                                                      |
+| full_gpu_bar_color     | Couleur de la barre de progression GPU (pleine)     | `DARK_GREEN`                                                       |
+| full_memory_bar_color  | Couleur de la barre de progression mémoire (pleine) | `DARK_MAGENTA`                                                     |
+| full_disk_bar_color    | Couleur de la barre de progression disque (pleine)  | `DARK_BLUE`                                                        |
+| empty_cpu_bar_color    | Couleur de la barre de progression CPU (vide)       | `BRIGHT_YELLOW`                                                    |
+| empty_gpu_bar_color    | Couleur de la barre de progression GPU (vide)       | `BRIGHT_GREEN`                                                     |
+| empty_memory_bar_color | Couleur de la barre de progression mémoire (vide)   | `BRIGHT_MAGENTA`                                                   |
+| empty_disk_bar_color   | Couleur de la barre de progression disque (vide)    | `BRIGHT_BLUE`                                                      |
 
+
+#####  <ins>Variables configurables avec un [caractère UNICODE](#caractères-unicode-disponibles)</ins> :
+
+| Nom de la variable     | Signification                                         | Valeur par défaut ([caractère UNICODE](#voici-les-couleurs-configurables-)) |
+|------------------------|-------------------------------------------------------|-----------------------------------------------------------------------------|
+| border_char            | Caractère représentant les bordures des fenêtres      | `unicode_full_block`                                                        |
+| full_bar_char          | Caractère représentant la barre de progression pleine | `unicode_dark_shade`                                                        |
+| empty_bar_char         | Caractère représentant la barre de progression vide   | `unicode_light_shade`                                                       |
+
+
+#####  <ins>Autre variables configurables</ins> :
+
+| Nom de la variable  | Valeur            | Signification                                                    | Valeur par défaut |
+|---------------------|------------------ |------------------------------------------------------------------|-------------------|
+| minimum_lines_width | `number`          | Largeur minimale en lignes                                       | `30`              |
+| minimum_cols_height | `number`          | Hauteur minimale en colonnes                                     | `70`              |
+| update_log_time     | `number`          | Fréquence de mise à jour du fichier de logs en secondes          | `60`              |
+| overwrite_log       | `true` ou `false` | Indique si le fichier de logs ***logfile.txt*** doit être écrasé | `true`            |
+
+---
+
+##### <ins>Couleurs disponibles</ins> :
+
+| Nom de la couleur        | Code hexadécimal |  Signification            |
+|--------------------------|------------------|---------------------------|
+| DARK_BLACK               | `#000000`        | Noir foncé                |
+| DARK_RED                 | `#800000`        | Rouge foncé               |
+| DARK_GREEN               | `#008000`        | Vert foncé                |
+| DARK_YELLOW              | `#808000`        | Jaune foncé               |
+| DARK_BLUE                | `#000080`        | Bleu foncé                |
+| DARK_MAGENTA             | `#800080`        | Magenta foncé             |
+| DARK_CYAN                | `#008080`        | Cyan foncé                |
+| DARK_WHITE               | `#C0C0C0`        | Blanc/gris foncé          |
+| BRIGHT_BLACK             | `#808080`        | Noir clair (gris foncé)   |
+| BRIGHT_RED               | `#FF0000`        | Rouge clair               |
+| BRIGHT_GREEN             | `#00FF00`        | Vert clair                |
+| BRIGHT_YELLOW            | `#FFFF00`        | Jaune clair               |
+| BRIGHT_BLUE              | `#0000FF`        | Bleu clair                |
+| BRIGHT_MAGENTA           | `#FF00FF`        | Magenta clair             |
+| BRIGHT_CYAN              | `#00FFFF`        | Cyan clair                |
+| BRIGHT_WHITE             | `#FFFFFF`        | Blanc/gris clair          |
+| BRIGHT_BLACK_BIS         | `#555555`        | Noir clair bis            |
+| BRIGHT_RED_BIS           | `#FF5555`        | Rouge clair bis           |
+| BRIGHT_GREEN_BIS         | `#55FF55`        | Vert clair bis            |
+| BRIGHT_YELLOW_BIS        | `#FFFF55`        | Jaune clair bis           |
+| BRIGHT_BLUE_BIS          | `#5555FF`        | Bleu clair bis            |
+| BRIGHT_MAGENTA_BIS       | `#FF55FF`        | Magenta clair bis         |
+| BRIGHT_CYAN_BIS          | `#55FFFF`        | Cyan clair bis            |
+| BRIGHT_WHITE_BIS         | `#E5E5E5`        | Blanc/gris clair bis      |
+| DARK_RED_BIS             | `#800000`        | Fond rouge foncé          |
+| DARK_GREEN_BIS           | `#008000`        | Fond vert foncé           |
+| DARK_YELLOW_BIS          | `#808000`        | Fond jaune foncé          |
+| DARK_BLUE_BIS            | `#000080`        | Fond bleu foncé           |
+| DARK_MAGENTA_BIS         | `#800080`        | Fond magenta foncé        |
+| DARK_CYAN_BIS            | `#008080`        | Fond cyan foncé           |
+| DARK_WHITE_BIS           | `#C0C0C0`        | Fond blanc/gris foncé     |
+
+
+##### <ins>Caractères UNICODE disponibles</ins> :
+
+| Nom du caractère           | Code Unicode | Signification       | Caractère |
+|----------------------------|--------------|---------------------|-----------|
+| unicode_full_block         | `\u2588`     | Bloc complet        | █         |
+| unicode_upper_half_block   | `\u2580`     | Demi-bloc supérieur | ▀         |
+| unicode_lower_half_block   | `\u2584`     | Demi-bloc inférieur | ▄         |
+| unicode_left_half_block    | `\u258C`     | Demi-bloc gauche    | ▌         |
+| unicode_right_half_block   | `\u2590`     | Demi-bloc droit     | ▐         |
+| unicode_light_shade        | `\u2591`     | Ombrage léger       | ░         |
+| unicode_medium_shade       | `\u2592`     | Ombrage moyen       | ▒         |
+| unicode_dark_shade         | `\u2593`     | Ombrage foncé       | ▓         |
+| unicode_white_square       | `\u25A1`     | Carré blanc         | ▢         |
+| unicode_black_circle       | `\u25CF`     | Cercle noir         | ●         |
+| unicode_white_circle       | `\u25CB`     | Cercle blanc        | ○         |
+| unicode_black_diamond      | `\u25C6`     | Losange noir        | ◆         |
+| unicode_white_diamond      | `\u25C7`     | Losange blanc       | ◇         |
+| unicode_black_star         | `\u2605`     | Étoile noire        | ★         |
+| unicode_white_star         | `\u2606`     | Étoile blanche      | ☆         |

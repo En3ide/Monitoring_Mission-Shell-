@@ -4,86 +4,92 @@
 . ./update_log.sh
 
 # Définir les valeurs par défaut
-bg_color="BG_BLACK"
-font_color="FONT_RED"
 os_default="ubuntu"
-climit="unicode_full_block"
-char_bar_plein="unicode_dark_shade"
-char_bar_vide="unicode_light_shade"
-color_limiteur="FONT_BLUE"
-color_bar_cpu="FONT_YELLOW"
-color_bar_gpu="FONT_GREEN"
-color_bar_memory="FONT_MAGENTA"
-color_bar_disk="FONT_BLUE"
-color_proc="FONT_BRIGHT_WHITE"
+
+bg_color="DARK_BLACK"
+font_color="DARK_RED"
+border_color="DARK_BLUE"
+font_processus_color="BRIGHT_WHITE"
+
+full_cpu_bar_color="DARK_YELLOW"
+full_gpu_bar_color="DARK_GREEN"
+full_memory_bar_color="DARK_MAGENTA"
+full_disk_bar_color="DARK_BLUE"
+
+empty_cpu_bar_color="BRIGHT_YELLOW"
+empty_gpu_bar_color="BRIGHT_GREEN"
+empty_memory_bar_color="BRIGHT_MAGENTA"
+empty_disk_bar_color="BRIGHT_BLUE"
+
+border_char="unicode_full_block"
+full_bar_char="unicode_dark_shade"
+empty_bar_char="unicode_light_shade"
+
+minimum_lines_width=30
+minimum_cols_height=70
 update_log_time=60
-lines_minimum=30
-cols_minimum=70
 overwrite_log=true
 
-# Variables pour les couleurs de texte (foreground)
-FONT_BLACK="\033[30m"          # Noir foncé
-FONT_RED="\033[31m"            # Rouge foncé
-FONT_GREEN="\033[32m"          # Vert foncé
-FONT_YELLOW="\033[33m"         # Jaune foncé
-FONT_BLUE="\033[34m"           # Bleu foncé
-FONT_MAGENTA="\033[35m"        # Magenta foncé
-FONT_CYAN="\033[36m"           # Cyan foncé
-FONT_WHITE="\033[37m"          # Blanc (gris clair)
-FONT_RESET="\033[0m"           # Réinitialisation de couleur
+# Couleurs sombres (Dark)
+DARK_BLACK='\033[0;30m'      # Noir foncé
+DARK_RED='\033[0;31m'        # Rouge foncé
+DARK_GREEN='\033[0;32m'      # Vert foncé
+DARK_YELLOW='\033[0;33m'     # Jaune foncé
+DARK_BLUE='\033[0;34m'       # Bleu foncé
+DARK_MAGENTA='\033[0;35m'    # Magenta foncé
+DARK_CYAN='\033[0;36m'       # Cyan foncé
+DARK_WHITE='\033[0;37m'      # Blanc/gris foncé
 
-# Variables pour les couleurs de fond (background) - variantes uniques
-BG_BLACK="\033[40m"            # Fond noir foncé légèrement différent
-BG_RED="\033[41m"              # Fond rouge foncé légèrement différent
-BG_GREEN="\033[42m"            # Fond vert foncé légèrement différent
-BG_YELLOW="\033[43m"           # Fond jaune foncé légèrement différent
-BG_BLUE="\033[44m"             # Fond bleu foncé légèrement différent
-BG_MAGENTA="\033[45m"          # Fond magenta foncé légèrement différent
-BG_CYAN="\033[46m"             # Fond cyan foncé légèrement différent
-BG_WHITE="\033[47m"            # Fond gris légèrement différent
+# Couleurs vives (Bright)
+BRIGHT_BLACK='\033[1;30m'     # Noir clair (gris foncé)
+BRIGHT_RED='\033[1;31m'       # Rouge clair
+BRIGHT_GREEN='\033[1;32m'     # Vert clair
+BRIGHT_YELLOW='\033[1;33m'    # Jaune clair
+BRIGHT_BLUE='\033[1;34m'      # Bleu clair
+BRIGHT_MAGENTA='\033[1;35m'   # Magenta clair
+BRIGHT_CYAN='\033[1;36m'      # Cyan clair
+BRIGHT_WHITE='\033[1;37m'     # Blanc/gris clair
 
-# Variables pour les couleurs claires (bright foreground)
-FONT_BRIGHT_BLACK="\033[90m"   # Noir clair
-FONT_BRIGHT_RED="\033[91m"     # Rouge clair
-FONT_BRIGHT_GREEN="\033[92m"   # Vert clair
-FONT_BRIGHT_YELLOW="\033[93m"  # Jaune clair
-FONT_BRIGHT_BLUE="\033[94m"    # Bleu clair
-FONT_BRIGHT_MAGENTA="\033[95m" # Magenta clair
-FONT_BRIGHT_CYAN="\033[96m"    # Cyan clair
-FONT_BRIGHT_WHITE="\033[97m"   # Blanc pur
+# Couleurs BIS pour Bright
+BRIGHT_BLACK_BIS='\033[1;90m'   # Noir clair bis
+BRIGHT_RED_BIS='\033[1;91m'     # Rouge clair bis
+BRIGHT_GREEN_BIS='\033[1;92m'   # Vert clair bis
+BRIGHT_YELLOW_BIS='\033[1;93m'  # Jaune clair bis
+BRIGHT_BLUE_BIS='\033[1;94m'    # Bleu clair bis
+BRIGHT_MAGENTA_BIS='\033[1;95m' # Magenta clair bis
+BRIGHT_CYAN_BIS='\033[1;96m'    # Cyan clair bis
+BRIGHT_WHITE_BIS='\033[1;97m'   # Blanc/gris clair bis
 
-# Variables pour les couleurs claires de fond (bright background) - variantes uniques
-BG_BRIGHT_BLACK="\033[100m"    # Fond noir clair
-BG_BRIGHT_RED="\033[101m"      # Fond rouge clair
-BG_BRIGHT_GREEN="\033[102m"    # Fond vert clair
-BG_BRIGHT_YELLOW="\033[103m"   # Fond jaune clair
-BG_BRIGHT_BLUE="\033[104m"     # Fond bleu clair
-BG_BRIGHT_MAGENTA="\033[105m"  # Fond magenta clair
-BG_BRIGHT_CYAN="\033[106m"     # Fond cyan clair
-BG_BRIGHT_WHITE="\033[107m"    # Fond blanc pur
+# Couleurs supplémentaires pour le texte de fond (Background)
+DARK_RED_BIS='\033[41m'         # Fond rouge foncé
+DARK_GREEN_BIS='\033[42m'       # Fond vert foncé
+DARK_YELLOW_BIS='\033[43m'      # Fond jaune foncé
+DARK_BLUE_BIS='\033[44m'        # Fond bleu foncé
+DARK_MAGENTA_BIS='\033[45m'     # Fond magenta foncé
+DARK_CYAN_BIS='\033[46m'        # Fond cyan foncé
+DARK_WHITE_BIS='\033[47m'       # Fond blanc/gris foncé
 
-carre_plein="\u2588"
-carre_vide="\u25A1"
+# Réinitialiser les couleurs
+RESET_COLOR='\033[0m'                 # Réinitialiser les couleurs
 
 # Caractères Unicode de type carré
-unicode_full_block="█"             # Bloc complet (Full Block)
-unicode_upper_half_block="▀"       # Demi-bloc supérieur (Upper Half Block)
-unicode_lower_half_block="▄"       # Demi-bloc inférieur (Lower Half Block)
-unicode_left_half_block="▌"        # Demi-bloc gauche (Left Half Block)
-unicode_right_half_block="▐"       # Demi-bloc droit (Right Half Block)
+unicode_full_block="\u2588"             # Bloc complet (Full Block)
+unicode_upper_half_block="\u2580"       # Demi-bloc supérieur (Upper Half Block)
+unicode_lower_half_block="\u2584"       # Demi-bloc inférieur (Lower Half Block)
+unicode_left_half_block="\u258C"        # Demi-bloc gauche (Left Half Block)
+unicode_right_half_block="\u2590"       # Demi-bloc droit (Right Half Block)
 
-unicode_light_shade="░"            # Ombrage léger (Light Shade)
-unicode_medium_shade="▒"           # Ombrage moyen (Medium Shade)
-unicode_dark_shade="▓"             # Ombrage foncé (Dark Shade)
+unicode_light_shade="\u2591"            # Ombrage léger (Light Shade)
+unicode_medium_shade="\u2592"           # Ombrage moyen (Medium Shade)
+unicode_dark_shade="\u2593"             # Ombrage foncé (Dark Shade)
 
-unicode_white_square="▢"           # Carré blanc (White Square)
-unicode_black_circle="●"           # Cercle noir (Black Circle)
-unicode_white_circle="○"           # Cercle blanc (White Circle)
-unicode_black_diamond="◆"          # Losange noir (Black Diamond)
-unicode_white_diamond="◇"          # Losange blanc (White Diamond)
-unicode_black_star="★"             # Étoile noire (Black Star)
-unicode_white_star="☆"             # Étoile blanche (White Star)
-
+unicode_white_square="\u25A1"           # Carré blanc (White Square)
+unicode_black_circle="\u25CF"           # Cercle noir (Black Circle)
+unicode_white_circle="\u25CB"           # Cercle blanc (White Circle)
+unicode_black_diamond="\u25C6"          # Losange noir (Black Diamond)
+unicode_white_diamond="\u25C7"          # Losange blanc (White Diamond)
+unicode_black_star="\u2605"             # Étoile noire (Black Star)
+unicode_white_star="\u2606"             # Étoile blanche (White Star)
 
 generate_random() {  # Jamel Bailleul
     local min=$1
@@ -113,10 +119,10 @@ clear_screen() { # Jamel Bailleul
 
             if (( i == 1 || i == cols || j == 1 || j == lines || i == separateur )); then
                 # Afficher la bordure
-                echo -en "${!bg_color}${!color_limiteur}${!climit}${reset}"
+                echo -en "${!bg_color}${!border_color}${!border_char}${reset}"
             else
                 # Remplir avec un espace vide
-                echo -en "${!bg_color}${!color_limiteur} ${reset}"
+                echo -en "${!bg_color}${!border_color} ${reset}"
             fi
         done
     done
@@ -160,7 +166,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour & ChatGPT
         echo -en "${!bg_color}${!font_color}Memory : ${used_memory}Kb / ${max_memory}Kb${reset}"
 
         # Afficher la barre d'état de la mémoire
-        print_bar_h "${!bg_color}${!color_bar_memory}" "$y" "$3" "$(( x + 1 ))" "$percent"
+        print_bar_h "${!bg_color}${!full_memory_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent"
     fi
 
     # GPU (%)
@@ -191,7 +197,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour & ChatGPT
         echo -en "${!bg_color}${!font_color}GPU % : ${reset}"
 
         # Afficher la barre d'état pour l'utilisation de la VRAM
-        print_bar_h "${!bg_color}${!color_bar_gpu}" "$y" "$3" "$(( x + 1 ))" "$percent"
+        print_bar_h "${!bg_color}${!full_gpu_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent"
     fi
 
     # GPU (vram)
@@ -222,7 +228,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour & ChatGPT
         echo -en "${!bg_color}${!font_color}GPU VRAM : ${reset}"
 
         # Afficher la barre d'état pour l'utilisation de la VRAM
-        print_bar_h "${!bg_color}${!color_bar_gpu}" "$y" "$3" "$(( x + 1 ))" "$percent"
+        print_bar_h "${!bg_color}${!full_gpu_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent"
     fi
 
     # Disque
@@ -253,7 +259,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour & ChatGPT
         echo -en "${!bg_color}${!font_color}Disk : ${used_disk} / ${max_disk}${reset}"
 
         # Afficher la barre d'état pour l'utilisation du disque
-        print_bar_h "${!bg_color}${!color_bar_disk}" "$y" "$3" "$(( x + 1 ))" "$percent"
+        print_bar_h "${!bg_color}${!full_disk_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent"
     fi
 
     # CPU (%)
@@ -285,7 +291,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour & ChatGPT
         echo -en "${!bg_color}${!font_color}CPU % : ${cpu_name:0:$(( $3 - 10 ))}${reset}"
 
         # Afficher la barre d'état pour l'utilisation du CPU
-        print_bar_h "${!bg_color}${!color_bar_cpu}" "$y" "$3" "$(( x + 1 ))" "$percent"
+        print_bar_h "${!bg_color}${!full_cpu_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent"
     fi
 
     local used_cpu=$(recup_cpu "cpu1" 2>/dev/null)
@@ -325,7 +331,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour & ChatGPT
                     echo -en "${!bg_color}${!font_color}CORE : ${j}${reset}"
 
                     # Afficher la barre d'état pour l'utilisation du CPU
-                    print_bar_h "${!bg_color}${!color_bar_cpu}" "$y" "$(($fin_bar - $espace))" "$(( x + 1 ))" "$percent"
+                    print_bar_h "${!bg_color}${!full_cpu_bar_color}" "$y" "$(($fin_bar - $espace))" "$(( x + 1 ))" "$percent"
                 else
                     return 1
                 fi
@@ -345,7 +351,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour & ChatGPT
 
         printf "\33[%d;%dH" "$x" "$(($y - 1))"
         for ((i=0; i < $3 ; i++)); do
-            echo -en "${!bg_color}${!color_limiteur}${!climit}${reset}"
+            echo -en "${!bg_color}${!border_color}${!border_char}${reset}"
         done
         nb_inter=$( echo $inter_name | awk '{print NF}')
         for (( i=1 ; i <= $nb_inter ; i++)); do
@@ -368,7 +374,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour & ChatGPT
 
             # Placer le curseur aux coordonnées (x, y) pour l'affichage
             printf "\33[%d;%dH" "$x" "$y"
-            echo -en "${!bg_color}${!font_color}${!char_bar_vide}${name:0:$(( $3 - 7 ))} ${!char_bar_vide}${reset}"
+            echo -en "${!bg_color}${!font_color}${!empty_bar_char}${name:0:$(( $3 - 7 ))} ${!empty_bar_char}${reset}"
             printf "\33[%d;%dH" "$(($x + 1))" "$y"
             if [[ $download -ne $(get_network_usage "download" $name) ]]; then
                 download_s=$(($download - $(get_network_usage "download" $name)))
@@ -428,7 +434,7 @@ affiche_processus() { # Jamel Bailleul
 		# Afficher les 15 premiers caractères de la première ligne au milieu de l'écran
 		printf "\033[%d;%dH" "$i" "$start_col"  # Positionne le curseur
 		local nb_char=$(($end_col - $start_col))
-		echo -en "${!bg_color}${!color_proc}${first_line:0:${nb_char}}"
+		echo -en "${!bg_color}${!font_processus_color}${first_line:0:${nb_char}}"
 		text=$(echo "$text" | sed '1d')
     done
 }
@@ -446,10 +452,11 @@ print_bar_h() { # Jamel Bailleul
 
     local res="$1"
     for ((i=$2; i<=$3 - 3; i++)); do
-        if (( $(echo "$i * 100 / ($3 - 4)" | bc) <= percent )); then
-            res+="${!bg_color}${!char_bar_plein}"
+        calculated_percent=$(( i * 100 / ( $3 - 4 ) ))
+        if (( calculated_percent <= percent )); then
+            res+="${!bg_color}${!full_bar_char}"
         else
-            res+="${reset}${!char_bar_vide}"
+            res+="${reset}${!empty_bar_char}"
         fi
     done
 
@@ -516,7 +523,7 @@ main() {  # Jamel Bailleul & Tim Lamour
     # si le programme est interrompu avec ctrl+c, on remet l'état initial du terminal
     trap 'tput "rmcup"; tput "cnorm"; stty "$old_stty"; exit' INT TERM
 
-	if (( $(tput cols) > $cols_minimum && $(tput lines) > lines_minimum )); then 
+	if (( $(tput cols) > $minimum_cols_height && $(tput lines) > minimum_lines_width )); then 
 		clear_screen "$(($(tput cols) / 2))"
 	else
 		clear_screen
@@ -544,7 +551,7 @@ main() {  # Jamel Bailleul & Tim Lamour
 		if (( $(tput cols) != $cols || $(tput lines) != $lines )); then
             	local cols=$(tput cols)
 	            local lines=$(tput lines)
-			if (( $cols > cols_minimum && $lines > $lines_minimum )); then 
+			if (( $cols > minimum_cols_height && $lines > $minimum_lines_width )); then 
 				clear_screen "$(($(tput cols) / 2))"
 			else
 				clear_screen
@@ -559,7 +566,7 @@ main() {  # Jamel Bailleul & Tim Lamour
             logfile_enabled=0       # Désactive l'écriture dans le log
         fi
 		
-		if (( $(tput cols) <= cols_minimum | $(tput lines) <= lines_minimum)); then
+		if (( $(tput cols) <= minimum_cols_height | $(tput lines) <= minimum_lines_width)); then
 			info_reduite 2 3 "$(($(tput cols)-2))" "$logfile_enabled"
 		else
 			info_scinder 2 3 "$(($(tput cols)-2))" "$logfile_enabled"
