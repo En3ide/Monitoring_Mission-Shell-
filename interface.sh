@@ -452,15 +452,32 @@ print_bar_h() { # Jamel Bailleul
 config_file() {  # Jamel Bailleul
     local fichier="$1"
 
-    if [ -f "$fichier" ]; then # Vérifie si le fichier existe
+    # Vérifie si le fichier existe
+    if [ -f "$fichier" ]; then 
         while IFS='=' read -r cle valeur; do # Boucle pour lire chaque ligne du fichier
-            if [[ -n "$cle" && -n "$valeur" ]]; then
+
+            # Supprime les espaces inutiles autour
+            cle=$(echo "$cle" | xargs)
+            valeur=$(echo "$valeur" | xargs)
+
+            # Ignore ligne vide et commentaire
+            if [[ -z "$cle" || "$cle" == \#* ]]; then
+                continue
+            fi
+
+            if [ -z "$cle" ]; then
+                echo "Erreur de syntaxe le configfile : variable non reconnue." >&2
+                exit 2
+            elif [ -z "$valeur" ]; then
+                echo "Erreur de syntaxe le configfile : valeur de variable reconnue." >&2
+                exit 3
+            else
                 export "$cle=$valeur" # Exporter chaque clé comme une variable d'environnement
             fi
         done < "$fichier"
-        echo "Les variables d'environnement ont été définies."
     else
-        echo "Le fichier '$fichier' n'existe pas."
+        echo "Le fichier '$fichier' n'existe pas." >&2
+        exit 1
     fi
 }
 
@@ -473,6 +490,12 @@ install_bc_if_not_installed() {  # Jamel Bailleul
 }
 
 main() {  # Jamel Bailleul & Tim Lamour
+
+    # vérifie la présence d'un fichier de config
+	if [ "$#" -eq 1 ]; then
+        config_file "$1"
+    fi
+
     # on sauvegarde l'état du terminal
     local old_stty=$(stty -g)
     tput "smcup"
@@ -483,13 +506,6 @@ main() {  # Jamel Bailleul & Tim Lamour
 
     # si le programme est interrompu avec ctrl+c, on remet l'état initial du terminal
     trap 'tput "rmcup"; tput "cnorm"; stty "$old_stty"; exit' INT TERM
-
-	# vérifie la présence d'un fichier de config
-	if [ -f "$1" ]; then
-		config_file "$1"
-	else
-		echo "Non, le fichier '$1' n'existe pas."
-	fi
 
 	if (( $(tput cols) > 15 && $(tput lines) > 30 )); then 
 		clear_screen "$(($(tput cols) / 2))"
