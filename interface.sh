@@ -22,45 +22,45 @@ cols_minimum=70
 overwrite_log=true
 
 # Variables pour les couleurs de texte (foreground)
-FONT_BLACK="\033[30m"
-FONT_RED="\033[31m"
-FONT_GREEN="\033[32m"
-FONT_YELLOW="\033[33m"
-FONT_BLUE="\033[34m"
-FONT_MAGENTA="\033[35m"
-FONT_CYAN="\033[36m"
-FONT_WHITE="\033[37m"
-FONT_RESET="\033[0m"
+FONT_BLACK="\033[30m"          # Noir foncé
+FONT_RED="\033[31m"            # Rouge foncé
+FONT_GREEN="\033[32m"          # Vert foncé
+FONT_YELLOW="\033[33m"         # Jaune foncé
+FONT_BLUE="\033[34m"           # Bleu foncé
+FONT_MAGENTA="\033[35m"        # Magenta foncé
+FONT_CYAN="\033[36m"           # Cyan foncé
+FONT_WHITE="\033[37m"          # Blanc (gris clair)
+FONT_RESET="\033[0m"           # Réinitialisation de couleur
 
-# Variables pour les couleurs de fond (background)
-BG_BLACK="\033[40m"
-BG_RED="\033[41m"
-BG_GREEN="\033[42m"
-BG_YELLOW="\033[43m"
-BG_BLUE="\033[44m"
-BG_MAGENTA="\033[45m"
-BG_CYAN="\033[46m"
-BG_WHITE="\033[47m"
+# Variables pour les couleurs de fond (background) - variantes uniques
+BG_BLACK="\033[40m"            # Fond noir foncé légèrement différent
+BG_RED="\033[41m"              # Fond rouge foncé légèrement différent
+BG_GREEN="\033[42m"            # Fond vert foncé légèrement différent
+BG_YELLOW="\033[43m"           # Fond jaune foncé légèrement différent
+BG_BLUE="\033[44m"             # Fond bleu foncé légèrement différent
+BG_MAGENTA="\033[45m"          # Fond magenta foncé légèrement différent
+BG_CYAN="\033[46m"             # Fond cyan foncé légèrement différent
+BG_WHITE="\033[47m"            # Fond gris légèrement différent
 
 # Variables pour les couleurs claires (bright foreground)
-FONT_BRIGHT_BLACK="\033[90m"
-FONT_BRIGHT_RED="\033[91m"
-FONT_BRIGHT_GREEN="\033[92m"
-FONT_BRIGHT_YELLOW="\033[93m"
-FONT_BRIGHT_BLUE="\033[94m"
-FONT_BRIGHT_MAGENTA="\033[95m"
-FONT_BRIGHT_CYAN="\033[96m"
-FONT_BRIGHT_WHITE="\033[97m"
+FONT_BRIGHT_BLACK="\033[90m"   # Noir clair
+FONT_BRIGHT_RED="\033[91m"     # Rouge clair
+FONT_BRIGHT_GREEN="\033[92m"   # Vert clair
+FONT_BRIGHT_YELLOW="\033[93m"  # Jaune clair
+FONT_BRIGHT_BLUE="\033[94m"    # Bleu clair
+FONT_BRIGHT_MAGENTA="\033[95m" # Magenta clair
+FONT_BRIGHT_CYAN="\033[96m"    # Cyan clair
+FONT_BRIGHT_WHITE="\033[97m"   # Blanc pur
 
-# Variables pour les couleurs claires de fond (bright background)
-BG_BRIGHT_BLACK="\033[100m"
-BG_BRIGHT_RED="\033[101m"
-BG_BRIGHT_GREEN="\033[102m"
-BG_BRIGHT_YELLOW="\033[103m"
-BG_BRIGHT_BLUE="\033[104m"
-BG_BRIGHT_MAGENTA="\033[105m"
-BG_BRIGHT_CYAN="\033[106m"
-BG_BRIGHT_WHITE="\033[107m"
+# Variables pour les couleurs claires de fond (bright background) - variantes uniques
+BG_BRIGHT_BLACK="\033[100m"    # Fond noir clair
+BG_BRIGHT_RED="\033[101m"      # Fond rouge clair
+BG_BRIGHT_GREEN="\033[102m"    # Fond vert clair
+BG_BRIGHT_YELLOW="\033[103m"   # Fond jaune clair
+BG_BRIGHT_BLUE="\033[104m"     # Fond bleu clair
+BG_BRIGHT_MAGENTA="\033[105m"  # Fond magenta clair
+BG_BRIGHT_CYAN="\033[106m"     # Fond cyan clair
+BG_BRIGHT_WHITE="\033[107m"    # Fond blanc pur
 
 carre_plein="\u2588"
 carre_vide="\u25A1"
