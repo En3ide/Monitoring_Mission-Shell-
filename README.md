@@ -13,11 +13,11 @@ Il s'agit est un moniteur de système écrit en Bash. Il permet de surveiller en
 
 ## Utilisation 
 1. Vous pouvez utiliser la commande  : `./interface.sh`
-2. Lancer le processus avec le configfile qui sert de fichier de configuration : `./interface.sh configfile.txt`
+2. Lancer le processus avec le fichier de configuration : `./interface.sh configfile.txt`
 
 ## Fichier de log
 Un fichier de log ***logfile.txt*** se créé automatiquement lors du lancement du processus.
-Il est écrasé à chaque nouveau lancement.
+La réinitialisation et l'intervalle de temps (en secondes) sont configurables dans le fichier de configuration ***configfile.txt***.
 
 ## Fichier de configuration
 Le fichier de configuration ***configfile.txt*** permet de définir les couleurs de l'interface, l'intervalle en secondes du temps d'écriture dans les logs (fichier ***logfile.txt***).

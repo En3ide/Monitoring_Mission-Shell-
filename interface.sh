@@ -20,6 +20,7 @@ update_log_time=60
 rewrite_log=true
 lines_minimum=30
 cols_minimum=70
+overwrite_log=true
 
 # Variables pour les couleurs de texte (foreground)
 FONT_BLACK="\033[30m"
@@ -534,7 +535,7 @@ main() {  # Jamel Bailleul & Tim Lamour
     #done &
 
     # Créer le logfile
-    create_logfile "$rewrite_log"
+    create_logfile "$overwrite_log"
 
     local logfile_enabled=0
     local start_time="$SECONDS"
