@@ -1,5 +1,5 @@
 # Projet Shell - Application de Monitoring
----
+
 >Ce projet a été réalisé dans le cadre d'un programme universitaire d'une 3<sup>ème</sup> année de licence Informatique.
 
 Il s'agit est un moniteur de système écrit en *Bash*. Il permet de surveiller en temps réel les ressources du système comme le processeur (CPU), la carte graphique (GPU), la mémoire, les disques, le réseau, et les processus actifs
