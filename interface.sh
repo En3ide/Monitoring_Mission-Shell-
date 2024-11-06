@@ -18,6 +18,8 @@ color_bar_disk="FONT_BLUE"
 color_proc="FONT_BRIGHT_WHITE"
 update_log_time=60
 rewrite_log=true
+lines_minimum=30
+cols_minimum=70
 
 # Variables pour les couleurs de texte (foreground)
 FONT_BLACK="\033[30m"
@@ -280,7 +282,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour & ChatGPT
         fi
 
         # Afficher le nom du CPU avec une longueur limitée par la largeur disponible
-        echo -en "${!bg_color}${!font_color}CPU % : ${cpu_name:0:$(( $3 - 7 ))}${reset}"
+        echo -en "${!bg_color}${!font_color}CPU % : ${cpu_name:0:$(( $3 - 10 ))}${reset}"
 
         # Afficher la barre d'état pour l'utilisation du CPU
         print_bar_h "${!bg_color}${!color_bar_cpu}" "$y" "$3" "$(( x + 1 ))" "$percent"
@@ -331,7 +333,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour & ChatGPT
 
     # Net
     local inter_name=$(get_interface_name 2>/dev/null)
-    if [[ -n "$inter_name" ]]; then
+    if [[ -n "$inter_name" && $(tput lines) > $(( $1 + (3 * position) + 5 )) ]]; then
         # Calcul de la position pour afficher les informations de reseaux
         x=$(( $1 + (3 * position) ))  # Position en ligne ajustée selon la position actuelle
         y="$2"  # Position en colonne reçue en argument
@@ -372,9 +374,13 @@ info_reduite() { # Jamel Bailleul & Tim Lamour & ChatGPT
             if [[ $upload -ne $(get_network_usage "upload" $name) ]]; then
                 upload_s=$(($upload - $(get_network_usage "upload" $name)))
             fi
-            echo -en "${!bg_color}${!font_color}Download total : ${download:0:$(( $3 - 7 ))} Bytes | Download/s : ${download_s} Bytes/s${reset}"
+            echo -en "${!bg_color}${!font_color}Download total : ${download:0:$(( $3 - 7 ))} Bytes${reset}"
             printf "\33[%d;%dH" "$(($x + 2))" "$y"
-            echo -en "${!bg_color}${!font_color}Upload total : ${upload:0:$(( $3 - 7 ))} Bytes | Upload/s : ${upload_s} Bytes/s${reset}"
+            echo -en "${!bg_color}${!font_color}Speed Download/s : ${download_s} Bytes/s${reset}"
+            printf "\33[%d;%dH" "$(($x + 3))" "$y"
+            echo -en "${!bg_color}${!font_color}Upload total : ${upload:0:$(( $3 - 7 ))} Bytes${reset}"
+            printf "\33[%d;%dH" "$(($x + 4))" "$y"
+            echo -en "${!bg_color}${!font_color}Upload/s : ${upload_s} Bytes/s${reset}"
         done
     fi
 
@@ -508,7 +514,7 @@ main() {  # Jamel Bailleul & Tim Lamour
     # si le programme est interrompu avec ctrl+c, on remet l'état initial du terminal
     trap 'tput "rmcup"; tput "cnorm"; stty "$old_stty"; exit' INT TERM
 
-	if (( $(tput cols) > 15 && $(tput lines) > 30 )); then 
+	if (( $(tput cols) > $cols_minimum && $(tput lines) > lines_minimum )); then 
 		clear_screen "$(($(tput cols) / 2))"
 	else
 		clear_screen
@@ -534,7 +540,9 @@ main() {  # Jamel Bailleul & Tim Lamour
     local start_time="$SECONDS"
 	while true; do
 		if (( $(tput cols) != $cols || $(tput lines) != $lines )); then
-			if (( $(tput cols) > 15 && $(tput lines) > 20 )); then 
+            	local cols=$(tput cols)
+	            local lines=$(tput lines)
+			if (( $cols > cols_minimum && $lines > $lines_minimum )); then 
 				clear_screen "$(($(tput cols) / 2))"
 			else
 				clear_screen
@@ -549,7 +557,7 @@ main() {  # Jamel Bailleul & Tim Lamour
             logfile_enabled=0       # Désactive l'écriture dans le log
         fi
 		
-		if (( $(tput cols) <= 50 | $(tput lines) <= 20)); then
+		if (( $(tput cols) <= cols_minimum | $(tput lines) <= lines_minimum)); then
 			info_reduite 2 3 "$(($(tput cols)-2))" "$logfile_enabled"
 		else
 			info_scinder 2 3 "$(($(tput cols)-2))" "$logfile_enabled"
