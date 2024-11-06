@@ -33,7 +33,7 @@ font_processus_color=BRIGHT_WHITE
 Veuillez vous référer aux tableaux ci-dessous pour voir les variables possibles ainsi que leurs valeurs.
 
 
-####  <ins>Variables configurables avec une [couleur](#couleurs-disponibles)</ins> :
+####  <ins>Variables configurables avec une [couleur](#couleurs-disponibles-)</ins> :
 | Nom de la variable     | Signification                                       | Valeur par défaut ([couleurs](#voici-les-couleurs-configurables-)) |
 |------------------------|-----------------------------------------------------|--------------------------------------------------------------------|
 | bg_color               | Couleur de fond de l'interface                      | `DARK_BLACK`                                                       |
@@ -50,7 +50,7 @@ Veuillez vous référer aux tableaux ci-dessous pour voir les variables possible
 | empty_disk_bar_color   | Couleur de la barre de progression disque (vide)    | `BRIGHT_BLUE`                                                      |
 
 
-####  <ins>Variables configurables avec un [caractère UNICODE](#caractères-unicode-disponibles)</ins> :
+####  <ins>Variables configurables avec un [caractère UNICODE](#caractères-unicode-disponibles-)</ins> :
 
 | Nom de la variable     | Signification                                         | Valeur par défaut ([caractère UNICODE](#voici-les-couleurs-configurables-)) |
 |------------------------|-------------------------------------------------------|-----------------------------------------------------------------------------|
