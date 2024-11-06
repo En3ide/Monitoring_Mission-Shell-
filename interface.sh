@@ -358,7 +358,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour & ChatGPT
 
             # Concatener dans le contenu à rajouter au logfile si demandé
             if [ "$logfile_enabled" == 1 ]; then
-                logfile_content="$logfile_content $name => Download : $download Bytes | Upload = $upload Bytes\n"
+                logfile_content="$logfile_content $name => Download : $download Bytes | Download/S : $download_s Bytes/S | Upload = $upload Bytes | Upload/S : $upload_s Bytes/S\n"
             fi
 
             # Placer le curseur aux coordonnées (x, y) pour l'affichage
