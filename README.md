@@ -2,7 +2,7 @@
 
 ---
 
-*Ce projet a été réalisé dans le cadre d'un programme universitaire d'une 3ème année de licence Informatique.*
+>Ce projet a été réalisé dans le cadre d'un programme universitaire d'une 3ème année de licence Informatique.
 
 Il s'agit est un moniteur de système écrit en Bash. Il permet de surveiller en temps réel les ressources du système comme le processeur, la mémoire, les disques, le réseau, et les processus actifs
 
@@ -17,9 +17,12 @@ Il s'agit est un moniteur de système écrit en Bash. Il permet de surveiller en
 
 ## Fichier de log
 Un fichier de log ***logfile.txt*** se créé automatiquement lors du lancement du processus.
-La réinitialisation et l'intervalle de temps (en secondes) sont configurables dans le fichier de configuration ***configfile.txt***.
+La réinitialisation et l'intervalle de temps (en secondes) sont configurables dans le [fichier de configuration ***configfile.txt***](#fichier-de-configuration).
 
 ## Fichier de configuration
-Le fichier de configuration ***configfile.txt*** permet de définir les couleurs de l'interface, l'intervalle en secondes du temps d'écriture dans les logs (fichier ***logfile.txt***).
+Le fichier de configuration ***configfile.txt*** permet de définir les couleurs de l'interface, l'intervalle en secondes du temps d'écriture et la réinitialisation du fichier des logs (fichier ***logfile.txt***).
 
+**Voici les _couleurs configurables_** :
+### caca
+[left]test[/left]
 
