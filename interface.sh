@@ -17,7 +17,6 @@ color_bar_memory="FONT_MAGENTA"
 color_bar_disk="FONT_BLUE"
 color_proc="FONT_BRIGHT_WHITE"
 update_log_time=60
-rewrite_log=true
 lines_minimum=30
 cols_minimum=70
 overwrite_log=true
