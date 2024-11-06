@@ -2,7 +2,7 @@
 
 >Ce projet a été réalisé dans le cadre d'un programme universitaire d'une 3<sup>ème</sup> année de licence Informatique.
 
-Il s'agit est un moniteur de système écrit en *Bash*. Il permet de surveiller en temps réel les ressources du système comme le processeur (CPU), la carte graphique (GPU), la mémoire, les disques, le réseau, et les processus actifs
+Il s'agit d'un moniteur de système écrit en *Bash*. Il permet de surveiller en temps réel les ressources du système comme le processeur (CPU), la carte graphique (GPU), la mémoire, les disques, le réseau, et les processus actifs
 
 ## Prérequis
 - Système d'exploitation **LINUX**
@@ -10,14 +10,14 @@ Il s'agit est un moniteur de système écrit en *Bash*. Il permet de surveiller 
 
 ## Utilisation 
 1. Vous pouvez utiliser la commande  : `./interface.sh`
-2. Lancer le processus avec le [fichier de configuration](#fichier-de-configuration) : `./interface.sh configfile.txt`
+2. Vous pouvez lancer le processus avec le [fichier de configuration](#fichier-de-configuration) : `./interface.sh configfile.txt`
 
 ## Fichier de logs
 Un fichier de logs ***logfile.txt*** se met à jour automatiquement, il y est écrit toutes les données récoltés par le processus.
-La réinitialisation lors du lancement du processus et l'intervalle de temps (en secondes) sont configurables dans le [fichier de configuration ***configfile.txt***](#fichier-de-configuration).
+La réinitialisation lors du lancement du processus et l'intervalle de temps (en secondes) sont configurables dans le [fichier de configuration](#fichier-de-configuration).
 
 ## Fichier de configuration
-Le fichier de configuration ***configfile.txt*** permet de définir les [couleurs](#couleurs-disponibles-) de l'interface, l'intervalle en secondes du temps d'écriture et la réinitialisation du [fichier des logs](#fichier-de-logs) (fichier ***logfile.txt***).
+Le fichier de configuration ***configfile.txt*** permet de définir les [couleurs](#couleurs-disponibles-) de l'interface, l'intervalle en secondes du temps d'écriture et la réinitialisation du [fichier des logs](#fichier-de-logs).
 
 Il doit respecter la syntaxe suivante `nom_variable=valeur` avec une affectation par ligne. Si elle n'est pas respecté, le processus ne se lance.
 Certaines variables doivent obligatoirement avec une [couleur](#couleurs-disponibles-) ou un [caractère UNICODE](#caractères-unicode-disponibles-) comme valeur.
@@ -30,10 +30,10 @@ border_color=DARK_BLUE
 font_processus_color=BRIGHT_WHITE
 ```
 
-Se référer aux tableaux ci-dessous pour voir les variables possibles ainsi que leurs valeurs.
+Veuillez vous référer aux tableaux ci-dessous pour voir les variables possibles ainsi que leurs valeurs.
 
 
-#####  <ins>Variables configurables avec une [couleur](#couleurs-disponibles)</ins> :
+####  <ins>Variables configurables avec une [couleur](#couleurs-disponibles)</ins> :
 | Nom de la variable     | Signification                                       | Valeur par défaut ([couleurs](#voici-les-couleurs-configurables-)) |
 |------------------------|-----------------------------------------------------|--------------------------------------------------------------------|
 | bg_color               | Couleur de fond de l'interface                      | `DARK_BLACK`                                                       |
@@ -50,7 +50,7 @@ Se référer aux tableaux ci-dessous pour voir les variables possibles ainsi que
 | empty_disk_bar_color   | Couleur de la barre de progression disque (vide)    | `BRIGHT_BLUE`                                                      |
 
 
-#####  <ins>Variables configurables avec un [caractère UNICODE](#caractères-unicode-disponibles)</ins> :
+####  <ins>Variables configurables avec un [caractère UNICODE](#caractères-unicode-disponibles)</ins> :
 
 | Nom de la variable     | Signification                                         | Valeur par défaut ([caractère UNICODE](#voici-les-couleurs-configurables-)) |
 |------------------------|-------------------------------------------------------|-----------------------------------------------------------------------------|
@@ -59,7 +59,7 @@ Se référer aux tableaux ci-dessous pour voir les variables possibles ainsi que
 | empty_bar_char         | Caractère représentant la barre de progression vide   | `unicode_light_shade`                                                       |
 
 
-#####  <ins>Autre variables configurables</ins> :
+####  <ins>Autre variables configurables</ins> :
 
 | Nom de la variable  | Valeur            | Signification                                                    | Valeur par défaut |
 |---------------------|------------------ |------------------------------------------------------------------|-------------------|
@@ -70,7 +70,7 @@ Se référer aux tableaux ci-dessous pour voir les variables possibles ainsi que
 
 ---
 
-##### <ins>Couleurs disponibles</ins> :
+#### <ins>Couleurs disponibles</ins> :
 
 | Nom de la couleur        | Code hexadécimal |  Signification            |
 |--------------------------|------------------|---------------------------|
@@ -107,7 +107,7 @@ Se référer aux tableaux ci-dessous pour voir les variables possibles ainsi que
 | DARK_WHITE_BIS           | `#C0C0C0`        | Fond blanc/gris foncé     |
 
 
-##### <ins>Caractères UNICODE disponibles</ins> :
+#### <ins>Caractères UNICODE disponibles</ins> :
 
 | Nom du caractère           | Code Unicode | Signification       | Caractère |
 |----------------------------|--------------|---------------------|-----------|
