@@ -33,7 +33,7 @@ font_processus_color=BRIGHT_WHITE
 Veuillez vous référer aux tableaux ci-dessous pour voir les variables possibles ainsi que leurs valeurs.
 
 
-####  <ins>Variables configurables avec une [couleur](#couleurs-disponibles-)</ins> :
+####  Variables configurables avec une [couleur](#couleurs-disponibles-) :
 | Nom de la variable     | Signification                                       | Valeur par défaut ([couleurs](#couleurs-disponibles-)) |
 |------------------------|-----------------------------------------------------|--------------------------------------------------------------------|
 | bg_color               | Couleur de fond de l'interface                      | `DARK_BLACK`                                                       |
@@ -50,7 +50,7 @@ Veuillez vous référer aux tableaux ci-dessous pour voir les variables possible
 | empty_disk_bar_color   | Couleur de la barre de progression disque (vide)    | `BRIGHT_BLUE`                                                      |
 
 
-####  <ins>Variables configurables avec un [caractère UNICODE](#caractères-unicode-disponibles-)</ins> :
+####  Variables configurables avec un [caractère UNICODE](#caractères-unicode-disponibles-) :
 
 | Nom de la variable     | Signification                                         | Valeur par défaut ([caractère UNICODE](#caractères-unicode-disponibles-)) |
 |------------------------|-------------------------------------------------------|-----------------------------------------------------------------------------|
@@ -59,7 +59,7 @@ Veuillez vous référer aux tableaux ci-dessous pour voir les variables possible
 | empty_bar_char         | Caractère représentant la barre de progression vide   | `unicode_light_shade`                                                       |
 
 
-####  <ins>Autre variables configurables</ins> :
+####  Autre variables configurables :
 
 | Nom de la variable  | Valeur            | Signification                                                    | Valeur par défaut |
 |---------------------|------------------ |------------------------------------------------------------------|-------------------|
@@ -70,7 +70,7 @@ Veuillez vous référer aux tableaux ci-dessous pour voir les variables possible
 
 ---
 
-#### <ins>Couleurs disponibles</ins> :
+#### Couleurs disponibles :
 
 | Nom de la couleur        | Code hexadécimal |  Signification            |
 |--------------------------|------------------|---------------------------|
@@ -107,7 +107,7 @@ Veuillez vous référer aux tableaux ci-dessous pour voir les variables possible
 | DARK_WHITE_BIS           | `#C0C0C0`        | Fond blanc/gris foncé     |
 
 
-#### <ins>Caractères UNICODE disponibles</ins> :
+#### Caractères UNICODE disponibles :
 
 | Nom du caractère           | Code Unicode | Signification       | Caractère |
 |----------------------------|--------------|---------------------|-----------|
