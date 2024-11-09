@@ -9,17 +9,17 @@ Il s'agit d'un moniteur de système écrit en *Bash*. Il permet de surveiller en
 - Ouvrir un terminal dans le repertoire du projet.
 
 ## Utilisation 
-1. Utilisez la commande suivant pour lancer l'applicaton : `./main.sh`
+1. Utilisez la commande suivante pour lancer l'applicaton : `./main.sh`
 2. Pour lancer le processus avec un [fichier de configuration](#fichier-de-configuration) spécifique, utilisez : `./main.sh configfile.txt`
 
 ## Fichier de logs
-Un fichier de logs ***logfile.txt*** se met à jour automatiquement. Toutes les données récoltées par le processus y sont écrites.
+Un fichier de logs ***logfile.txt*** se met à jour automatiquement. Toutes les données récoltées par le processus y sont écrites.  
 La réinitialisation lors du lancement du processus et l'intervalle de temps (en secondes) sont configurables dans le [fichier de configuration](#fichier-de-configuration).
 
 ## Fichier de configuration
 Le fichier de configuration ***configfile.txt*** permet de définir les [couleurs](#couleurs-disponibles-) de l'interface, l'intervalle pour l'écriture et la réinitialisation du [fichier de logs](#fichier-de-logs).
 
-Il doit respecter la syntaxe suivante : `nom_variable=valeur`, avec une affectation par ligne. Si cette syntaxe n'est pas respectée, le processus ne se lance pas.
+Il doit respecter la syntaxe suivante : `nom_variable=valeur`, avec une affectation par ligne. Si cette syntaxe n'est pas respectée, le processus ne se lance pas.  
 Certaines variables doivent obligatoirement avec une [couleur](#couleurs-disponibles-) ou un [caractère UNICODE](#caractères-unicode-disponibles-) comme valeur.
 
 Voici un exemple :
