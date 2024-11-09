@@ -1,25 +1,25 @@
 # Projet Shell - Application de Monitoring
 
->Ce projet a été réalisé dans le cadre d'un programme universitaire d'une 3<sup>ème</sup> année de licence Informatique.
+>Ce projet a été réalisé dans le cadre d'un programme universitaire en 3<sup>e</sup> année de licence en informatique.
 
-Il s'agit d'un moniteur de système écrit en *Bash*. Il permet de surveiller en temps réel les ressources du système comme le processeur (CPU), la carte graphique (GPU), la mémoire, les disques, le réseau, et les processus actifs
+Il s'agit d'un moniteur de système écrit en *Bash*. Il permet de surveiller en temps réel les ressources du système, telles que le processeur (CPU), la carte graphique (GPU), la mémoire, les disques, le réseau, et les processus actifs.
 
 ## Prérequis
-- Système d'exploitation **LINUX**
+- Système d'exploitation **Linux**
 - Ouvrir un terminal dans le repertoire du projet.
 
 ## Utilisation 
-1. Vous pouvez utiliser la commande  : `./interface.sh`
-2. Vous pouvez lancer le processus avec le [fichier de configuration](#fichier-de-configuration) : `./interface.sh configfile.txt`
+1. Utilisez la commande suivant pour lancer l'applicaton : `./main.sh`
+2. Pour lancer le processus avec un [fichier de configuration](#fichier-de-configuration) spécifique, utilisez : `./main.sh configfile.txt`
 
 ## Fichier de logs
-Un fichier de logs ***logfile.txt*** se met à jour automatiquement, il y est écrit toutes les données récoltés par le processus.
+Un fichier de logs ***logfile.txt*** se met à jour automatiquement. Toutes les données récoltées par le processus y sont écrites.
 La réinitialisation lors du lancement du processus et l'intervalle de temps (en secondes) sont configurables dans le [fichier de configuration](#fichier-de-configuration).
 
 ## Fichier de configuration
-Le fichier de configuration ***configfile.txt*** permet de définir les [couleurs](#couleurs-disponibles-) de l'interface, l'intervalle en secondes du temps d'écriture et la réinitialisation du [fichier des logs](#fichier-de-logs).
+Le fichier de configuration ***configfile.txt*** permet de définir les [couleurs](#couleurs-disponibles-) de l'interface, l'intervalle pour l'écriture et la réinitialisation du [fichier de logs](#fichier-de-logs).
 
-Il doit respecter la syntaxe suivante `nom_variable=valeur` avec une affectation par ligne. Si elle n'est pas respectée, le processus ne se lance.
+Il doit respecter la syntaxe suivante : `nom_variable=valeur`, avec une affectation par ligne. Si cette syntaxe n'est pas respectée, le processus ne se lance pas.
 Certaines variables doivent obligatoirement avec une [couleur](#couleurs-disponibles-) ou un [caractère UNICODE](#caractères-unicode-disponibles-) comme valeur.
 
 Voici un exemple :
@@ -30,7 +30,7 @@ border_color=DARK_BLUE
 font_processus_color=BRIGHT_WHITE
 ```
 
-Veuillez vous référer aux tableaux ci-dessous pour voir les variables possibles ainsi que leurs valeurs.
+Veuillez vous référer aux tableaux ci-dessous pour consulter les variables possibles ainsi que leurs valeurs.
 
 
 ####  Variables configurables avec une [couleur](#couleurs-disponibles-) :
@@ -59,7 +59,7 @@ Veuillez vous référer aux tableaux ci-dessous pour voir les variables possible
 | empty_bar_char         | Caractère représentant la barre de progression vide   | `unicode_light_shade`                                                       |
 
 
-####  Autre variables configurables :
+####  Autres variables configurables :
 
 | Nom de la variable  | Valeur            | Signification                                                    | Valeur par défaut |
 |---------------------|------------------ |------------------------------------------------------------------|-------------------|
