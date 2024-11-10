@@ -1,43 +1,328 @@
-\documentclass{report}
-\usepackage{graphicx} % Pour inclure des images comme des logos
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
 \usepackage{titling}  % Pour personnaliser l'apparence du titre
 \usepackage{lipsum}   % Pour du texte d'exemple (optionnel)
 \usepackage{setspace} % Pour régler les espacements
+\usepackage[colorlinks=true, linkcolor=black]{hyperref}
+\usepackage{array}
+\usepackage{tabularx} % À inclure dans le préambule pour ajuster la largeur du tableau
+\usepackage{xcolor} % Pour colorer les cellules ou le texte si nécessaire
+\usepackage{microtype}
 
-\title{\Huge \textbf{Rapport SAE Shell}\\\vspace{0.5cm} \Large Monitoring dans console}
-\author{\Large Tim Lamour \& Jamel Bailleul}
+\setlength{\parindent}{0pt}
+\hypersetup{linkcolor=red}
+
+\title{\Huge \textbf{Rapport SAE Shell} \\[0.5cm] \Large Monitoring dans la console}
+\author{\large Présenté par\\ \textbf{Tim Lamour \& Jamel Bailleul}}
 \date{\today}
 
 \begin{document}
 
-\begin{titlepage}
-    \begin{center}
-        % Inclure un logo (facultatif)
-        % \includegraphics[width=0.4\textwidth]{logo.png} % Remplacez "logo.png" par le chemin vers votre logo
+\maketitle % Affiche le titre
+\tableofcontents % Affiche la table des matières
+\newpage
 
-        \vspace{1cm}
-        \Huge \textbf{Rapport SAE Shell}\\
-        \Large Monitoring dans console
+% 1. Contextes
+\section{Contexte}
+Le projet consiste à développer une \textbf{application de Monitoring}, qui s'exécute dans la console.
+Celle-ci permet de surveiller en temps réel les ressources du système, telles que le processeur (CPU), la carte graphique (GPU), la mémoire, les disques, le réseau, et les processus actifs.
+\vspace{1em}
 
-        \vspace{1.5cm}
-        \large
-        Présenté par \\
-        \textbf{Tim Lamour \& Jamel Bailleul}
+Certains aspects de l'affichage sont personnalisables à l'aide d'un fichier d'entré appelé le \textbf{fichier de configuration}.
+\\
+Toutes les données récoltées par l'application sont écrites et mis à jour dans un fichier de sortie appelé le \textbf{fichier de logs}.
 
-        \vspace{2cm}
-        \textbf{Superviseur :}\\
-        Mme. Kteich Hanane
+% 2. Commandes et options de lancement
+\section{Algorithme, fichier et fonctions}
+Le projet est séparé en 4 fichiers :
+\begin{itemize}
+    \item \texttt{main.sh} : lit le configfile et lance le programme principale.
+    \item \texttt{interface.sh} : contient les fonctions permettant d'afficher et de mettre à jour l'interface.
+    \item \texttt{recup\_info.sh} : contient les fonctions permettant de récupérer\\ les informations des ressources du système.
+    \item \texttt{update\_log.sh} : contient les fonctions permettant de créer et de mettre à jour le fichier des logs. 
+\end{itemize}
+\vspace{1em}
 
-        \vfill
+Voici les fonctions principales par fichiers :
+\begin{itemize}
+    \item \texttt{main.sh} :
+        \begin{itemize}
+            \item \texttt{config\_file} : lit le configfile et met à jour les valeurs par défaut de l'interface.
+        \end{itemize}
+    \vspace{0.3em}
+    \item \texttt{interface.sh} :
+        \begin{itemize}
+            \item {\texttt{clear\_screen}} : permet de nettoyer la console et de dessiner la bordure du terminal.
+            \item \texttt{info\_reduite} : permet d'afficher les informations sur les ressources du système une par une si elles sont disponibles.
+            \item \texttt{affiche\_processus} : permet d'afficher les informations sur les processus à une position sur le terminal.
+            \item \texttt{print\_bar\_h} : permet un pourcentage sous forme d'une barre à une position précise sur le terminal.
+            \item \texttt{info\_scinder} : permet de rassembler de scinder tous les affichages précédents.
+        \end{itemize}
+        \vspace{0.3em}
+    \item \texttt{recup\_info.sh} :
+        \begin{itemize}
+            \item \texttt{recup\_mem} : permet de récupérer les informations sur la mémoire de la machine.
+            \item \texttt{recup\_cpu} : permet de récupérer les informations sur la carte graphique de la machine.
+            \item \texttt{recup\_gpu} : permet de récupérer les informations sur le processeur de la machine.
+            \item \texttt{recup\_disk} : permet de récupérer les informations sur les disques de la machine.
+            \item \texttt{recup\_processus} : permet de récupérer les processus en cours d'utilisation de la machine.
+            \item \texttt{recup\_network} : permet de récupérer les informations sur l'utilisation réseau de la machine.
+        \end{itemize}
+        \vspace{0.3em}
+    \item \texttt{update\_log.sh} :
+        \begin{itemize}
+            \item \texttt{create\_logfile} : permet de créer le logfile s'il n'existe pas déjà.
+            \item \texttt{write\_in\_logfile} : permet d'écrire dans le logfile et donc de le mettre à jour.
+        \end{itemize}
+\end{itemize}
 
-        \vspace{1cm}
-        \large
-        \textbf{Date :} \today
-    \end{center}
-\end{titlepage}
+% 3. Commandes et options de lancement
+\section{Commandes et options de lancement}
+
+\subsection{Lancer l'application}
+Pour exécuter l'application, vous pouvez utiliser la commande suivante dans le terminal :  
+\texttt{./main.sh <configfile>}
+
+\subsection{Fichier de configuration}
+Le \textbf{configfile} est un fichier de configuration permettant de définir les couleurs de l'interface, l'intervalle pour l'écriture et la réinitialisation du fichier de logs.
+  
+Il doit respecter la syntaxe suivante : \texttt{nom\_variable=valeur}, avec une affectation par ligne. Si cette syntaxe n'est pas respectée, le processus ne se lance pas.
+\vspace{1em}
+
+Certaines variables doivent obligatoirement avoir une \textbf{couleur} (tableau \ref{tab:couleur}) ou un \textbf{caractère UNICODE} (tableau \ref{tab:unicode}) parmis celles et ceux disponibles.
+  
+Veuillez vous référer aux tableaux \ref{tab:configable_color_var}, \ref{tab:configable_unicode_var} et \ref{tab:configable_other_var} pour consulter les variables possibles ainsi que leurs valeurs.
+
+% 4. Exemple d'utilisation
+\section{Exemple d'utilisation}
+Voici un exemple : \texttt{./main.sh configfile.txt}
+  
+Contenu du fichier de configuration \textbf{configfile.txt} :
+\begin{verbatim}
+bg_color=DARK_BLACK
+font_color=DARK_RED
+border_color=DARK_BLUE
+font_processus_color=BRIGHT_WHITE
+\end{verbatim}
+
+% 5. Diagramme
+\section{Diagramme}
+caca
+
+% 6. Conclusion
+\section{Conclusion}
+
+% 7. Annexe
+\section{Annexe : tableaux des variables configurables, des couleurs et caractères unicodes disponibles}
+\subsection{Variables configurables avec une couleur :}
+
+\begin{table}[h!]
+    \centering
+    \renewcommand{\arraystretch}{1.5}
+    \footnotesize
+    \begin{tabular}{|>{\centering\arraybackslash}m{3.5cm}|>{\centering\arraybackslash}m{3.8cm}|>{\centering\arraybackslash}m{3cm}|}
+        \hline
+        \textbf{Nom de la variable} & \textbf{Signification} & \textbf{Valeur par défaut (couleur)} \\
+        \hline
+        bg\_color & Couleur de fond de l'interface & DARK\_BLACK \\
+        \hline
+        font\_color & Couleur de la police principale & DARK\_RED \\
+        \hline
+        border\_color & Couleur de la bordure & DARK\_BLUE \\
+        \hline
+        font\_processus\_color & Couleur de la police pour les processus affichés & BRIGHT\_WHITE \\
+        \hline
+        full\_cpu\_bar\_color & Couleur de la barre de progression CPU (pleine) & DARK\_YELLOW \\
+        \hline
+        full\_gpu\_bar\_color & Couleur de la barre de progression GPU (pleine) & DARK\_GREEN \\
+        \hline
+        full\_memory\_bar\_color & Couleur de la barre de progression mémoire (pleine) & DARK\_MAGENTA \\
+        \hline
+        full\_disk\_bar\_color & Couleur de la barre de progression disque (pleine) & DARK\_BLUE \\
+        \hline
+        empty\_cpu\_bar\_color & Couleur de la barre de progression CPU (vide) & BRIGHT\_YELLOW \\
+        \hline
+        empty\_gpu\_bar\_color & Couleur de la barre de progression GPU (vide) & BRIGHT\_GREEN \\
+        \hline
+        empty\_memory\_bar\_color & Couleur de la barre de progression mémoire (vide) & BRIGHT\_MAGENTA \\
+        \hline
+        empty\_disk\_bar\_color & Couleur de la barre de progression disque (vide) & BRIGHT\_BLUE \\
+        \hline
+    \end{tabular}
+    \label{tab:configable_color_var}
+    \caption{Variables configurables avec une couleur}
+\end{table}
 
 \newpage
-\section{C'est mon premier document LaTeX.}
+\subsection{Variables configurables avec un caractère UNICODE :}
+\
+\begin{table}[h!]
+    \centering
+    \renewcommand{\arraystretch}{1.5}
+    \footnotesize
+    \begin{tabular}{|>{\centering\arraybackslash}m{3cm}|>{\centering\arraybackslash}m{3cm}|>{\centering\arraybackslash}m{3cm}|}
+        \hline
+        \textbf{Nom de la variable} & \textbf{Signification} & \textbf{Valeur par défaut (caractère UNICODE)} \\
+        \hline
+        border\_char & Caractère représentant les bordures des fenêtres & unicode\_full\_block \\
+        \hline
+        full\_bar\_char & Caractère représentant la barre de progression pleine & unicode\_dark\_shade \\
+        \hline
+        empty\_bar\_char & Caractère représentant la barre de progression vide & unicode\_light\_shade \\
+        \hline
+    \end{tabular}
+    \label{tab:configable_unicode_var}
+    \caption{Variables configurables avec un caractère UNICODE}
+\end{table}
 
-\lipsum[1] % Utilisation de texte d'exemple
+\subsection{Autres variables configurables :}
+\begin{table}[h!]
+    \centering
+    \renewcommand{\arraystretch}{1.5}
+    \footnotesize
+    \begin{tabular}{|>{\centering\arraybackslash}m{3cm}|>{\centering\arraybackslash}m{1.6cm}|>{\centering\arraybackslash}m{3cm}|>{\centering\arraybackslash}m{1.6cm}|}
+        \hline
+        \textbf{Nom de la variable} & \textbf{Valeur} & \textbf{Signification} & \textbf{Valeur par défaut} \\
+        \hline
+        minimum\_lines\_width & number & Largeur minimale en lignes & 30 \\
+        \hline
+        minimum\_cols\_height & number & Hauteur minimale en colonnes & 70 \\
+        \hline
+        update\_log\_time & number & Fréquence de mise à jour du fichier de logs en secondes & 60 \\
+        \hline
+        overwrite\_log & true ou false & Indique si le fichier de logs \texttt{logfile.txt} doit être écrasé & true \\
+        \hline
+    \end{tabular}
+    \label{tab:configable_other_var}
+    \caption{Autres variables configurables}
+\end{table}
+
+\newpage
+\subsection{Couleurs disponibles :}
+\begin{table}[h!]
+    \centering
+    \renewcommand{\arraystretch}{1.5}
+    \footnotesize
+    \begin{tabular}{|>{\centering\arraybackslash}m{4cm}|>{\centering\arraybackslash}m{3cm}|>{\centering\arraybackslash}m{3cm}|}
+        \hline
+        \textbf{Nom de la couleur} & \textbf{Code hexadécimal} & \textbf{Signification} \\
+        \hline
+        DARK\_BLACK & \#000000 & Noir foncé \\
+        \hline
+        DARK\_RED & \#800000 & Rouge foncé \\
+        \hline
+        DARK\_GREEN & \#008000 & Vert foncé \\
+        \hline
+        DARK\_YELLOW & \#808000 & Jaune foncé \\
+        \hline
+        DARK\_BLUE & \#000080 & Bleu foncé \\
+        \hline
+        DARK\_MAGENTA & \#800080 & Magenta foncé \\
+        \hline
+        DARK\_CYAN & \#008080 & Cyan foncé \\
+        \hline
+        DARK\_WHITE & \#C0C0C0 & Blanc/gris foncé \\
+        \hline
+        BRIGHT\_BLACK & \#808080 & Noir clair (gris foncé) \\
+        \hline
+        BRIGHT\_RED & \#FF0000 & Rouge clair \\
+        \hline
+        BRIGHT\_GREEN & \#00FF00 & Vert clair \\
+        \hline
+        BRIGHT\_YELLOW & \#FFFF00 & Jaune clair \\
+        \hline
+        BRIGHT\_BLUE & \#0000FF & Bleu clair \\
+        \hline
+        BRIGHT\_MAGENTA & \#FF00FF & Magenta clair \\
+        \hline
+        BRIGHT\_CYAN & \#00FFFF & Cyan clair \\
+        \hline
+        BRIGHT\_WHITE & \#FFFFFF & Blanc/gris clair \\
+        \hline
+        BRIGHT\_BLACK\_BIS & \#555555 & Noir clair bis \\
+        \hline
+        BRIGHT\_RED\_BIS & \#FF5555 & Rouge clair bis \\
+        \hline
+        BRIGHT\_GREEN\_BIS & \#55FF55 & Vert clair bis \\
+        \hline
+        BRIGHT\_YELLOW\_BIS & \#FFFF55 & Jaune clair bis \\
+        \hline
+        BRIGHT\_BLUE\_BIS & \#5555FF & Bleu clair bis \\
+        \hline
+        BRIGHT\_MAGENTA\_BIS & \#FF55FF & Magenta clair bis \\
+        \hline
+        BRIGHT\_CYAN\_BIS & \#55FFFF & Cyan clair bis \\
+        \hline
+        BRIGHT\_WHITE\_BIS & \#E5E5E5 & Blanc/gris clair bis \\
+        \hline
+        DARK\_RED\_BIS & \#800000 & Fond rouge foncé \\
+        \hline
+        DARK\_GREEN\_BIS & \#008000 & Fond vert foncé \\
+        \hline
+        DARK\_YELLOW\_BIS & \#808000 & Fond jaune foncé \\
+        \hline
+        DARK\_BLUE\_BIS & \#000080 & Fond bleu foncé \\
+        \hline
+        DARK\_MAGENTA\_BIS & \#800080 & Fond magenta foncé \\
+        \hline
+        DARK\_CYAN\_BIS & \#008080 & Fond cyan foncé \\
+        \hline
+        DARK\_WHITE\_BIS & \#C0C0C0 & Fond blanc/gris foncé \\
+        \hline
+    \end{tabular}
+    \label{tab:couleur}
+    \caption{Couleurs disponibles}
+\end{table}
+
+\newpage
+\subsection{Caractères UNICODE disponibles}
+\begin{table}[h!]
+    \centering
+    \renewcommand{\arraystretch}{1.5} % Ajuste l'espacement vertical des lignes
+    \footnotesize
+    \begin{tabular}{|>{\centering\arraybackslash}m{4cm}|>{\centering\arraybackslash}m{2.3cm}|>{\centering\arraybackslash}m{3cm}|}
+        \hline
+        \textbf{Nom du caractère} & \textbf{Code Unicode} & \textbf{Signification} \\
+        \hline
+        unicode\_full\_block & \texttt{\textbackslash u2588} & Bloc complet \\
+        \hline
+        unicode\_upper\_half\_block & \texttt{\textbackslash u2580} & Demi-bloc supérieur \\
+        \hline
+        unicode\_lower\_half\_block & \texttt{\textbackslash u2584} & Demi-bloc inférieur \\
+        \hline
+        unicode\_left\_half\_block & \texttt{\textbackslash u258C} & Demi-bloc gauche \\
+        \hline
+        unicode\_right\_half\_block & \texttt{\textbackslash u2590} & Demi-bloc droit \\
+        \hline
+        unicode\_light\_shade & \texttt{\textbackslash u2591} & Ombrage léger \\
+        \hline
+        unicode\_medium\_shade & \texttt{\textbackslash u2592} & Ombrage moyen \\
+        \hline
+        unicode\_dark\_shade & \texttt{\textbackslash u2593} & Ombrage foncé \\
+        \hline
+        unicode\_white\_square & \texttt{\textbackslash u25A1} & Carré blanc \\
+        \hline
+        unicode\_black\_circle & \texttt{\textbackslash u25CF} & Cercle noir \\
+        \hline
+        unicode\_white\_circle & \texttt{\textbackslash u25CB} & Cercle blanc \\
+        \hline
+        unicode\_black\_diamond & \texttt{\textbackslash u25C6} & Losange noir \\
+        \hline
+        unicode\_white\_diamond & \texttt{\textbackslash u25C7} & Losange blanc \\
+        \hline
+        unicode\_black\_star & \texttt{\textbackslash u2605} & Étoile noire \\
+        \hline
+        unicode\_white\_star & \texttt{\textbackslash u2606} & Étoile blanche \\
+        \hline
+    \end{tabular}
+    \label{tab:unicode}
+    \caption{Caractères UNICODE disponibles}
+\end{table}
+
+
+
 \end{document}

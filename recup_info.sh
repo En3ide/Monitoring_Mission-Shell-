@@ -185,6 +185,7 @@ recup_disk() { # Tim Lamour
     echo "$res"
 }
 
+# Renovie le nom de l'interface actuellement utilisé
 get_interface_name() { # Tim Lamour
     # Liste toutes les interfaces réseau disponibles
     local interfaces=$(ls /sys/class/net)
@@ -202,10 +203,10 @@ get_interface_name() { # Tim Lamour
     echo ""
 }
 
-# Renvoie le pourcentage d'utilisation, l'utilisation et la VRAM total du GPU.
-get_network_usage() { # Tim Lamour
+# Renvoie les bytes d'updload ou de download du réseau
+get_network() { # Tim Lamour
     # Vérifier le nombre de paramètres
-    test "$#" -ne 2 && echo "Usage : get_network_usage [download | upload] nom_interface_reseau" && return 1
+    test "$#" -ne 2 && echo "Usage : get_network [download | upload] nom_interface_reseau" && return 1
     # Vérifier que le fichier /proc/net/dev existe
     test ! -f /proc/net/dev && echo "Erreur : Le fichier /proc/net/dev n'existe pas" && return 2
 

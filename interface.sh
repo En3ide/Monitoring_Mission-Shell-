@@ -364,8 +364,8 @@ info_reduite() { # Jamel Bailleul & Tim Lamour & ChatGPT
             position=$(( position + 1 ))
             
             # Calculer le pourcentage
-            download=$(get_network_usage "download" $name)
-            upload=$(get_network_usage "upload" $name)
+            download=$(get_network "download" $name)
+            upload=$(get_network "upload" $name)
 
             # Concatener dans le contenu à rajouter au logfile si demandé
             if [ "$logfile_enabled" == 1 ]; then
@@ -376,11 +376,11 @@ info_reduite() { # Jamel Bailleul & Tim Lamour & ChatGPT
             printf "\33[%d;%dH" "$x" "$y"
             echo -en "${!bg_color}${!font_color}${!empty_bar_char}${name:0:$(( $3 - 7 ))} ${!empty_bar_char}${reset}"
             printf "\33[%d;%dH" "$(($x + 1))" "$y"
-            if [[ $download -ne $(get_network_usage "download" $name) ]]; then
-                download_s=$(($download - $(get_network_usage "download" $name)))
+            if [[ $download -ne $(get_network "download" $name) ]]; then
+                download_s=$(($download - $(get_network "download" $name)))
             fi
-            if [[ $upload -ne $(get_network_usage "upload" $name) ]]; then
-                upload_s=$(($upload - $(get_network_usage "upload" $name)))
+            if [[ $upload -ne $(get_network "upload" $name) ]]; then
+                upload_s=$(($upload - $(get_network "upload" $name)))
             fi
             echo -en "${!bg_color}${!font_color}Download total : ${download:0:$(( $3 - 7 ))} Bytes${reset}"
             printf "\33[%d;%dH" "$(($x + 2))" "$y"

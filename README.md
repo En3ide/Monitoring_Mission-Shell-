@@ -21,7 +21,7 @@ La réinitialisation lors du lancement du processus et l'intervalle de temps (en
 Le fichier de configuration `configfile.txt` permet de définir les [couleurs](#couleurs-disponibles-) de l'interface, l'intervalle pour l'écriture et la réinitialisation du [fichier de logs](#fichier-de-logs).
 
 Il doit respecter la syntaxe suivante : `nom_variable=valeur`, avec une affectation par ligne. Si cette syntaxe n'est pas respectée, le processus ne se lance pas.  
-Certaines variables doivent obligatoirement avec une [couleur](#couleurs-disponibles-) ou un [caractère UNICODE](#caractères-unicode-disponibles-) comme valeur.
+Certaines variables doivent obligatoirement avec une [couleur](#couleurs-disponibles-) ou un [caractère UNICODE](#caractères-unicode-disponibles-) comme valeur parmis celles et ceux disponibles.
 
 Voici un exemple :
 ```
