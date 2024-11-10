@@ -1,7 +1,7 @@
 \babel@toc {french}{}\relax 
 \contentsline {section}{\numberline {1}Membres du groupe}{2}{section.1}%
 \contentsline {section}{\numberline {2}Contexte}{2}{section.2}%
-\contentsline {section}{\numberline {3}Algorithme, fichier et fonctions}{2}{section.3}%
+\contentsline {section}{\numberline {3}Algorithme, fichiers et fonctions}{2}{section.3}%
 \contentsline {section}{\numberline {4}Diagramme}{4}{section.4}%
 \contentsline {section}{\numberline {5}Commandes et options de lancement}{5}{section.5}%
 \contentsline {subsection}{\numberline {5.1}Lancer l'application}{5}{subsection.5.1}%
