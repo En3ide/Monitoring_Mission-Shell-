@@ -8,10 +8,19 @@
 \usepackage{lipsum}   % Pour du texte d'exemple (optionnel)
 \usepackage{setspace} % Pour régler les espacements
 \usepackage[colorlinks=true, linkcolor=black]{hyperref}
+
+% Tableau
+\usepackage[table]{xcolor}
 \usepackage{array}
 \usepackage{tabularx} % À inclure dans le préambule pour ajuster la largeur du tableau
 \usepackage{xcolor} % Pour colorer les cellules ou le texte si nécessaire
+
 \usepackage{microtype}
+\usepackage{enumitem} % Permet de personnaliser les listes
+
+% Diagramme
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric}
 
 \setlength{\parindent}{0pt}
 \hypersetup{linkcolor=red}
@@ -25,6 +34,14 @@
 \maketitle % Affiche le titre
 \tableofcontents % Affiche la table des matières
 \newpage
+
+% 0. Membres du groupe
+\section{Membres du groupe}
+\begin{itemize}
+    \item \textbf{Tim Lamour} : développement des fonctions de récupération des informations sur les ressources du système, création et écriture des logs, optimisations, mise en forme du code, documentation et rédaction.
+    \item \textbf{Jamel Bailleul} : développement de l'interface graphique et du programme principal.
+
+\end{itemize}
 
 % 1. Contextes
 \section{Contexte}
@@ -50,12 +67,12 @@ Le projet est séparé en 4 fichiers :
 Voici les fonctions principales par fichiers :
 \begin{itemize}
     \item \texttt{main.sh} :
-        \begin{itemize}
+        \begin{itemize}[label=\textbullet]
             \item \texttt{config\_file} : lit le configfile et met à jour les valeurs par défaut de l'interface.
         \end{itemize}
     \vspace{0.3em}
     \item \texttt{interface.sh} :
-        \begin{itemize}
+        \begin{itemize}[label=\textbullet]
             \item {\texttt{clear\_screen}} : permet de nettoyer la console et de dessiner la bordure du terminal.
             \item \texttt{info\_reduite} : permet d'afficher les informations sur les ressources du système une par une si elles sont disponibles.
             \item \texttt{affiche\_processus} : permet d'afficher les informations sur les processus à une position sur le terminal.
@@ -64,7 +81,7 @@ Voici les fonctions principales par fichiers :
         \end{itemize}
         \vspace{0.3em}
     \item \texttt{recup\_info.sh} :
-        \begin{itemize}
+        \begin{itemize}[label=\textbullet]
             \item \texttt{recup\_mem} : permet de récupérer les informations sur la mémoire de la machine.
             \item \texttt{recup\_cpu} : permet de récupérer les informations sur la carte graphique de la machine.
             \item \texttt{recup\_gpu} : permet de récupérer les informations sur le processeur de la machine.
@@ -74,9 +91,9 @@ Voici les fonctions principales par fichiers :
         \end{itemize}
         \vspace{0.3em}
     \item \texttt{update\_log.sh} :
-        \begin{itemize}
-            \item \texttt{create\_logfile} : permet de créer le logfile s'il n'existe pas déjà.
-            \item \texttt{write\_in\_logfile} : permet d'écrire dans le logfile et donc de le mettre à jour.
+        \begin{itemize}[label=\textbullet]
+            \item \texttt{create\_logfile} : permet de créer le readconfigfile s'il n'existe pas déjà.
+            \item \texttt{write\_in\_logfile} : permet d'écrire dans le readconfigfile et donc de le mettre à jour.
         \end{itemize}
 \end{itemize}
 
@@ -101,6 +118,7 @@ Veuillez vous référer aux tableaux \ref{tab:configable_color_var}, \ref{tab:co
 \section{Exemple d'utilisation}
 Voici un exemple : \texttt{./main.sh configfile.txt}
   
+\vspace{0.5em}
 Contenu du fichier de configuration \textbf{configfile.txt} :
 \begin{verbatim}
 bg_color=DARK_BLACK
@@ -109,12 +127,50 @@ border_color=DARK_BLUE
 font_processus_color=BRIGHT_WHITE
 \end{verbatim}
 
+
 % 5. Diagramme
 \section{Diagramme}
-caca
 
+Voici un diagramme montrant la logique d'exécution de l'application :
+\vspace{1em}
+  
+\begin{center}
+\begin{tikzpicture}[node distance=1.2cm, >={Stealth[round]}, thick]
+
+    % Styles for different types of nodes
+    \tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3.5cm, minimum height=0.8cm, text centered, draw=black, fill=gray!20, font=\scriptsize]
+    \tikzstyle{process} = [rectangle, minimum width=3.5cm, minimum height=0.8cm, text centered, draw=black, fill=blue!10, font=\scriptsize]
+    \tikzstyle{decision} = [rectangle, minimum width=3.5cm, minimum height=0.8cm, text centered, draw=black, fill=yellow!20, font=\scriptsize]
+    \tikzstyle{arrow} = [thick,->,>=stealth]
+
+    % Nodes
+    \node (start) [startstop] {Lancement du programme};
+    \node (readconfigfile) [decision, below of=start, yshift=-0.5cm] {Lecture du configfile (si fournit)};
+    \node (terminal) [process, below of=readconfigfile, yshift=-0.5cm] {Délimitation du terminal};
+    \node (resetlogfile) [decision, below of=terminal, yshift=-0.5cm] {Réinitilisation du logfile (si demandé)};
+    \node (loop) [startstop, below of=resetlogfile, yshift=-0.5cm] {Boucle (while true)};
+    \node (retrieve) [process, below of=loop, yshift=-0.3cm] {Récupérer et afficher les informations};
+    \node (update) [process, below of=retrieve, yshift=-0.3cm] {Mise à jour du logfile};
+    \node (stop) [startstop, below of=update, yshift=-0.3cm] {Arrêt manuel du processus};
+
+    % Arrows
+    \draw [arrow] (start) -- (readconfigfile);
+    \draw [arrow] (start.west) -- ++(-1.3,0) |- ([xshift=-0.2cm] terminal.west);
+    \draw [arrow] (readconfigfile) -- (terminal);
+    \draw [arrow] (terminal) -- (resetlogfile);
+    \draw [arrow] (terminal.east) -- ++(1.4,0) |- (loop.east);
+    \draw [arrow] (resetlogfile) -- (loop);
+    \draw [arrow] (loop) -- (retrieve);
+    \draw [arrow] (retrieve) -- (update);
+    \draw [arrow] (update.west) -- ++(-1.3,0) |- ([xshift=0.2cm] loop.west);
+    \draw [arrow] (update) -- (stop);
+
+\end{tikzpicture}
+\end{center}
 % 6. Conclusion
 \section{Conclusion}
+Dans l'ensemble, nous sommes satisfaits du résultat. Cependant, il reste bien évidemment des possibilités d'optimisation, notamment au niveau de l'aspect graphique
+ et de la manière dont les informations sont récupérées et mises à jour. La gestion de la mise à jour des informations pourrait également être améliorée en utilisant le multi-processing.
 
 % 7. Annexe
 \section{Annexe : tableaux des variables configurables, des couleurs et caractères unicodes disponibles}
@@ -194,7 +250,7 @@ caca
         \hline
         update\_log\_time & number & Fréquence de mise à jour du fichier de logs en secondes & 60 \\
         \hline
-        overwrite\_log & true ou false & Indique si le fichier de logs \texttt{logfile.txt} doit être écrasé & true \\
+        overwrite\_log & true ou false & Indique si le fichier de logs \texttt{readconfigfile.txt} doit être écrasé & true \\
         \hline
     \end{tabular}
     \label{tab:configable_other_var}
@@ -211,71 +267,71 @@ caca
         \hline
         \textbf{Nom de la couleur} & \textbf{Code hexadécimal} & \textbf{Signification} \\
         \hline
-        DARK\_BLACK & \#000000 & Noir foncé \\
+        DARK\_BLACK & \cellcolor[HTML]{000000}\textcolor{white}{\#000000} & Noir foncé \\
         \hline
-        DARK\_RED & \#800000 & Rouge foncé \\
+        DARK\_RED & \cellcolor[HTML]{800000}\textcolor{white}{\#800000} & Rouge foncé \\
         \hline
-        DARK\_GREEN & \#008000 & Vert foncé \\
+        DARK\_GREEN & \cellcolor[HTML]{008000}\textcolor{white}{\#008000} & Vert foncé \\
         \hline
-        DARK\_YELLOW & \#808000 & Jaune foncé \\
+        DARK\_YELLOW & \cellcolor[HTML]{808000}\textcolor{black}{\#808000} & Jaune foncé \\
         \hline
-        DARK\_BLUE & \#000080 & Bleu foncé \\
+        DARK\_BLUE & \cellcolor[HTML]{000080}\textcolor{white}{\#000080} & Bleu foncé \\
         \hline
-        DARK\_MAGENTA & \#800080 & Magenta foncé \\
+        DARK\_MAGENTA & \cellcolor[HTML]{800080}\textcolor{white}{\#800080} & Magenta foncé \\
         \hline
-        DARK\_CYAN & \#008080 & Cyan foncé \\
+        DARK\_CYAN & \cellcolor[HTML]{008080}\textcolor{white}{\#008080} & Cyan foncé \\
         \hline
-        DARK\_WHITE & \#C0C0C0 & Blanc/gris foncé \\
+        DARK\_WHITE & \cellcolor[HTML]{C0C0C0}\textcolor{black}{\#C0C0C0} & Blanc/gris foncé \\
         \hline
-        BRIGHT\_BLACK & \#808080 & Noir clair (gris foncé) \\
+        BRIGHT\_BLACK & \cellcolor[HTML]{808080}\textcolor{white}{\#808080} & Noir clair (gris foncé) \\
         \hline
-        BRIGHT\_RED & \#FF0000 & Rouge clair \\
+        BRIGHT\_RED & \cellcolor[HTML]{FF0000}\textcolor{white}{\#FF0000} & Rouge clair \\
         \hline
-        BRIGHT\_GREEN & \#00FF00 & Vert clair \\
+        BRIGHT\_GREEN & \cellcolor[HTML]{00FF00}\textcolor{black}{\#00FF00} & Vert clair \\
         \hline
-        BRIGHT\_YELLOW & \#FFFF00 & Jaune clair \\
+        BRIGHT\_YELLOW & \cellcolor[HTML]{FFFF00}\textcolor{black}{\#FFFF00} & Jaune clair \\
         \hline
-        BRIGHT\_BLUE & \#0000FF & Bleu clair \\
+        BRIGHT\_BLUE & \cellcolor[HTML]{0000FF}\textcolor{white}{\#0000FF} & Bleu clair \\
         \hline
-        BRIGHT\_MAGENTA & \#FF00FF & Magenta clair \\
+        BRIGHT\_MAGENTA & \cellcolor[HTML]{FF00FF}\textcolor{black}{\#FF00FF} & Magenta clair \\
         \hline
-        BRIGHT\_CYAN & \#00FFFF & Cyan clair \\
+        BRIGHT\_CYAN & \cellcolor[HTML]{00FFFF}\textcolor{black}{\#00FFFF} & Cyan clair \\
         \hline
-        BRIGHT\_WHITE & \#FFFFFF & Blanc/gris clair \\
+        BRIGHT\_WHITE & \cellcolor[HTML]{FFFFFF}\textcolor{black}{\#FFFFFF} & Blanc/gris clair \\
         \hline
-        BRIGHT\_BLACK\_BIS & \#555555 & Noir clair bis \\
+        BRIGHT\_BLACK\_BIS & \cellcolor[HTML]{555555}\textcolor{white}{\#555555} & Noir clair bis \\
         \hline
-        BRIGHT\_RED\_BIS & \#FF5555 & Rouge clair bis \\
+        BRIGHT\_RED\_BIS & \cellcolor[HTML]{FF5555}\textcolor{black}{\#FF5555} & Rouge clair bis \\
         \hline
-        BRIGHT\_GREEN\_BIS & \#55FF55 & Vert clair bis \\
+        BRIGHT\_GREEN\_BIS & \cellcolor[HTML]{55FF55}\textcolor{black}{\#55FF55} & Vert clair bis \\
         \hline
-        BRIGHT\_YELLOW\_BIS & \#FFFF55 & Jaune clair bis \\
+        BRIGHT\_YELLOW\_BIS & \cellcolor[HTML]{FFFF55}\textcolor{black}{\#FFFF55} & Jaune clair bis \\
         \hline
-        BRIGHT\_BLUE\_BIS & \#5555FF & Bleu clair bis \\
+        BRIGHT\_BLUE\_BIS & \cellcolor[HTML]{5555FF}\textcolor{white}{\#5555FF} & Bleu clair bis \\
         \hline
-        BRIGHT\_MAGENTA\_BIS & \#FF55FF & Magenta clair bis \\
+        BRIGHT\_MAGENTA\_BIS & \cellcolor[HTML]{FF55FF}\textcolor{black}{\#FF55FF} & Magenta clair bis \\
         \hline
-        BRIGHT\_CYAN\_BIS & \#55FFFF & Cyan clair bis \\
+        BRIGHT\_CYAN\_BIS & \cellcolor[HTML]{55FFFF}\textcolor{black}{\#55FFFF} & Cyan clair bis \\
         \hline
-        BRIGHT\_WHITE\_BIS & \#E5E5E5 & Blanc/gris clair bis \\
+        BRIGHT\_WHITE\_BIS & \cellcolor[HTML]{E5E5E5}\textcolor{black}{\#E5E5E5} & Blanc/gris clair bis \\
         \hline
-        DARK\_RED\_BIS & \#800000 & Fond rouge foncé \\
+        DARK\_RED\_BIS & \cellcolor[HTML]{800000}\textcolor{white}{\#800000} & Fond rouge foncé \\
         \hline
-        DARK\_GREEN\_BIS & \#008000 & Fond vert foncé \\
+        DARK\_GREEN\_BIS & \cellcolor[HTML]{008000}\textcolor{white}{\#008000} & Fond vert foncé \\
         \hline
-        DARK\_YELLOW\_BIS & \#808000 & Fond jaune foncé \\
+        DARK\_YELLOW\_BIS & \cellcolor[HTML]{808000}\textcolor{black}{\#808000} & Fond jaune foncé \\
         \hline
-        DARK\_BLUE\_BIS & \#000080 & Fond bleu foncé \\
+        DARK\_BLUE\_BIS & \cellcolor[HTML]{000080}\textcolor{white}{\#000080} & Fond bleu foncé \\
         \hline
-        DARK\_MAGENTA\_BIS & \#800080 & Fond magenta foncé \\
+        DARK\_MAGENTA\_BIS & \cellcolor[HTML]{800080}\textcolor{white}{\#800080} & Fond magenta foncé \\
         \hline
-        DARK\_CYAN\_BIS & \#008080 & Fond cyan foncé \\
+        DARK\_CYAN\_BIS & \cellcolor[HTML]{008080}\textcolor{white}{\#008080} & Fond cyan foncé \\
         \hline
-        DARK\_WHITE\_BIS & \#C0C0C0 & Fond blanc/gris foncé \\
+        DARK\_WHITE\_BIS & \cellcolor[HTML]{C0C0C0}\textcolor{black}{\#C0C0C0} & Fond blanc/gris foncé \\
         \hline
     \end{tabular}
-    \label{tab:couleur}
     \caption{Couleurs disponibles}
+    \label{tab:couleur}
 \end{table}
 
 \newpage
@@ -322,7 +378,5 @@ caca
     \label{tab:unicode}
     \caption{Caractères UNICODE disponibles}
 \end{table}
-
-
 
 \end{document}

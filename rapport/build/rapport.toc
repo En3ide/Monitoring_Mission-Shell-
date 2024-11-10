@@ -1,15 +1,16 @@
 \babel@toc {french}{}\relax 
-\contentsline {section}{\numberline {1}Contexte}{2}{section.1}%
-\contentsline {section}{\numberline {2}Algorithme, fichier et fonctions}{2}{section.2}%
-\contentsline {section}{\numberline {3}Commandes et options de lancement}{3}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Lancer l'application}{3}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Fichier de configuration}{3}{subsection.3.2}%
-\contentsline {section}{\numberline {4}Exemple d'utilisation}{3}{section.4}%
-\contentsline {section}{\numberline {5}Diagramme}{3}{section.5}%
-\contentsline {section}{\numberline {6}Conclusion}{4}{section.6}%
-\contentsline {section}{\numberline {7}Annexe : tableaux des variables configurables, des couleurs et caractères unicodes disponibles}{4}{section.7}%
-\contentsline {subsection}{\numberline {7.1}Variables configurables avec une couleur :}{4}{subsection.7.1}%
-\contentsline {subsection}{\numberline {7.2}Variables configurables avec un caractère UNICODE :}{5}{subsection.7.2}%
-\contentsline {subsection}{\numberline {7.3}Autres variables configurables :}{5}{subsection.7.3}%
-\contentsline {subsection}{\numberline {7.4}Couleurs disponibles :}{6}{subsection.7.4}%
-\contentsline {subsection}{\numberline {7.5}Caractères UNICODE disponibles}{7}{subsection.7.5}%
+\contentsline {section}{\numberline {1}Membres du groupe}{2}{section.1}%
+\contentsline {section}{\numberline {2}Contexte}{2}{section.2}%
+\contentsline {section}{\numberline {3}Algorithme, fichier et fonctions}{2}{section.3}%
+\contentsline {section}{\numberline {4}Commandes et options de lancement}{3}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Lancer l'application}{3}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Fichier de configuration}{3}{subsection.4.2}%
+\contentsline {section}{\numberline {5}Exemple d'utilisation}{4}{section.5}%
+\contentsline {section}{\numberline {6}Diagramme}{4}{section.6}%
+\contentsline {section}{\numberline {7}Conclusion}{5}{section.7}%
+\contentsline {section}{\numberline {8}Annexe : tableaux des variables configurables, des couleurs et caractères unicodes disponibles}{5}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Variables configurables avec une couleur :}{5}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Variables configurables avec un caractère UNICODE :}{6}{subsection.8.2}%
+\contentsline {subsection}{\numberline {8.3}Autres variables configurables :}{6}{subsection.8.3}%
+\contentsline {subsection}{\numberline {8.4}Couleurs disponibles :}{7}{subsection.8.4}%
+\contentsline {subsection}{\numberline {8.5}Caractères UNICODE disponibles}{8}{subsection.8.5}%
