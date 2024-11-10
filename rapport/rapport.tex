@@ -53,7 +53,7 @@ Certains aspects de l'affichage sont personnalisables à l'aide d'un fichier d'e
 \\
 Toutes les données récoltées par l'application sont écrites et mis à jour dans un fichier de sortie appelé le \textbf{fichier de logs}.
 
-% 2. Commandes et options de lancement
+% 2. Algorithme, fichier et fonctions
 \section{Algorithme, fichier et fonctions}
 Le projet est séparé en 4 fichiers :
 \begin{itemize}
@@ -64,6 +64,7 @@ Le projet est séparé en 4 fichiers :
 \end{itemize}
 \vspace{1em}
 
+\newpage
 Voici les fonctions principales par fichiers :
 \begin{itemize}
     \item \texttt{main.sh} :
@@ -97,38 +98,8 @@ Voici les fonctions principales par fichiers :
         \end{itemize}
 \end{itemize}
 
-% 3. Commandes et options de lancement
-\section{Commandes et options de lancement}
-
-\subsection{Lancer l'application}
-Pour exécuter l'application, vous pouvez utiliser la commande suivante dans le terminal :  
-\texttt{./main.sh <configfile>}
-
-\subsection{Fichier de configuration}
-Le \textbf{configfile} est un fichier de configuration permettant de définir les couleurs de l'interface, l'intervalle pour l'écriture et la réinitialisation du fichier de logs.
-  
-Il doit respecter la syntaxe suivante : \texttt{nom\_variable=valeur}, avec une affectation par ligne. Si cette syntaxe n'est pas respectée, le processus ne se lance pas.
-\vspace{1em}
-
-Certaines variables doivent obligatoirement avoir une \textbf{couleur} (tableau \ref{tab:couleur}) ou un \textbf{caractère UNICODE} (tableau \ref{tab:unicode}) parmis celles et ceux disponibles.
-  
-Veuillez vous référer aux tableaux \ref{tab:configable_color_var}, \ref{tab:configable_unicode_var} et \ref{tab:configable_other_var} pour consulter les variables possibles ainsi que leurs valeurs.
-
-% 4. Exemple d'utilisation
-\section{Exemple d'utilisation}
-Voici un exemple : \texttt{./main.sh configfile.txt}
-  
-\vspace{0.5em}
-Contenu du fichier de configuration \textbf{configfile.txt} :
-\begin{verbatim}
-bg_color=DARK_BLACK
-font_color=DARK_RED
-border_color=DARK_BLUE
-font_processus_color=BRIGHT_WHITE
-\end{verbatim}
-
-
-% 5. Diagramme
+\newpage
+% 3. Diagramme
 \section{Diagramme}
 
 Voici un diagramme montrant la logique d'exécution de l'application :
@@ -138,9 +109,9 @@ Voici un diagramme montrant la logique d'exécution de l'application :
 \begin{tikzpicture}[node distance=1.2cm, >={Stealth[round]}, thick]
 
     % Styles for different types of nodes
-    \tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3.5cm, minimum height=0.8cm, text centered, draw=black, fill=gray!20, font=\scriptsize]
-    \tikzstyle{process} = [rectangle, minimum width=3.5cm, minimum height=0.8cm, text centered, draw=black, fill=blue!10, font=\scriptsize]
-    \tikzstyle{decision} = [rectangle, minimum width=3.5cm, minimum height=0.8cm, text centered, draw=black, fill=yellow!20, font=\scriptsize]
+    \tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3.5cm, minimum height=0.8cm, text centered, draw=black, fill=gray!20]
+    \tikzstyle{process} = [rectangle, minimum width=3.5cm, minimum height=0.8cm, text centered, draw=black, fill=blue!10]
+    \tikzstyle{decision} = [rectangle, minimum width=3.5cm, minimum height=0.8cm, text centered, draw=black, fill=yellow!20]
     \tikzstyle{arrow} = [thick,->,>=stealth]
 
     % Nodes
@@ -158,21 +129,55 @@ Voici un diagramme montrant la logique d'exécution de l'application :
     \draw [arrow] (start.west) -- ++(-1.3,0) |- ([xshift=-0.2cm] terminal.west);
     \draw [arrow] (readconfigfile) -- (terminal);
     \draw [arrow] (terminal) -- (resetlogfile);
-    \draw [arrow] (terminal.east) -- ++(1.4,0) |- (loop.east);
+    \draw [arrow] (terminal.east) -- ++(1.6,0) |- (loop.east);
     \draw [arrow] (resetlogfile) -- (loop);
     \draw [arrow] (loop) -- (retrieve);
     \draw [arrow] (retrieve) -- (update);
-    \draw [arrow] (update.west) -- ++(-1.3,0) |- ([xshift=0.2cm] loop.west);
+    \draw [arrow] (update.west) -- ++(-1.6,0) |- ([xshift=0.2cm] loop.west);
     \draw [arrow] (update) -- (stop);
 
 \end{tikzpicture}
 \end{center}
+
+% 4. Commandes et options de lancement
+\newpage
+\section{Commandes et options de lancement}
+
+\subsection{Lancer l'application}
+Pour exécuter l'application, vous pouvez utiliser la commande suivante dans le terminal :  
+\texttt{./main.sh <configfile>}
+
+\subsection{Fichier de configuration}
+Le \textbf{configfile} est un fichier de configuration permettant de définir les couleurs de l'interface, l'intervalle pour l'écriture et la réinitialisation du fichier de logs.
+  
+Il doit respecter la syntaxe suivante : \texttt{nom\_variable=valeur}, avec une affectation par ligne. Si cette syntaxe n'est pas respectée, le processus ne se lance pas.
+\vspace{1em}
+
+Certaines variables doivent obligatoirement avoir une \textbf{couleur} (tableau \ref{tab:couleur}) ou un \textbf{caractère UNICODE} (tableau \ref{tab:unicode}) parmis celles et ceux disponibles.
+  
+Veuillez vous référer aux tableaux \ref{tab:configable_color_var}, \ref{tab:configable_unicode_var} et \ref{tab:configable_other_var} pour consulter les variables possibles ainsi que leurs valeurs.
+
+% 5. Exemple d'utilisation
+\section{Exemple d'utilisation}
+Voici un exemple : \texttt{./main.sh configfile.txt}
+  
+\vspace{0.5em}
+Contenu du fichier de configuration \textbf{configfile.txt} :
+\begin{verbatim}
+bg_color=DARK_BLACK
+font_color=DARK_RED
+border_color=DARK_BLUE
+font_processus_color=BRIGHT_WHITE
+\end{verbatim}
+
+
 % 6. Conclusion
 \section{Conclusion}
 Dans l'ensemble, nous sommes satisfaits du résultat. Cependant, il reste bien évidemment des possibilités d'optimisation, notamment au niveau de l'aspect graphique
  et de la manière dont les informations sont récupérées et mises à jour. La gestion de la mise à jour des informations pourrait également être améliorée en utilisant le multi-processing.
 
 % 7. Annexe
+\newpage
 \section{Annexe : tableaux des variables configurables, des couleurs et caractères unicodes disponibles}
 \subsection{Variables configurables avec une couleur :}
 

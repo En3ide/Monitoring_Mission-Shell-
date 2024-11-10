@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2024.9.18)  10 NOV 2024 12:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2024.9.18)  10 NOV 2024 14:19
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -553,9 +553,9 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 35.
  (build/rapport.toc
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 6.
+(Font)              <7> on input line 7.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 6.
+(Font)              <5> on input line 7.
 )
 \tf@toc=\write5
 \openout5 = `rapport.toc'.
@@ -571,32 +571,32 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `cmtt' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
- [2{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}] [3] [4]
-Overfull \hbox (1.52332pt too wide) in paragraph at lines 207--207
+ [2] [3{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}] [4] [5]
+Overfull \hbox (1.52332pt too wide) in paragraph at lines 212--212
  []|\T1/cmr/m/n/8 (-20) empty_memory_bar_color| 
  []
 
-[5] [6] [7] [8] (build/rapport.aux)
+[6] [7] [8] [9] (build/rapport.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
 Package rerunfilecheck Info: File `rapport.out' has not changed.
-(rerunfilecheck)             Checksum: 0EE32A285E028C8ACD120E28672E1C5E;3109.
+(rerunfilecheck)             Checksum: CBD32BDDADD65FAC23212E563A821E9C;3109.
  ) 
 Here is how much of TeX's memory you used:
- 24917 strings out of 474222
- 469989 string characters out of 5748733
+ 24912 strings out of 474222
+ 469927 string characters out of 5748733
  1949975 words of memory out of 5000000
- 46636 multiletter control sequences out of 15000+600000
- 575199 words of font info for 119 fonts, out of 8000000 for 9000
+ 46635 multiletter control sequences out of 15000+600000
+ 574305 words of font info for 116 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 102i,12n,107p,1062b,863s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texmf/fonts/type1/public/cm-super/sfbx0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfcc1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1000.pfb>
-Output written on build/rapport.pdf (8 pages, 302949 bytes).
+ 102i,12n,107p,1062b,861s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texmf/fonts/type1/public/cm-super/sfbx0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfcc1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1000.pfb>
+Output written on build/rapport.pdf (9 pages, 282498 bytes).
 PDF statistics:
  210 PDF objects out of 1000 (max. 8388607)
- 171 compressed objects within 2 object streams
- 30 named destinations out of 1000 (max. 500000)
- 42117 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 172 compressed objects within 2 object streams
+ 31 named destinations out of 1000 (max. 500000)
+ 40069 words of extra memory for PDF output out of 42996 (max. 10000000)
 
