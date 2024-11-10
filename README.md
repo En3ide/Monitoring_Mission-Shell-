@@ -3,7 +3,7 @@
 >Ce projet a été réalisé dans le cadre d'un programme universitaire en 3<sup>e</sup> année de licence en informatique.
 
 Il s'agit d'un moniteur de système écrit en *Bash*, qui s'exécute dans la console.  
-Il permet de surveiller en temps réel les ressources du système, telles que le processeur (CPU), la carte graphique (GPU), la mémoire, les disques, le réseau, et les processus actifs.
+Il permet de surveiller en temps réel les ressources du système, telles que le processeur (CPU), la carte graphique (GPU), la mémoire (RAM), les disques, le réseau, et les processus actifs.
 
 ## Prérequis
 - Système d'exploitation **Linux**
