@@ -379,16 +379,16 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
             echo -en "${!bg_color}${!font_color}${!empty_bar_char}${name:0:$(( $3 - 7 ))} ${!empty_bar_char}${reset}"
             printf "\33[%d;%dH" "$(($x + 1))" "$y"
             if [[ $download -ne $(get_network "download" $name) ]]; then
-                download_s=$(($download - $(get_network "download" $name)))
+                download_s=$(($(get_network "download" $name) - $download))
             fi
             if [[ $upload -ne $(get_network "upload" $name) ]]; then
-                upload_s=$(($upload - $(get_network "upload" $name)))
+                upload_s=$(($(get_network "upload" $name) - $upload))
             fi
             echo -en "${!bg_color}${!font_color}Download total : ${download:0:$(( $3 - 7 ))} Bytes${reset}"
             printf "\33[%d;%dH" "$(($x + 2))" "$y"
             echo -en "${!bg_color}${!font_color}Speed Download/s : ${download_s} Bytes/s${reset}"
             printf "\33[%d;%dH" "$(($x + 3))" "$y"
-            echo -en "${!bg_color}${!font_color}Net Error Download : ${download_s}${reset}"
+            echo -en "${!bg_color}${!font_color}Net Error Download : ${reset}"
             # Calculer le pourcentage
             percent=$(calculate_percent $(get_network "downloadErr" $name) $(get_network "downloadPackets" $name))
             print_bar_h "${!bg_color}${!full_net_bar_color}" "$y" "$(($fin_bar - $espace))" "$(( x + 4 ))" "$percent" "${empty_net_bar_color}"
@@ -398,7 +398,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
             echo -en "${!bg_color}${!font_color}Upload/s : ${upload_s} Bytes/s${reset}"
             # Calculer le pourcentage
             printf "\33[%d;%dH" "$(($x + 7))" "$y"
-            echo -en "${!bg_color}${!font_color}Net Error Upload : ${download_s}${reset}"
+            echo -en "${!bg_color}${!font_color}Net Error Upload : ${reset}"
             percent=$(calculate_percent $(get_network "downloadErr" $name) $(get_network "downloadPackets" $name))
             print_bar_h "${!bg_color}${!full_net_bar_color}" "$y" "$(($fin_bar - $espace))" "$(( x + 8 ))" "$percent" "${empty_net_bar_color}"
         done
