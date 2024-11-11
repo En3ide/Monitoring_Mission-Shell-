@@ -11,17 +11,19 @@ font_color="DARK_RED"
 border_color="DARK_BLUE"
 font_processus_color="BRIGHT_WHITE"
 
-full_net_bar_color="GREEN"
-full_cpu_bar_color="GREEN"
-full_gpu_bar_color="GREEN"
+full_net_bar_color="DARK_RED"
+full_cpu_bar_color="DARK_GREEN"
+full_core_bar_color="DARK_GREEN"
+full_gpu_bar_color="DARK_GREEN"
 full_memory_bar_color="DARK_GREEN"
 full_disk_bar_color="DARK_BLUE"
 
-empty_net_bar_color="GREEN"
-empty_cpu_bar_color="DARK_YELLOW"
-empty_gpu_bar_color="DARK_GREEN"
-empty_memory_bar_color="BRIGHT_MAGENTA"
-empty_disk_bar_color="BRIGHT_BLUE"
+empty_net_bar_color="DARK_WHITE"
+empty_cpu_bar_color="DARK_WHITE"
+empty_core_bar_color="DARK_WHITE"
+empty_gpu_bar_color="DARK_WHITE"
+empty_memory_bar_color="DARK_WHITE"
+empty_disk_bar_color="DARK_WHITE"
 
 border_char="unicode_full_block"
 full_bar_char="unicode_dark_shade"
@@ -484,7 +486,10 @@ print_bar_h() { # Jamel Bailleul
     done
 
     printf "\33[%d;%dH" "$4" "$2"
-    echo -en "${!bg_color}${!font_color}$res${!bg_color}${!font_color}$percent%${reset}"
+    if [[ "$percent" -lt 100 ]]; then
+        percent="${percent}% "
+    fi
+    echo -en "${!bg_color}${!font_color}$res${!bg_color}${!font_color}$percent${reset}"
 }
 
 
