@@ -304,11 +304,11 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
         local fin_bar=$(($3 /2))
         local nb_core=$(recup_nb_core_cpu)
         local espace=1
-        if [[ $(( $1 + (3 * (($nb_core / 2) + $position)))) < $(tput lines) ]]; then
+        if [[ $(( $1 + (3 * (( $nb_core / 2 ) + $position )))) < $(tput lines) ]]; then
             for (( j=1; j <= nb_core ; j++ )); do
-                if [[ $j == $((($nb_core / 2) + 1 )) ]]; then
+                if [[ $j == $((( $nb_core / 2 ) + 1 )) ]]; then
                     local i=2
-                    local y=$(($fin_bar + 1))
+                    local y=$(( $fin_bar + 1 ))
                     local position="$position_tmp"
                     local fin_bar="$3"
                     local espace=0
