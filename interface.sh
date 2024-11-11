@@ -281,7 +281,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
         printf "\33[%d;%dH" "$x" "$y"
 
         # Valeur maximal en pourcentage du CPU
-        local max_cpu=99
+        local max_cpu=100
         
         # Calculer le pourcentage
         percent=$(calculate_percent "$used_cpu" "$max_cpu")
@@ -308,7 +308,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
             for (( j=1; j <= nb_core ; j++ )); do
                 if [[ $j == $((($nb_core / 2) + 1 )) ]]; then
                     local i=2
-                    local y=$fin_bar
+                    local y=$(($fin_bar + 1))
                     local position="$position_tmp"
                     local fin_bar="$3"
                     local espace=0
