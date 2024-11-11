@@ -343,7 +343,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
 
     # Net
     local inter_name=$(get_interface_name 2>/dev/null)
-    if [[ -n "$inter_name" && $(tput lines) > $(( $1 + (3 * position) + 5 )) ]]; then
+    if [[ -n "$inter_name" && $(tput lines) > $(( $1 + (3 * position) + 9 )) ]]; then
         # Calcul de la position pour afficher les informations de reseaux
         x=$(( $1 + (3 * position) ))  # Position en ligne ajustée selon la position actuelle
         y="$2"  # Position en colonne reçue en argument
