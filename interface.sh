@@ -128,7 +128,7 @@ clear_screen() { # Jamel Bailleul
     done
 }
 
-info_reduite() { # Jamel Bailleul & Tim Lamour & ChatGPT
+info_reduite() { # Jamel Bailleul & Tim Lamour
     local position=0
     local x y
     local var_info

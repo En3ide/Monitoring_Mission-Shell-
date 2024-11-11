@@ -2,18 +2,18 @@ os_default=ubuntu
 
 bg_color=DARK_BLACK
 font_color=DARK_RED
-border_color=DARK_BLUE
-font_processus_color=BRIGHT_WHITE
+border_color=RED
+font_processus_color=DARK_RED_BIS
 
-full_cpu_bar_color=DARK_YELLOW
-full_gpu_bar_color=DARK_GREEN
-full_memory_bar_color=DARK_MAGENTA
-full_disk_bar_color=DARK_BLUE
+full_cpu_bar_color=BRIGHT_BLUE
+full_gpu_bar_color=BRIGHT_GREEN
+full_memory_bar_color=BRIGHT_MAGENTA
+full_disk_bar_color=BRIGHT_BLUE
 
-empty_cpu_bar_color=BRIGHT_YELLOW
-empty_gpu_bar_color=BRIGHT_GREEN
-empty_memory_bar_color=BRIGHT_MAGENTA
-empty_disk_bar_color=BRIGHT_BLUE
+empty_cpu_bar_color=DARK_RED
+empty_gpu_bar_color=DARK_GREEN
+empty_memory_bar_color=DARK_MAGENTA
+empty_disk_bar_color=DARK_BLUE
 
 border_char=unicode_full_block
 full_bar_char=unicode_dark_shade
