@@ -40,7 +40,7 @@ recup_mem() { # Tim Lamour
 }
 
 
-recup_nb_core_cpu() {
+recup_nb_core_cpu() { # Tim Lamour
     nproc
 }
 
@@ -204,9 +204,9 @@ get_interface_name() { # Tim Lamour
 }
 
 # Renvoie les bytes d'updload ou de download du réseau
-get_network() { # Tim Lamour
+get_network() { # Tim Lamour & Jamel Bailleul
     # Vérifier le nombre de paramètres
-    test "$#" -ne 2 && echo "Usage : get_network [download | upload] nom_interface_reseau" && return 1
+    test "$#" -ne 2 && echo "Usage : get_network [download | downloadPackets | downloadErr | upload | uploadPackets | uploadErr ] nom_interface_reseau" && return 1
     # Vérifier que le fichier /proc/net/dev existe
     test ! -f /proc/net/dev && echo "Erreur : Le fichier /proc/net/dev n'existe pas" && return 2
 
@@ -218,8 +218,20 @@ get_network() { # Tim Lamour
         "download")
             res=$(echo "$interface" | awk '{print $2}')
             ;;
+        "downloadPackets")
+            res=$(echo "$interface" | awk '{print $3}')
+            ;;
+        "downloadErr")
+            res=$(echo "$interface" | awk '{print $4}')
+            ;;
         "upload")
             res=$(echo "$interface" | awk '{print $10}')
+            ;;
+        "uploadPackets")
+            res=$(echo "$interface" | awk '{print $11}')
+            ;;
+        "uploadErr")
+            res=$(echo "$interface" | awk '{print $12}')
             ;;
         *)
             echo "Paramètre non reconnu. Utilisez 'download' ou 'upload'."

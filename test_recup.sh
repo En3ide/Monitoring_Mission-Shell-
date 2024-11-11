@@ -163,4 +163,4 @@ print_bar_h() { # Jamel Bailleul
     echo -en "${!bg_color}${!font_color}$res${!bg_color}${!font_color}$percent%${reset}"
 }
 
-get_network_usage "upload" $(get_interface_name)
+get_network "eth0" "downloadErr"

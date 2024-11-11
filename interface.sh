@@ -11,13 +11,15 @@ font_color="DARK_RED"
 border_color="DARK_BLUE"
 font_processus_color="BRIGHT_WHITE"
 
-full_cpu_bar_color="DARK_YELLOW"
-full_gpu_bar_color="DARK_GREEN"
-full_memory_bar_color="DARK_MAGENTA"
+full_net_bar_color="GREEN"
+full_cpu_bar_color="GREEN"
+full_gpu_bar_color="GREEN"
+full_memory_bar_color="DARK_GREEN"
 full_disk_bar_color="DARK_BLUE"
 
-empty_cpu_bar_color="BRIGHT_YELLOW"
-empty_gpu_bar_color="BRIGHT_GREEN"
+empty_net_bar_color="GREEN"
+empty_cpu_bar_color="DARK_YELLOW"
+empty_gpu_bar_color="DARK_GREEN"
 empty_memory_bar_color="BRIGHT_MAGENTA"
 empty_disk_bar_color="BRIGHT_BLUE"
 
@@ -166,7 +168,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
         echo -en "${!bg_color}${!font_color}Memory : ${used_memory}Kb / ${max_memory}Kb${reset}"
 
         # Afficher la barre d'état de la mémoire
-        print_bar_h "${!bg_color}${!full_memory_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent"
+        print_bar_h "${!bg_color}${!full_memory_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent" "${empty_memory_bar_color}"
     fi
 
     # GPU (%)
@@ -197,7 +199,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
         echo -en "${!bg_color}${!font_color}GPU % : ${reset}"
 
         # Afficher la barre d'état pour l'utilisation de la VRAM
-        print_bar_h "${!bg_color}${!full_gpu_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent"
+        print_bar_h "${!bg_color}${!full_gpu_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent" "${empty_gpu_bar_color}"
     fi
 
     # GPU (vram)
@@ -228,7 +230,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
         echo -en "${!bg_color}${!font_color}GPU VRAM : ${reset}"
 
         # Afficher la barre d'état pour l'utilisation de la VRAM
-        print_bar_h "${!bg_color}${!full_gpu_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent"
+        print_bar_h "${!bg_color}${!full_gpu_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent" "${empty_gpu_bar_color}"
     fi
 
     # Disque
@@ -259,7 +261,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
         echo -en "${!bg_color}${!font_color}Disk : ${used_disk} / ${max_disk}${reset}"
 
         # Afficher la barre d'état pour l'utilisation du disque
-        print_bar_h "${!bg_color}${!full_disk_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent"
+        print_bar_h "${!bg_color}${!full_disk_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent" "${empty_disk_bar_color}"
     fi
 
     # CPU (%)
@@ -291,7 +293,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
         echo -en "${!bg_color}${!font_color}CPU % : ${cpu_name:0:$(( $3 - 10 ))}${reset}"
 
         # Afficher la barre d'état pour l'utilisation du CPU
-        print_bar_h "${!bg_color}${!full_cpu_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent"
+        print_bar_h "${!bg_color}${!full_cpu_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent" "${empty_cpu_bar_color}"
     fi
 
     local used_cpu=$(recup_cpu "cpu1" 2>/dev/null)
@@ -331,7 +333,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
                     echo -en "${!bg_color}${!font_color}CORE : ${j}${reset}"
 
                     # Afficher la barre d'état pour l'utilisation du CPU
-                    print_bar_h "${!bg_color}${!full_cpu_bar_color}" "$y" "$(($fin_bar - $espace))" "$(( x + 1 ))" "$percent"
+                    print_bar_h "${!bg_color}${!full_core_bar_color}" "$y" "$(($fin_bar - $espace))" "$(( x + 1 ))" "$percent" "${empty_core_bar_color}"
                 else
                     return 1
                 fi
@@ -386,9 +388,19 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
             printf "\33[%d;%dH" "$(($x + 2))" "$y"
             echo -en "${!bg_color}${!font_color}Speed Download/s : ${download_s} Bytes/s${reset}"
             printf "\33[%d;%dH" "$(($x + 3))" "$y"
+            echo -en "${!bg_color}${!font_color}Net Error Download : ${download_s}${reset}"
+            # Calculer le pourcentage
+            percent=$(calculate_percent $(get_network "downloadErr" $name) $(get_network "downloadPackets" $name))
+            print_bar_h "${!bg_color}${!full_net_bar_color}" "$y" "$(($fin_bar - $espace))" "$(( x + 4 ))" "$percent" "${empty_net_bar_color}"
+            printf "\33[%d;%dH" "$(($x + 5))" "$y"
             echo -en "${!bg_color}${!font_color}Upload total : ${upload:0:$(( $3 - 7 ))} Bytes${reset}"
-            printf "\33[%d;%dH" "$(($x + 4))" "$y"
+            printf "\33[%d;%dH" "$(($x + 6))" "$y"
             echo -en "${!bg_color}${!font_color}Upload/s : ${upload_s} Bytes/s${reset}"
+            # Calculer le pourcentage
+            printf "\33[%d;%dH" "$(($x + 7))" "$y"
+            echo -en "${!bg_color}${!font_color}Net Error Upload : ${download_s}${reset}"
+            percent=$(calculate_percent $(get_network "downloadErr" $name) $(get_network "downloadPackets" $name))
+            print_bar_h "${!bg_color}${!full_net_bar_color}" "$y" "$(($fin_bar - $espace))" "$(( x + 8 ))" "$percent" "${empty_net_bar_color}"
         done
     fi
 
@@ -445,6 +457,13 @@ print_bar_h() { # Jamel Bailleul
     # $3 = cols fin de barre
     # $4 = lines
     # $5 = percent
+    # $6 = couleur bar vide
+
+    if [[ -z "$6" ]]; then
+        bar_vide=""
+    else
+        bar_vide="$6"
+    fi
 
     current_tmp_bar=$(echo "$current_tmp_bar" | tr -d '.')
 
@@ -456,7 +475,11 @@ print_bar_h() { # Jamel Bailleul
         if (( calculated_percent <= percent )); then
             res+="${!bg_color}${!full_bar_char}"
         else
-            res+="${reset}${!empty_bar_char}"
+            if [[ -z "$bar_vide" ]]; then
+                res+="${!empty_bar_char}"
+            else
+                res+="${!bar_vide}${!empty_bar_char}"
+            fi
         fi
     done
 
@@ -475,7 +498,8 @@ config_file() {  # Jamel Bailleul
             # Supprime les espaces inutiles autour
             cle=$(echo "$cle" | xargs)
             valeur=$(echo "$valeur" | xargs)
-
+            echo $cle >> test.txt
+            echo $valeur >> test.txt
             # Ignore ligne vide et commentaire
             if [[ -z "$cle" || "$cle" == \#* ]]; then
                 continue

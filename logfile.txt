@@ -1,0 +1,30 @@
+----------------------------- 2024-11-11 17:44:59 -----------------------------
+ Memory => Used_memory : 779892'kb'      Total_memory : 2984740'kb'      Usage : 25%
+ Disk => Used_disk : 94G'Mo'      Total_disk : 119G'Mo'      Usage : 78%
+ CPU => Usage : 9%
+ CORE 1 => Usage : 13%
+ CORE 2 => Usage : 5%
+ CORE 3 => Usage : 11%
+ CORE 4 => Usage : 6%
+ CORE 5 => Usage : 11%
+ CORE 6 => Usage : 7%
+ CORE 7 => Usage : 11%
+ CORE 8 => Usage : 6%
+  eth0 => Download : 992854 Bytes | Download/S :  Bytes/S | Upload = 71396 Bytes | Upload/S :  Bytes/S
+
+
+----------------------------- 2024-11-11 17:46:00 -----------------------------
+ Memory => Used_memory : 783900'kb'      Total_memory : 2984740'kb'      Usage : 26%
+ Disk => Used_disk : 94G'Mo'      Total_disk : 119G'Mo'      Usage : 78%
+ CPU => Usage : 9%
+ CORE 1 => Usage : 13%
+ CORE 2 => Usage : 5%
+ CORE 3 => Usage : 11%
+ CORE 4 => Usage : 6%
+ CORE 5 => Usage : 11%
+ CORE 6 => Usage : 7%
+ CORE 7 => Usage : 11%
+ CORE 8 => Usage : 6%
+  eth0 => Download : 992854 Bytes | Download/S :  Bytes/S | Upload = 71396 Bytes | Upload/S :  Bytes/S
+
+
