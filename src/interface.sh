@@ -207,7 +207,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
     local used_vram_gpu=$(recup_gpu "vramUsed" 2>/dev/null)
     if [ -n "$used_vram_gpu" ]; then
         # Calcul de la position pour afficher les informations de GPU
-        x=$(( $1 + (3 * position) ))  # Position en ligne ajustée selon la position actuelle
+        x=$(( $1 + ( 3 * position ) ))  # Position en ligne ajustée selon la position actuelle
         y="$2"  # Position en colonne reçue en argument
 
         # Incrémenter la position pour la prochaine section
@@ -434,10 +434,8 @@ info_scinder() { # Jamel Bailleul
     # Appel de la fonction info_reduite avec les paramètres ajustés
     info_reduite "$cols" "$lines" "$((($max_cols / 2) - 2))" "$logfile_enabled"
 
-    # Récupérer le résultat de la commande ps dans la variable text
-    local text=$(ps -eo %cpu,%mem,pid,user,cmd --sort=-%cpu)
     # Appel initial de la fonction récursive
-    affiche_processus "$(($cols_proc + 2))" "$lines" "$(( max_lines - 2))" "$(tput cols)" "$text"
+    affiche_processus "$(($cols_proc + 2))" "$lines" "$(( max_lines - 2))" "$(tput cols)" "$(recup_processus)"
 }
 
 affiche_processus() { # Jamel Bailleul - fonction récursive (en récursif c'est pas optimisé mais on devait en faire une)

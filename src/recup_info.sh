@@ -151,7 +151,8 @@ recup_gpu() { # Tim Lamour
 
 # Affiche la liste des processus (utilise la commande ps aux).
 recup_processus() { # Tim Lamour
-    ps aux
+    # Récupérer le résultat de la commande ps dans la variable text
+    echo "$(ps -eo %cpu,%mem,pid,user,cmd --sort=-%cpu)"
 }
 
 # Affiche les pourcentages d'utilisations, les noms, l'espace total ou les l'espace utilisé des partitions de disques (sous forme de liste)
