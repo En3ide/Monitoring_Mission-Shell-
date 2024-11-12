@@ -36,8 +36,8 @@ logfile_enabled=0
 start_time="$SECONDS"
 while true; do
    if (( $(tput cols) != $cols || $(tput lines) != $lines )); then
-      local cols=$(tput cols)
-      local lines=$(tput lines)
+      cols=$(tput cols)
+      lines=$(tput lines)
       if (( $cols > minimum_cols_height && $lines > $minimum_lines_width )); then 
          clear_screen "$(($(tput cols) / 2))"
       else
