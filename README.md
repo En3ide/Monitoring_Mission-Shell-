@@ -100,13 +100,14 @@ Veuillez vous référer aux tableaux ci-dessous pour consulter les variables pos
 | BRIGHT_MAGENTA_BIS       | `#FF55FF`        | Magenta clair bis         |
 | BRIGHT_CYAN_BIS          | `#55FFFF`        | Cyan clair bis            |
 | BRIGHT_WHITE_BIS         | `#E5E5E5`        | Blanc/gris clair bis      |
-| DARK_RED_BIS             | `#800000`        | Fond rouge foncé          |
-| DARK_GREEN_BIS           | `#008000`        | Fond vert foncé           |
-| DARK_YELLOW_BIS          | `#808000`        | Fond jaune foncé          |
-| DARK_BLUE_BIS            | `#000080`        | Fond bleu foncé           |
-| DARK_MAGENTA_BIS         | `#800080`        | Fond magenta foncé        |
-| DARK_CYAN_BIS            | `#008080`        | Fond cyan foncé           |
-| DARK_WHITE_BIS           | `#C0C0C0`        | Fond blanc/gris foncé     |
+| DARK_BLACK_BIS           | `#800000`      | Rouge foncé bis          |
+| DARK_RED_BIS             | `#800000`        | Rouge foncé bis           |
+| DARK_GREEN_BIS           | `#008000`        | Vert foncé bis            |
+| DARK_YELLOW_BIS          | `#808000`        | Jaune foncé bis           |
+| DARK_BLUE_BIS            | `#000080`        | Bleu foncé bis            |
+| DARK_MAGENTA_BIS         | `#800080`        | Magenta foncé bis         |
+| DARK_CYAN_BIS            | `#008080`        | Cyan foncé bis            |
+| DARK_WHITE_BIS           | `#C0C0C0`        | Blanc/gris foncé          |
 
 
 #### Caractères UNICODE disponibles :

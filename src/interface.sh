@@ -5,7 +5,7 @@
 
 # Définir les valeurs par défaut
 
-bg_color="DARK_BLACK_BIS"
+bg_color="DEFAULT_COLOR"
 font_color="DARK_WHITE"
 border_color="BRIGHT_MAGENTA"
 font_processus_color="DARK_WHITE"
@@ -64,6 +64,7 @@ BRIGHT_CYAN_BIS='\033[1;96m'    # Cyan clair bis
 BRIGHT_WHITE_BIS='\033[1;97m'   # Blanc/gris clair bis
 
 # Couleurs supplémentaires pour le texte de fond (Background)
+DARK_BLACK_BIS='\033[40m'         # Fond rouge foncé
 DARK_RED_BIS='\033[41m'         # Fond rouge foncé
 DARK_GREEN_BIS='\033[42m'       # Fond vert foncé
 DARK_YELLOW_BIS='\033[43m'      # Fond jaune foncé
@@ -73,7 +74,7 @@ DARK_CYAN_BIS='\033[46m'        # Fond cyan foncé
 DARK_WHITE_BIS='\033[47m'       # Fond blanc/gris foncé
 
 # Réinitialiser les couleurs
-RESET_COLOR='\033[0m'                 # Réinitialiser les couleurs
+DEFAULT_COLOR='\033[0m'                 # Réinitialiser les couleurs
 
 # Caractères Unicode de type carré
 unicode_full_block="\u2588"             # Bloc complet (Full Block)

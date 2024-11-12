@@ -1,6 +1,6 @@
-bg_color=DARK_WHITE
+bg_color=DARK_BLACK_BIS
 font_color=DARK_WHITE
-border_color=DARK_RED
+border_color=BRIGHT_MAGENTA
 font_processus_color=DARK_WHITE
 
 full_net_bar_color=DARK_BLUE
@@ -23,5 +23,5 @@ empty_bar_char=unicode_light_shade
 
 minimum_lines_width=30
 minimum_cols_height=70
-update_log_time=60
+update_log_time=1
 overwrite_log=true
