@@ -49,9 +49,9 @@ Le projet consiste à développer une \textbf{application de Monitoring}, qui s'
 Celle-ci permet de surveiller en temps réel les ressources du système, telles que le processeur (CPU), la carte graphique (GPU), la mémoire (RAM), les disques, le réseau et les processus actifs.
 \vspace{1em}
 
-Toutes les données récoltées par l'application sont écrites et mises à jour dans un fichier de sortie appelé le \textbf{fichier de logs}.
+Toutes les données récoltées par l'application sont écrites et mises à jour dans un fichier de sortie \texttt{logs.txt} appelé le \textbf{fichier de logs} (logfile).
 \\
-Certains aspects graphiques et techniques comme les couleurs ou l'intervalle d'écriture dans le logfile sont personnalisables à l'aide d'un fichier d'entré appelé le \textbf{fichier de configuration}.
+Certains aspects graphiques et techniques comme les couleurs ou l'intervalle d'écriture dans le logfile sont personnalisables à l'aide d'un fichier d'entré \texttt{config.txt} appelé le \textbf{fichier de configuration} (configfile).
 
 % 2. Algorithme, fichier et fonctions
 \section{Algorithme, fichiers et fonctions}
@@ -159,10 +159,10 @@ Veuillez vous référer aux tableaux \ref{tab:configable_color_var}, \ref{tab:co
 
 % 5. Exemple d'utilisation
 \section{Exemple d'utilisation}
-Voici un exemple : \texttt{./main.sh configfile.txt}
+Voici un exemple : \texttt{./main.sh config.txt}
   
 \vspace{0.5em}
-Contenu du fichier de configuration \textbf{configfile.txt} :
+Contenu du fichier de configuration \textbf{config.txt} :
 \begin{verbatim}
 bg_color=DARK_BLACK
 font_color=DARK_RED

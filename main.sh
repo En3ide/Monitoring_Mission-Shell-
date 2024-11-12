@@ -6,7 +6,7 @@
 
 # vérifie la présence d'un fichier de config
 if [ "$#" -eq 1 ]; then
-   config_file "$1"
+   read_config_file "$1"
 fi
 
 # on sauvegarde l'état du terminal

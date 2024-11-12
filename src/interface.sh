@@ -504,7 +504,7 @@ print_bar() { # Jamel Bailleul
     echo -en "${!bg_color}${!font_color}$res${!bg_color}${!font_color}$percent${reset}"
 }
 
-config_file() {  # Jamel Bailleul
+read_config_file() {  # Jamel Bailleul
     local fichier="$1"
 
     # Vérifie si le fichier existe

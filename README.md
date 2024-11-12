@@ -11,14 +11,14 @@ Il permet de surveiller en temps réel les ressources du système, telles que le
 
 ## Utilisation 
 1. Utilisez la commande suivante pour lancer l'applicaton : `./main.sh`
-2. Pour lancer le processus avec un [fichier de configuration](#fichier-de-configuration) spécifique, utilisez : `./main.sh configfile.txt`
+2. Pour lancer le processus avec un [fichier de configuration](#fichier-de-configuration) spécifique, utilisez : `./main.sh config.txt`
 
 ## Fichier de logs
-Un fichier de logs `logfile.txt` se met à jour automatiquement. Toutes les données récoltées par le processus y sont écrites.  
+Un fichier de logs `logs.txt` se met à jour automatiquement. Toutes les données récoltées par le processus y sont écrites.  
 La réinitialisation lors du lancement du processus et l'intervalle de temps (en secondes) sont configurables dans le [fichier de configuration](#fichier-de-configuration).
 
 ## Fichier de configuration
-Le fichier de configuration `configfile.txt` permet de personnaliser certains aspects graphiques et techniques comme les [couleurs](#couleurs-disponibles-) de l'interface ou l'intervalle d'écriture dans le [fichier de logs](#fichier-de-logs).
+Le fichier de configuration `config.txt` permet de personnaliser certains aspects graphiques et techniques comme les [couleurs](#couleurs-disponibles-) de l'interface ou l'intervalle d'écriture dans le [fichier de logs](#fichier-de-logs).
 
 Il doit respecter la syntaxe suivante : `nom_variable=valeur`, avec une affectation par ligne. Si cette syntaxe n'est pas respectée, le processus ne se lance pas.  
 La majorité des variables doivent obligatoirement avec une [couleur](#couleurs-disponibles-) ou un [caractère UNICODE](#caractères-unicode-disponibles-) comme valeur parmi celles et ceux disponibles.
