@@ -206,9 +206,9 @@ get_interface_name() { # Tim Lamour
 }
 
 # Renvoie les bytes d'updload ou de download du réseau
-get_network() { # Tim Lamour & Jamel Bailleul
+recup_network() { # Tim Lamour & Jamel Bailleul
     # Vérifier le nombre de paramètres
-    test "$#" -ne 2 && echo "Error : 2 parameters are required. Usage : get_network [download | downloadPackets | downloadErr | upload | uploadPackets | uploadErr ] nom_interface_reseau" && return 1
+    test "$#" -ne 2 && echo "Error : 2 parameters are required. Usage : recup_network [download | downloadPackets | downloadErr | upload | uploadPackets | uploadErr ] nom_interface_reseau" && return 1
     # Vérifier que le fichier /proc/net/dev existe
     test ! -f /proc/net/dev && echo "Error : file /proc/net/dev doest not exist and is required." && return 2
 
@@ -236,7 +236,7 @@ get_network() { # Tim Lamour & Jamel Bailleul
             res=$(echo "$interface" | awk '{print $12}')
             ;;
         *)
-            echo "Error : unknown parameter. Usage : get_network [download | downloadPackets | downloadErr | upload | uploadPackets | uploadErr] network_interface_name"
+            echo "Error : unknown parameter. Usage : recup_network [download | downloadPackets | downloadErr | upload | uploadPackets | uploadErr] network_interface_name"
             return 1
             ;;
     esac

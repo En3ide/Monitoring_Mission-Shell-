@@ -375,8 +375,8 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
             position=$(( position + 1 ))
             
             # Calculer le pourcentage
-            local download=$(get_network "download" $name)
-            local upload=$(get_network "upload" $name)
+            local download=$(recup_network "download" $name)
+            local upload=$(recup_network "upload" $name)
 
             # Concatener dans le contenu à rajouter au logfile si demandé
             if [ "$logfile_enabled" == 1 ]; then
@@ -387,11 +387,11 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
             printf "\33[%d;%dH" "$x" "$y"
             echo -en "${!bg_color}${!font_color}${!empty_bar_char}${name:0:$(( $3 - 7 ))} ${!empty_bar_char}${reset}"
             printf "\33[%d;%dH" "$(($x + 1))" "$y"
-            if [[ $download -ne $(get_network "download" $name) ]]; then
-                download_s=$(($(get_network "download" $name) - $download))
+            if [[ $download -ne $(recup_network "download" $name) ]]; then
+                download_s=$(($(recup_network "download" $name) - $download))
             fi
-            if [[ $upload -ne $(get_network "upload" $name) ]]; then
-                upload_s=$(($(get_network "upload" $name) - $upload))
+            if [[ $upload -ne $(recup_network "upload" $name) ]]; then
+                upload_s=$(($(recup_network "upload" $name) - $upload))
             fi
             echo -en "${!bg_color}${!font_color}Download total : ${download:0:$(( $3 - 7 ))} Bytes${reset}"
             printf "\33[%d;%dH" "$(($x + 2))" "$y"
@@ -400,7 +400,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
             echo -en "${!bg_color}${!font_color}Net Error Download : ${reset}"
 
             # Calculer le pourcentage
-            percent=$(calculate_percent $(get_network "downloadErr" $name) $(get_network "downloadPackets" $name))
+            percent=$(calculate_percent $(recup_network "downloadErr" $name) $(recup_network "downloadPackets" $name))
             print_bar "${!bg_color}${!full_net_bar_color}" "$y" "$(($fin_bar - $espace))" "$(( x + 4 ))" "$percent" "${empty_net_bar_color}"
             printf "\33[%d;%dH" "$(($x + 5))" "$y"
             echo -en "${!bg_color}${!font_color}Upload total : ${upload:0:$(( $3 - 7 ))} Bytes${reset}"
@@ -410,7 +410,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
             # Calculer le pourcentage
             printf "\33[%d;%dH" "$(($x + 7))" "$y"
             echo -en "${!bg_color}${!font_color}Net Error Upload : ${reset}"
-            percent=$(calculate_percent $(get_network "downloadErr" $name) $(get_network "downloadPackets" $name))
+            percent=$(calculate_percent $(recup_network "downloadErr" $name) $(recup_network "downloadPackets" $name))
             print_bar "${!bg_color}${!full_net_bar_color}" "$y" "$(($fin_bar - $espace))" "$(( x + 8 ))" "$percent" "${empty_net_bar_color}"
         done
     fi

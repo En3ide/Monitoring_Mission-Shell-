@@ -39,25 +39,27 @@
 \section{Membres du groupe}
 \begin{itemize}
     \item \textbf{Tim Lamour} : développement des fonctions de récupération des informations, création, écriture et mise à jour des logs, optimisations, mise en forme du code, documentation et rédaction.
-    \item \textbf{Jamel Bailleul} : développement de l'interface graphique et du programme principal.
+    \item \textbf{Jamel Bailleul} : développement du programme principal (interface graphique, affichage responsive, scinder les informations à l'écran..), lecture du fichier de configuration.
 
 \end{itemize}
 
 % 1. Contextes
 \section{Contexte}
-Le projet consiste à développer une \textbf{application de Monitoring}, qui s'exécute dans la console.
+Le projet consiste à développer une \textbf{outil de Monitoring}, qui s'exécute dans la console.
 Celle-ci permet de surveiller en temps réel les ressources et les performances du système, telles que le processeur (CPU), la carte graphique (GPU), la mémoire (RAM), les disques, le réseau et les processus actifs.
 \vspace{1em}
 
-Toutes les données récoltées par l'application sont écrites et mises à jour dans un fichier de sortie \texttt{logs.txt} appelé le \textbf{fichier de logs} (logfile).
+Toutes les données récoltées sont écrites et mises à jour dans un fichier de sortie \texttt{logs.txt} appelé le \textbf{fichier de logs} (logfile).
 \\
-Certains aspects graphiques et techniques comme les couleurs ou l'intervalle d'écriture dans le logfile sont personnalisables à l'aide d'un fichier d'entré \texttt{config.txt} appelé le \textbf{fichier de configuration} (configfile).
+Certains aspects graphiques et techniques comme les couleurs ou l'intervalle 
+  
+d'écriture dans le logfile sont personnalisables à l'aide d'un fichier d'entré \texttt{config.txt} appelé le \textbf{fichier de configuration} (configfile).
 
 % 2. Algorithme, fichier et fonctions
 \section{Algorithme, fichiers et fonctions}
 Le projet est séparé en 4 fichiers :
 \begin{itemize}
-    \item \texttt{main.sh} : lit le fichier de configuration et lance le programme principale.
+    \item \texttt{main.sh} : contient le programme principale (lecture du fichier de configuration, affichage de l'interface graphique et mise à jour du fichier des logs)
     \item \texttt{interface.sh} : contient les fonctions permettant d'afficher et de mettre à jour l'interface.
     \item \texttt{recup\_info.sh} : contient les fonctions permettant de récupérer\\ les informations des ressources du système.
     \item \texttt{update\_log.sh} : contient les fonctions permettant de créer et de mettre à jour le fichier de logs. 
@@ -69,7 +71,7 @@ Voici les fonctions principales par fichiers :
 \begin{itemize}
     \item \texttt{main.sh} :
         \begin{itemize}[label=\textbullet]
-            \item \texttt{config\_file} : lit le fichier de configuration et met à jour les valeurs par défaut de l'interface.
+            \item \texttt{read\_config\_file} : lit le fichier de configuration et met à jour les valeurs par défaut de l'interface.
         \end{itemize}
     \vspace{0.3em}
     \item \texttt{interface.sh} :
@@ -84,11 +86,12 @@ Voici les fonctions principales par fichiers :
     \item \texttt{recup\_info.sh} :
         \begin{itemize}[label=\textbullet]
             \item \texttt{recup\_mem} : récupère les informations sur la mémoire de la machine.
-            \item \texttt{recup\_cpu} : récupère les informations sur la carte graphique de la machine.
-            \item \texttt{recup\_gpu} : récupère les informations sur le processeur de la machine.
-            \item \texttt{recup\_disk} : récupère les informations sur les disques de la machine.
+            \item \texttt{recup\_cpu} : récupère les informations sur le processeur de la machine.
+            \item \texttt{recup\_gpu} : récupère les informations sur la carte graphiquede la machine.
+            \item \texttt{recup\_disk} : récupère les informations sur le disque courant de la machine.
             \item \texttt{recup\_processus} : récupère les processus en cours d'utilisation de la machine.
             \item \texttt{recup\_network} : récupère les informations sur l'utilisation réseau de la machine.
+            \item \texttt{get\_interface\_name} : récupère le nom de l'interface réseau actuellement utilisé.
         \end{itemize}
         \vspace{0.3em}
     \item \texttt{update\_log.sh} :
@@ -102,7 +105,7 @@ Voici les fonctions principales par fichiers :
 % 3. Diagramme
 \section{Diagramme}
 
-Voici un diagramme montrant la logique d'exécution de l'application :
+Voici un diagramme montrant la logique d'exécution de l'outil :
 \vspace{1em}
   
 \begin{center}
@@ -143,8 +146,8 @@ Voici un diagramme montrant la logique d'exécution de l'application :
 \newpage
 \section{Commandes et options de lancement}
 
-\subsection{Lancer l'application}
-Pour exécuter l'application, vous pouvez utiliser la commande suivante dans le terminal :  
+\subsection{Lancer l'outil}
+Pour exécuter l'outil, vous pouvez utiliser la commande suivante dans le terminal :  
 \texttt{./main.sh <configfile>}
 
 \subsection{Fichier de configuration}
@@ -168,6 +171,7 @@ bg_color=DARK_BLACK
 font_color=DARK_RED
 border_color=DARK_BLUE
 font_processus_color=BRIGHT_WHITE
+border_char=unicode_full_block
 \end{verbatim}
 
 
@@ -175,7 +179,7 @@ font_processus_color=BRIGHT_WHITE
 \section{Conclusion}
 Dans l'ensemble, nous sommes assez satisfait du résultat. Cependant, il reste bien évidemment des possibilités d'optimisation, notamment au niveau de l'aspect graphique, qui n'est pas le plus esthétique,
 et de la manière dont les informations sont récupérées et mises à jour. 
-Des possibles améliorations seraient par exemple d'utiliser des processus asynchromes (multi-processing), ou adapter les nombres de colonnes des processus à la taille du terminal.
+Des possibles améliorations seraient par exemple d'utiliser des processus asynchrones (multi-processing), ou adapter les nombres de colonnes des processus à la taille du terminal.
   
 On pourrait également effecturer des petits ajouts comme donner la possibilité à l'utilisateur de choisir les unités de mesure via le fichier de configuration.
 
@@ -184,7 +188,6 @@ On pourrait également effecturer des petits ajouts comme donner la possibilité
 \section{Annexe : tableaux des variables configurables, des couleurs et caractères unicodes disponibles}
 \vspace{3em}
 \subsection{Variables configurables avec une couleur :}
-
 \begin{table}[h!]
     \centering
     \renewcommand{\arraystretch}{1.5}
@@ -339,8 +342,8 @@ On pourrait également effecturer des petits ajouts comme donner la possibilité
         DARK\_WHITE\_BIS & \cellcolor[HTML]{C0C0C0}\textcolor{black}{\#C0C0C0} & Fond blanc/gris foncé \\
         \hline
     \end{tabular}
-    \caption{Couleurs disponibles}
     \label{tab:couleur}
+    \caption{Couleurs disponibles}
 \end{table}
 
 \newpage

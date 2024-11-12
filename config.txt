@@ -1,4 +1,4 @@
-bg_color=DARK_BLACK_BIS
+bg_color=DARK_WHITE
 font_color=DARK_WHITE
 border_color=DARK_RED
 font_processus_color=DARK_WHITE

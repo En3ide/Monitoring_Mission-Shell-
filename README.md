@@ -1,4 +1,4 @@
-# Projet Shell - Application de Monitoring
+# Projet Shell - Outil de Monitoring
 
 >Ce projet a été réalisé dans le cadre d'un programme universitaire en 3<sup>e</sup> année de licence en informatique.
 
@@ -15,7 +15,7 @@ Il permet de surveiller en temps réel les ressources et les perfomances du syst
 
 ## Fichier de logs
 Un fichier de logs `logs.txt` se met à jour automatiquement. Toutes les données récoltées par le processus y sont écrites.  
-La réinitialisation lors du lancement du processus et l'intervalle de temps (en secondes) sont configurables dans le [fichier de configuration](#fichier-de-configuration).
+La réinitialisation lors du lancement du processus et l'intervalle de temps d'écriture (en secondes) sont configurables dans le [fichier de configuration](#fichier-de-configuration).
 
 ## Fichier de configuration
 Le fichier de configuration `config.txt` permet de personnaliser certains aspects graphiques et techniques comme les [couleurs](#couleurs-disponibles-) de l'interface ou l'intervalle d'écriture dans le [fichier de logs](#fichier-de-logs).
@@ -29,6 +29,7 @@ bg_color=DARK_BLACK
 font_color=DARK_RED
 border_color=DARK_BLUE
 font_processus_color=BRIGHT_WHITE
+border_char=unicode_full_block
 ```
 
 Veuillez vous référer aux tableaux ci-dessous pour consulter les variables possibles ainsi que leurs valeurs.
