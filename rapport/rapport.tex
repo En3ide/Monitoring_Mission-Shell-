@@ -46,10 +46,10 @@
 % 1. Contextes
 \section{Contexte}
 Le projet consiste à développer une \textbf{application de Monitoring}, qui s'exécute dans la console.
-Celle-ci permet de surveiller en temps réel les ressources du système, telles que le processeur (CPU), la carte graphique (GPU), la mémoire (RAM), les disques, le réseau, et les processus actifs.
+Celle-ci permet de surveiller en temps réel les ressources du système, telles que le processeur (CPU), la carte graphique (GPU), la mémoire (RAM), les disques, le réseau et les processus actifs.
 \vspace{1em}
 
-Toutes les données récoltées par l'application sont écrites et mis à jour dans un fichier de sortie appelé le \textbf{fichier de logs}.
+Toutes les données récoltées par l'application sont écrites et mises à jour dans un fichier de sortie appelé le \textbf{fichier de logs}.
 \\
 Certains aspects graphiques et techniques comme les couleurs ou l'intervalle d'écriture dans le logfile sont personnalisables à l'aide d'un fichier d'entré appelé le \textbf{fichier de configuration}.
 
@@ -57,10 +57,10 @@ Certains aspects graphiques et techniques comme les couleurs ou l'intervalle d'�
 \section{Algorithme, fichiers et fonctions}
 Le projet est séparé en 4 fichiers :
 \begin{itemize}
-    \item \texttt{main.sh} : lit le configfile et lance le programme principale.
+    \item \texttt{main.sh} : lit le fichier de configuration et lance le programme principale.
     \item \texttt{interface.sh} : contient les fonctions permettant d'afficher et de mettre à jour l'interface.
     \item \texttt{recup\_info.sh} : contient les fonctions permettant de récupérer\\ les informations des ressources du système.
-    \item \texttt{update\_log.sh} : contient les fonctions permettant de créer et de mettre à jour le fichier des logs. 
+    \item \texttt{update\_log.sh} : contient les fonctions permettant de créer et de mettre à jour le fichier de logs. 
 \end{itemize}
 \vspace{1em}
 
@@ -69,32 +69,32 @@ Voici les fonctions principales par fichiers :
 \begin{itemize}
     \item \texttt{main.sh} :
         \begin{itemize}[label=\textbullet]
-            \item \texttt{config\_file} : lit le configfile et met à jour les valeurs par défaut de l'interface.
+            \item \texttt{config\_file} : lit le fichier de configuration et met à jour les valeurs par défaut de l'interface.
         \end{itemize}
     \vspace{0.3em}
     \item \texttt{interface.sh} :
         \begin{itemize}[label=\textbullet]
-            \item {\texttt{clear\_screen}} : permet de nettoyer la console et de dessiner la bordure du terminal.
-            \item \texttt{info\_reduite} : permet d'afficher les informations sur les ressources du système une par une si elles sont disponibles.
-            \item \texttt{affiche\_processus} : permet d'afficher les informations sur les processus à une position sur le terminal.
-            \item \texttt{print\_bar} : permet un pourcentage sous forme d'une barre à une position précise sur le terminal.
-            \item \texttt{info\_scinder} : permet de rassembler et scinder tous les affichages précédents.
+            \item {\texttt{clear\_screen}} : nettoie la console et dessine la bordure du terminal.
+            \item \texttt{info\_reduite} : affiche les informations sur les ressources du système, une par une si elles sont disponibles.
+            \item \texttt{affiche\_processus} : affiche les informations sur les processus à une position spécifique dans le terminal.
+            \item \texttt{print\_bar} : affiche un pourcentage sous forme de barre à une position spécifique dans le terminal.
+            \item \texttt{info\_scinder} : rassemble et scinde tous les affichages précédents.
         \end{itemize}
         \vspace{0.3em}
     \item \texttt{recup\_info.sh} :
         \begin{itemize}[label=\textbullet]
-            \item \texttt{recup\_mem} : permet de récupérer les informations sur la mémoire de la machine.
-            \item \texttt{recup\_cpu} : permet de récupérer les informations sur la carte graphique de la machine.
-            \item \texttt{recup\_gpu} : permet de récupérer les informations sur le processeur de la machine.
-            \item \texttt{recup\_disk} : permet de récupérer les informations sur les disques de la machine.
-            \item \texttt{recup\_processus} : permet de récupérer les processus en cours d'utilisation de la machine.
-            \item \texttt{recup\_network} : permet de récupérer les informations sur l'utilisation réseau de la machine.
+            \item \texttt{recup\_mem} : récupère les informations sur la mémoire de la machine.
+            \item \texttt{recup\_cpu} : récupère les informations sur la carte graphique de la machine.
+            \item \texttt{recup\_gpu} : récupère les informations sur le processeur de la machine.
+            \item \texttt{recup\_disk} : récupère les informations sur les disques de la machine.
+            \item \texttt{recup\_processus} : récupère les processus en cours d'utilisation de la machine.
+            \item \texttt{recup\_network} : récupère les informations sur l'utilisation réseau de la machine.
         \end{itemize}
         \vspace{0.3em}
     \item \texttt{update\_log.sh} :
         \begin{itemize}[label=\textbullet]
-            \item \texttt{create\_logfile} : permet de créer le readconfigfile s'il n'existe pas déjà.
-            \item \texttt{write\_in\_logfile} : permet d'écrire dans le readconfigfile et donc de le mettre à jour.
+            \item \texttt{create\_logfile} : crée le fichier de configuration s’il n’existe pas déjà.
+            \item \texttt{write\_in\_logfile} : permet d’écrire dans le fichier de configuration et donc de le mettre à jour.
         \end{itemize}
 \end{itemize}
 
@@ -148,7 +148,7 @@ Pour exécuter l'application, vous pouvez utiliser la commande suivante dans le 
 \texttt{./main.sh <configfile>}
 
 \subsection{Fichier de configuration}
-Le \textbf{configfile} est un fichier de configuration permettant de définir les couleurs de l'interface, l'intervalle pour l'écriture et la réinitialisation du fichier de logs.
+Le \textbf{configfile} est un fichier de configuration permettant de définir les couleurs de l'interface, l'intervalle pour l'écriture et la réinitialisation (ou non) du fichier de logs.
   
 Il doit respecter la syntaxe suivante : \texttt{nom\_variable=valeur}, avec une affectation par ligne. Si cette syntaxe n'est pas respectée, le processus ne se lance pas.
 \vspace{1em}

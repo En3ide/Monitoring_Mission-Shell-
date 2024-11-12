@@ -428,37 +428,43 @@ info_scinder() { # Jamel Bailleul
 
     local max_cols=$(tput cols)
     local max_lines=$(tput lines)
-	local cols_proc=$(($max_cols / 2)) # Moitié des colonnes pour diviser la zone
+    local cols_proc=$(($max_cols / 2)) # Moitié des colonnes pour diviser la zone
     local lines_proc=$(($max_lines / 2)) # Moitié des lignes pour diviser la zone
 
     # Appel de la fonction info_reduite avec les paramètres ajustés
     info_reduite "$cols" "$lines" "$((($max_cols / 2) - 2))" "$logfile_enabled"
 
-    # Appel de la fonction affiche_processus avec les colonnes et lignes ajustées
-    affiche_processus "$(($cols_proc + 2))" "$lines" "$(( max_lines - 2))" "$(tput cols)"
+    # Récupérer le résultat de la commande ps dans la variable text
+    local text=$(ps -eo %cpu,%mem,pid,user,cmd --sort=-%cpu)
+    # Appel initial de la fonction récursive
+    affiche_processus "$(($cols_proc + 2))" "$lines" "$(( max_lines - 2))" "$(tput cols)" "$text"
 }
 
-affiche_processus() { # Jamel Bailleul
-    local start_col="$1"   # Colonne de début
-    local start_line="$2"  # Ligne de début
-    local end_line="$3"    # Nombre total de lignes à afficher
-    local end_col="$4"     # Colonne de fin
-	# Récupérer le résultat de la commande ps dans la variable text
-	local text=$(ps -eo %cpu,%mem,pid,user,cmd --sort=-%cpu)
+affiche_processus() { # Jamel Bailleul - fonction récursive (en récursif c'est pas optimisé mais on devait en faire une)
+    local start_col="$1"    # Colonne de début
+    local start_line="$2"   # Ligne de début
+    local end_line="$3"     # Ligne de fin
+    local end_col="$4"      # Colonne de fin
+    local text="$5"         # Texte contenant les informations des processus
 
-    # Boucle pour afficher chaque processus dans la zone délimitée
-    for (( i=$(($start_line - 1)); i < end_line; i++ )); do
+    # Condition d'arrêt : Si la ligne actuelle dépasse la fin, arrêter la récursion
+    if (( start_line >= end_line )); then
+        return
+    fi
 
-		# Obtenir la première ligne de "text"
-		local first_line=$(echo "$text" | head -n 1)
-		#first_15_chars=${first_line:0:15}	# Obtenir les 15 premiers caractères de la première ligne
-
-		# Afficher les 15 premiers caractères de la première ligne au milieu de l'écran
-		printf "\033[%d;%dH" "$i" "$start_col"  # Positionne le curseur
-		local nb_char=$(($end_col - $start_col))
-		echo -en "${!bg_color}${!font_processus_color}${first_line:0:${nb_char}}"
-		text=$(echo "$text" | sed '1d')
-    done
+    # Obtenir la première ligne du texte
+    local first_line=$(echo "$text" | head -n 1)
+    
+    # Calculer le nombre de caractères à afficher
+    local nb_char=$(($end_col - $start_col))
+    
+    # Positionner le curseur et afficher les premiers caractères de la ligne
+    printf "\033[%d;%dH" "$start_line" "$start_col"
+    echo -en "${!bg_color}${!font_processus_color}${first_line:0:${nb_char}}"
+    
+    # Appel récursif : avancer d'une ligne et supprimer la première ligne du texte
+    local new_text=$(echo "$text" | sed '1d')
+    affiche_processus "$start_col" "$((start_line + 1))" "$end_line" "$end_col" "$new_text"
 }
 
 print_bar() { # Jamel Bailleul
