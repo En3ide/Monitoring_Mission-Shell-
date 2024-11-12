@@ -1,5 +1,6 @@
 bg_color=DARK_BLACK_BIS
 font_color=DARK_WHITE
+
 border_color=BRIGHT_MAGENTA
 font_processus_color=DARK_WHITE
 

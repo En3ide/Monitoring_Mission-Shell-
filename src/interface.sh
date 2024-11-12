@@ -33,45 +33,46 @@ minimum_cols_height=70
 update_log_time=1
 overwrite_log="true"
 
-# Couleurs sombres (Dark)
-DARK_BLACK='\033[0;30m'      # Noir foncé
-DARK_RED='\033[0;31m'        # Rouge foncé
-DARK_GREEN='\033[0;32m'      # Vert foncé
-DARK_YELLOW='\033[0;33m'     # Jaune foncé
-DARK_BLUE='\033[0;34m'       # Bleu foncé
-DARK_MAGENTA='\033[0;35m'    # Magenta foncé
-DARK_CYAN='\033[0;36m'       # Cyan foncé
-DARK_WHITE='\033[0;37m'      # Blanc/gris foncé
+# Variables pour les couleurs de fond (background)
+BG_BLACK="\033[40m"
+BG_RED="\033[41m"
+BG_GREEN="\033[42m"
+BG_YELLOW="\033[43m"
+BG_BLUE="\033[44m"
+BG_MAGENTA="\033[45m"
+BG_CYAN="\033[46m"
+BG_WHITE="\033[47m"
 
-# Couleurs vives (Bright)
-BRIGHT_BLACK='\033[1;30m'     # Noir clair (gris foncé)
-BRIGHT_RED='\033[1;31m'       # Rouge clair
-BRIGHT_GREEN='\033[1;32m'     # Vert clair
-BRIGHT_YELLOW='\033[1;33m'    # Jaune clair
-BRIGHT_BLUE='\033[1;34m'      # Bleu clair
-BRIGHT_MAGENTA='\033[1;35m'   # Magenta clair
-BRIGHT_CYAN='\033[1;36m'      # Cyan clair
-BRIGHT_WHITE='\033[1;37m'     # Blanc/gris clair
+# Variables pour les couleurs claires de fond (bright background)
+BG_BRIGHT_BLACK="\033[100m"
+BG_BRIGHT_RED="\033[101m"
+BG_BRIGHT_GREEN="\033[102m"
+BG_BRIGHT_YELLOW="\033[103m"
+BG_BRIGHT_BLUE="\033[104m"
+BG_BRIGHT_MAGENTA="\033[105m"
+BG_BRIGHT_CYAN="\033[106m"
+BG_BRIGHT_WHITE="\033[107m"
 
-# Couleurs BIS pour Bright
-BRIGHT_BLACK_BIS='\033[1;90m'   # Noir clair bis
-BRIGHT_RED_BIS='\033[1;91m'     # Rouge clair bis
-BRIGHT_GREEN_BIS='\033[1;92m'   # Vert clair bis
-BRIGHT_YELLOW_BIS='\033[1;93m'  # Jaune clair bis
-BRIGHT_BLUE_BIS='\033[1;94m'    # Bleu clair bis
-BRIGHT_MAGENTA_BIS='\033[1;95m' # Magenta clair bis
-BRIGHT_CYAN_BIS='\033[1;96m'    # Cyan clair bis
-BRIGHT_WHITE_BIS='\033[1;97m'   # Blanc/gris clair bis
+# Variables pour les couleurs de texte (foreground)
+FONT_BLACK="\033[30m"
+FONT_RED="\033[31m"
+FONT_GREEN="\033[32m"
+FONT_YELLOW="\033[33m"
+FONT_BLUE="\033[34m"
+FONT_MAGENTA="\033[35m"
+FONT_CYAN="\033[36m"
+FONT_WHITE="\033[37m"
+FONT_RESET="\033[0m"
 
-# Couleurs supplémentaires pour le texte de fond (Background)
-DARK_BLACK_BIS='\033[40m'         # Fond rouge foncé
-DARK_RED_BIS='\033[41m'         # Fond rouge foncé
-DARK_GREEN_BIS='\033[42m'       # Fond vert foncé
-DARK_YELLOW_BIS='\033[43m'      # Fond jaune foncé
-DARK_BLUE_BIS='\033[44m'        # Fond bleu foncé
-DARK_MAGENTA_BIS='\033[45m'     # Fond magenta foncé
-DARK_CYAN_BIS='\033[46m'        # Fond cyan foncé
-DARK_WHITE_BIS='\033[47m'       # Fond blanc/gris foncé
+# Variables pour les couleurs claires (bright foreground)
+FONT_BRIGHT_BLACK="\033[90m"
+FONT_BRIGHT_RED="\033[91m"
+FONT_BRIGHT_GREEN="\033[92m"
+FONT_BRIGHT_YELLOW="\033[93m"
+FONT_BRIGHT_BLUE="\033[94m"
+FONT_BRIGHT_MAGENTA="\033[95m"
+FONT_BRIGHT_CYAN="\033[96m"
+FONT_BRIGHT_WHITE="\033[97m"
 
 # Réinitialiser les couleurs
 DEFAULT_COLOR='\033[0m'                 # Réinitialiser les couleurs
