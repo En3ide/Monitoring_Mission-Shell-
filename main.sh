@@ -7,7 +7,7 @@ if [ "$#" -eq 1 ]; then
 fi
 
 # on sauvegarde l'état du terminal
-local old_stty=$(stty -g)
+old_stty=$(stty -g)
 tput "smcup"
 
 # prepare la zone de texte pour ne pas afficher le curseur ou les caractères tapés
@@ -23,14 +23,14 @@ else
    clear_screen
 fi
 
-local cols=$(tput cols)
-local lines=$(tput lines)
+cols=$(tput cols)
+lines=$(tput lines)
 
 # Créer le logfile
 create_logfile "$overwrite_log"
 
-local logfile_enabled=0
-local start_time="$SECONDS"
+logfile_enabled=0
+start_time="$SECONDS"
 while true; do
    if (( $(tput cols) != $cols || $(tput lines) != $lines )); then
       local cols=$(tput cols)
