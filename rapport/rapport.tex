@@ -38,7 +38,7 @@
 % 0. Membres du groupe
 \section{Membres du groupe}
 \begin{itemize}
-    \item \textbf{Tim Lamour} : développement des fonctions de récupération des informations sur les ressources du système, création et écriture des logs, optimisations, mise en forme du code, documentation et rédaction.
+    \item \textbf{Tim Lamour} : développement des fonctions de récupération des informations, création, écriture et mise à jour des logs, optimisations, mise en forme du code, documentation et rédaction.
     \item \textbf{Jamel Bailleul} : développement de l'interface graphique et du programme principal.
 
 \end{itemize}
@@ -46,7 +46,7 @@
 % 1. Contextes
 \section{Contexte}
 Le projet consiste à développer une \textbf{application de Monitoring}, qui s'exécute dans la console.
-Celle-ci permet de surveiller en temps réel les ressources du système, telles que le processeur (CPU), la carte graphique (GPU), la mémoire (RAM), les disques, le réseau et les processus actifs.
+Celle-ci permet de surveiller en temps réel les ressources et les performances du système, telles que le processeur (CPU), la carte graphique (GPU), la mémoire (RAM), les disques, le réseau et les processus actifs.
 \vspace{1em}
 
 Toutes les données récoltées par l'application sont écrites et mises à jour dans un fichier de sortie \texttt{logs.txt} appelé le \textbf{fichier de logs} (logfile).
@@ -173,8 +173,11 @@ font_processus_color=BRIGHT_WHITE
 
 % 6. Conclusion
 \section{Conclusion}
-Dans l'ensemble, nous sommes satisfaits du résultat. Cependant, il reste bien évidemment des possibilités d'optimisation, notamment au niveau de l'aspect graphique, qui est pas le plus esthétique,
-et de la manière dont les informations sont récupérées et mises à jour. On pourrait par exemple utilisé du multi-processing et adapté les nombres de colonnes des processus à la taille du terminal.
+Dans l'ensemble, nous sommes assez satisfait du résultat. Cependant, il reste bien évidemment des possibilités d'optimisation, notamment au niveau de l'aspect graphique, qui n'est pas le plus esthétique,
+et de la manière dont les informations sont récupérées et mises à jour. 
+Des possibles améliorations seraient par exemple d'utiliser des processus asynchromes (multi-processing), ou adapter les nombres de colonnes des processus à la taille du terminal.
+  
+On pourrait également effecturer des petits ajouts comme donner la possibilité à l'utilisateur de choisir les unités de mesure via le fichier de configuration.
 
 % 7. Annexe
 \newpage
