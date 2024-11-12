@@ -170,7 +170,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
         echo -en "${!bg_color}${!font_color}Memory : ${used_memory}Kb / ${max_memory}Kb${reset}"
 
         # Afficher la barre d'état de la mémoire
-        print_bar_h "${!bg_color}${!full_memory_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent" "${empty_memory_bar_color}"
+        print_bar "${!bg_color}${!full_memory_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent" "${empty_memory_bar_color}"
     fi
 
     # GPU (%)
@@ -201,7 +201,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
         echo -en "${!bg_color}${!font_color}GPU % : ${reset}"
 
         # Afficher la barre d'état pour l'utilisation de la VRAM
-        print_bar_h "${!bg_color}${!full_gpu_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent" "${empty_gpu_bar_color}"
+        print_bar "${!bg_color}${!full_gpu_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent" "${empty_gpu_bar_color}"
     fi
 
     # GPU (vram)
@@ -232,7 +232,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
         echo -en "${!bg_color}${!font_color}GPU VRAM : ${reset}"
 
         # Afficher la barre d'état pour l'utilisation de la VRAM
-        print_bar_h "${!bg_color}${!full_gpu_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent" "${empty_gpu_bar_color}"
+        print_bar "${!bg_color}${!full_gpu_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent" "${empty_gpu_bar_color}"
     fi
 
     # Disque
@@ -263,7 +263,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
         echo -en "${!bg_color}${!font_color}Disk : ${used_disk} / ${max_disk}${reset}"
 
         # Afficher la barre d'état pour l'utilisation du disque
-        print_bar_h "${!bg_color}${!full_disk_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent" "${empty_disk_bar_color}"
+        print_bar "${!bg_color}${!full_disk_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent" "${empty_disk_bar_color}"
     fi
 
     # CPU (%)
@@ -295,7 +295,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
         echo -en "${!bg_color}${!font_color}CPU % : ${cpu_name:0:$(( $3 - 10 ))}${reset}"
 
         # Afficher la barre d'état pour l'utilisation du CPU
-        print_bar_h "${!bg_color}${!full_cpu_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent" "${empty_cpu_bar_color}"
+        print_bar "${!bg_color}${!full_cpu_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent" "${empty_cpu_bar_color}"
     fi
 
     local used_cpu=$(recup_cpu "cpu1" 2>/dev/null)
@@ -335,7 +335,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
                     echo -en "${!bg_color}${!font_color}CORE : ${j}${reset}"
 
                     # Afficher la barre d'état pour l'utilisation du CPU
-                    print_bar_h "${!bg_color}${!full_core_bar_color}" "$y" "$(($fin_bar - $espace))" "$(( x + 1 ))" "$percent" "${empty_core_bar_color}"
+                    print_bar "${!bg_color}${!full_core_bar_color}" "$y" "$(($fin_bar - $espace))" "$(( x + 1 ))" "$percent" "${empty_core_bar_color}"
                 else
                     return 1
                 fi
@@ -393,7 +393,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
             echo -en "${!bg_color}${!font_color}Net Error Download : ${reset}"
             # Calculer le pourcentage
             percent=$(calculate_percent $(get_network "downloadErr" $name) $(get_network "downloadPackets" $name))
-            print_bar_h "${!bg_color}${!full_net_bar_color}" "$y" "$(($fin_bar - $espace))" "$(( x + 4 ))" "$percent" "${empty_net_bar_color}"
+            print_bar "${!bg_color}${!full_net_bar_color}" "$y" "$(($fin_bar - $espace))" "$(( x + 4 ))" "$percent" "${empty_net_bar_color}"
             printf "\33[%d;%dH" "$(($x + 5))" "$y"
             echo -en "${!bg_color}${!font_color}Upload total : ${upload:0:$(( $3 - 7 ))} Bytes${reset}"
             printf "\33[%d;%dH" "$(($x + 6))" "$y"
@@ -402,7 +402,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
             printf "\33[%d;%dH" "$(($x + 7))" "$y"
             echo -en "${!bg_color}${!font_color}Net Error Upload : ${reset}"
             percent=$(calculate_percent $(get_network "downloadErr" $name) $(get_network "downloadPackets" $name))
-            print_bar_h "${!bg_color}${!full_net_bar_color}" "$y" "$(($fin_bar - $espace))" "$(( x + 8 ))" "$percent" "${empty_net_bar_color}"
+            print_bar "${!bg_color}${!full_net_bar_color}" "$y" "$(($fin_bar - $espace))" "$(( x + 8 ))" "$percent" "${empty_net_bar_color}"
         done
     fi
 
@@ -453,7 +453,7 @@ affiche_processus() { # Jamel Bailleul
     done
 }
 
-print_bar_h() { # Jamel Bailleul
+print_bar() { # Jamel Bailleul
     # $1 = couleur
     # $2 = cols debut de barre
     # $3 = cols fin de barre
@@ -492,7 +492,6 @@ print_bar_h() { # Jamel Bailleul
     echo -en "${!bg_color}${!font_color}$res${!bg_color}${!font_color}$percent${reset}"
 }
 
-
 config_file() {  # Jamel Bailleul
     local fichier="$1"
 
@@ -525,79 +524,3 @@ config_file() {  # Jamel Bailleul
         exit 1
     fi
 }
-
-main() {  # Jamel Bailleul & Tim Lamour
-
-    # vérifie la présence d'un fichier de config
-	if [ "$#" -eq 1 ]; then
-        config_file "$1"
-    fi
-
-    # on sauvegarde l'état du terminal
-    local old_stty=$(stty -g)
-    tput "smcup"
-
-    # prepare la zone de texte pour ne pas afficher le curseur ou les caractères tapés
-    stty -icanon -echo
-    tput civis # Rendre le curseur invisible
-
-    # si le programme est interrompu avec ctrl+c, on remet l'état initial du terminal
-    trap 'tput "rmcup"; tput "cnorm"; stty "$old_stty"; exit' INT TERM
-
-	if (( $(tput cols) > $minimum_cols_height && $(tput lines) > minimum_lines_width )); then 
-		clear_screen "$(($(tput cols) / 2))"
-	else
-		clear_screen
-	fi
-	local cols=$(tput cols)
-	local lines=$(tput lines)
-    #while true; do
-    #    # Utilise la commande read avec l'option -n1 pour lire un seul caractère
-	#	read -n 1 -s input
-    #	# Si l'utilisateur appuie sur 'q', on sort de la boucle
-	#	if [[ "$input" == "q" ]]; then
-    #        printf "\33[%d;%dH" "$lines" "0"
-	#		echo "Au revoir!"
-    #        stty sane
-	#		exit 1
-	#	fi
-    #done &
-
-    # Créer le logfile
-    create_logfile "$overwrite_log"
-
-    local logfile_enabled=0
-    local start_time="$SECONDS"
-	while true; do
-		if (( $(tput cols) != $cols || $(tput lines) != $lines )); then
-            	local cols=$(tput cols)
-	            local lines=$(tput lines)
-			if (( $cols > minimum_cols_height && $lines > $minimum_lines_width )); then 
-				clear_screen "$(($(tput cols) / 2))"
-			else
-				clear_screen
-			fi
-		fi
-
-        # Ecris dans les logs toutes les update_log_time secondes
-        if (( SECONDS - start_time >= update_log_time )); then
-            logfile_enabled=1       # Active l'écriture dans le log
-            start_time=$SECONDS     # Réinitialise le compteur de temps
-        else
-            logfile_enabled=0       # Désactive l'écriture dans le log
-        fi
-		
-		if (( $(tput cols) <= minimum_cols_height | $(tput lines) <= minimum_lines_width)); then
-			info_reduite 2 3 "$(($(tput cols)-2))" "$logfile_enabled"
-		else
-			info_scinder 2 3 "$(($(tput cols)-2))" "$logfile_enabled"
-		fi
-	done
-
-    # on remet l'état initial du terminal si l'utilisateur quitte normalement
-    tput "rmcup"
-    tput "cnorm"
-    stty "$old_stty"
-}
-
-main "$@"
