@@ -57,7 +57,7 @@ while true; do
    fi
 done
 
-   # on remet l'état initial du terminal si l'utilisateur quitte normalement
-   tput "rmcup"
-   tput "cnorm"
-   stty "$old_stty"
+# on remet l'état initial du terminal si l'utilisateur quitte normalement
+tput "rmcup"
+tput "cnorm"
+stty "$old_stty"
