@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# Tim Lamour & Jamel Bailleul
+
 . ./src/interface.sh
 
 # vérifie la présence d'un fichier de config
