@@ -1,0 +1,44 @@
+------------------------------------------ 2024-11-12 20:40:34 ------------------------------------------
+Memory     : Used 6775600 MB / Total 15094628 MB (Usage 44%)
+GPU        : Usage 0%
+GPU VRAM   : Used 930996224 MB / Total 1073741824 MB (Usage 85%)
+Disk       : Used 33G GB / Total 96G GB (Usage 34%)
+CPU        : Total 2%
+             Core 1 : 3% | Core 2 : 1% | Core 3 : 3% | Core 4 : 2% | Core 5 : 3% | Core 6 : 2% | 
+             Core 7 : 3% | Core 8 : 1% | Core 9 : 3% | Core 10 : 1% | Core 11 : 3% | Core 12 : 1% | 
+Network    : Download 51682405 Bytes | Download/S  Bytes/S | Upload 24679122 Bytes | Upload/S  Bytes/S
+
+
+------------------------------------------ 2024-11-12 20:40:35 ------------------------------------------
+Memory     : Used 6758396 MB / Total 15094628 MB (Usage 44%)
+GPU        : Usage 0%
+GPU VRAM   : Used 930996224 MB / Total 1073741824 MB (Usage 85%)
+Disk       : Used 33G GB / Total 96G GB (Usage 34%)
+CPU        : Total 2%
+             Core 1 : 3% | Core 2 : 1% | Core 3 : 3% | Core 4 : 2% | Core 5 : 3% | Core 6 : 2% | 
+             Core 7 : 3% | Core 8 : 1% | Core 9 : 3% | Core 10 : 1% | Core 11 : 3% | Core 12 : 1% | 
+Network    : Download 51683269 Bytes | Download/S  Bytes/S | Upload 24684140 Bytes | Upload/S  Bytes/S
+
+
+------------------------------------------ 2024-11-12 20:40:35 ------------------------------------------
+Memory     : Used 6753548 MB / Total 15094628 MB (Usage 44%)
+GPU        : Usage 0%
+GPU VRAM   : Used 930996224 MB / Total 1073741824 MB (Usage 85%)
+Disk       : Used 33G GB / Total 96G GB (Usage 34%)
+CPU        : Total 2%
+             Core 1 : 3% | Core 2 : 1% | Core 3 : 3% | Core 4 : 2% | Core 5 : 3% | Core 6 : 2% | 
+             Core 7 : 3% | Core 8 : 1% | Core 9 : 3% | Core 10 : 1% | Core 11 : 3% | Core 12 : 1% | 
+Network    : Download 51683600 Bytes | Download/S  Bytes/S | Upload 24684226 Bytes | Upload/S  Bytes/S
+
+
+------------------------------------------ 2024-11-12 20:40:36 ------------------------------------------
+Memory     : Used 6759836 MB / Total 15094628 MB (Usage 44%)
+GPU        : Usage 0%
+GPU VRAM   : Used 930996224 MB / Total 1073741824 MB (Usage 85%)
+Disk       : Used 33G GB / Total 96G GB (Usage 34%)
+CPU        : Total 2%
+             Core 1 : 3% | Core 2 : 1% | Core 3 : 3% | Core 4 : 2% | Core 5 : 3% | Core 6 : 2% | 
+             Core 7 : 3% | Core 8 : 1% | Core 9 : 3% | Core 10 : 1% | Core 11 : 3% | Core 12 : 1% | 
+Network    : Download 51683706 Bytes | Download/S  Bytes/S | Upload 24684441 Bytes | Upload/S  Bytes/S
+
+

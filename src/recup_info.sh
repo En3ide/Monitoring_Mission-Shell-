@@ -3,9 +3,9 @@
 # Affiche la mémoire libre, utilisé, libre, utilisé et le cache de la mémoire en kB.
 recup_mem() { # Tim Lamour
     # Vérifie le nombre de paramètres
-    test "$#" -ne 1 && echo "Un seul paramètre est requis. Utilisez 'total', 'available', 'free', 'cache', ou 'used'." && return 1
+    test "$#" -ne 1 && echo "Error : only one parameter is required. Usage : recup_mem ['total' | 'available' | 'free' | 'cache' | 'used']" && return 1
     # Vérifie si le fichier meminfo existe
-    test ! -f "/proc/meminfo" && echo "Le fichier meminfo n'existe pas" && return 2
+    test ! -f "/proc/meminfo" && echo "Error : file '/proc/meminfo' does not exist and is required." && return 2
 
     local param="$1" # Récupère le premier argument comme paramètre
 
@@ -32,7 +32,7 @@ recup_mem() { # Tim Lamour
             res=$((mem_total - mem_available)) 
             ;;
         *)
-            echo "Paramètre non reconnu. Utilisez 'total', 'available', 'free', 'cache', ou 'used'."
+            echo "Error : unknown parameter. Please, use 'total', 'available', 'free', 'cache', ou 'used'."
             return 1
             ;;
     esac
@@ -47,12 +47,12 @@ recup_nb_core_cpu() { # Tim Lamour
 # Renvoie les infos sur le cpu, usage : recup_cpu ['name' | 'cpu']
 recup_cpu() { # Tim Lamour
     # Vérifier le nombre de paramètres
-    test "$#" -ne 1 && echo "Usage : recup_cpu ['name' | 'cpu{0,1,n}']" && return 1
+    test "$#" -ne 1 && echo "Error : only one parameter is required. Usage : recup_cpu ['name' | 'cpu{0,1,..,n}']" && return 1
 
     # Si un seul paramètre, vérifier que c'est "name"
     if [ "$1" == "name" ]; then
         # Vérifier l'existence de /proc/cpuinfo et récupérer le nom du CPU
-        test ! -f /proc/cpuinfo && echo "Erreur : Le fichier /proc/cpuinfo n'existe pas" && return 2
+        test ! -f /proc/cpuinfo && echo "Error : file /proc/cpuinfo does not exist and is required." && return 2
 
         # On récupère le nom du cpu
         local cpu_name=$(grep "model name" /proc/cpuinfo | uniq | awk -F: '{print $2}' | sed 's/^ *//')
@@ -61,7 +61,7 @@ recup_cpu() { # Tim Lamour
 
     elif [[ "$1" =~ ^cpu([0-9]+)?$ ]]; then
         # Vérifier l'existence de /proc/stat pour récupérer les infos du CPU
-        test ! -f /proc/stat && echo "Erreur : Le fichier /proc/stat n'existe pas" && return 3
+        test ! -f /proc/stat && echo "Error : file /proc/stat does not exist and is required." && return 3
         
         local nb_core=$(nproc)  # on recupere le nombre de coeur du cpu
 
@@ -72,7 +72,7 @@ recup_cpu() { # Tim Lamour
         else
             # Vérifier que le numéro du coeur est valide
             if [ "$num" -gt "$nb_core" ] || [ "$num" -lt 1 ]; then
-                echo "Erreur : CPU $num inexistant. Nombre de cœurs : $nb_core."
+                echo "Error : CPU core n° $num does not exist. You currently have : $nb_core cores."
                 return 4
             fi
             num="cpu$((num - 1))" #Total du core num du CPU
@@ -103,7 +103,7 @@ recup_cpu() { # Tim Lamour
     fi
 
     # Message d'erreur si les paramètres sont incorrects
-    echo "Usage : recup_cpu ['name' | 'cpu{0,1,n}']"
+    echo "Error : unknow parameter. Usage : recup_cpu ['name' | 'cpu{0,1,n}']"
     return 4
 }
 
@@ -111,7 +111,7 @@ recup_cpu() { # Tim Lamour
 # Renvoie le pourcentage d'utilisation, l'utilisation et la VRAM total du GPU.
 recup_gpu() { # Tim Lamour
     # Vérifie s'il y a exactement un paramètre
-    test "$#" -ne 1 && echo "Un seul paramètre est requis. Utilisez 'percent', 'vramUsed', 'vramTotal'." && return 1
+    test "$#" -ne 1 && echo "Error : only one parameter is required. Usage : recup_gpu ['percent' | 'vramUsed' | 'vramTotal']" && return 1
 
     # On teste si les répertoires card0 ou card1 existent (card0 prioritaire)
     local path="/sys/class/drm/card"
@@ -120,6 +120,7 @@ recup_gpu() { # Tim Lamour
     elif [ -d "${path}1" ] && [ -f "${path}1/device/gpu_busy_percent" ]; then
         path="${path}1"
     else
+        echo "Error : neither ${path0}/device/gpu_busy_percent or ${path}1/device/gpu_busy_percent has been found and at least one of them is required."
         return 1
     fi
     # Si un répertoire a été trouvé
@@ -138,7 +139,7 @@ recup_gpu() { # Tim Lamour
             res=$(cat "${path}/device/mem_info_vram_total")  
             ;;
         *)
-            echo "Paramètre non reconnu. Utilisez 'percent', 'vramUsed' ou 'vramTotal'."
+            echo "Error : unknown parameter. Please, use 'percent', 'vramUsed' or 'vramTotal'."
             return 1
             ;;
     esac
@@ -155,7 +156,7 @@ recup_processus() { # Tim Lamour
 
 # Affiche les pourcentages d'utilisations, les noms, l'espace total ou les l'espace utilisé des partitions de disques (sous forme de liste)
 recup_disk() { # Tim Lamour
-    test "$#" -ne 1 && echo "Un seul paramètre est requis. Utilisez 'percent', 'name', 'total', 'used'." && exit 1
+    test "$#" -ne 1 && echo "Error : only one parameter is required. Usage, recup_disk ['percent' | 'name' | 'total' | 'used']" && exit 1
     local param="$1" # recupere le premier argument comme paramètre
 
     local info_disk=$(df -h .)
@@ -175,7 +176,7 @@ recup_disk() { # Tim Lamour
             res=$(echo "$info_disk" | awk 'NR==2 {print $3}')
             ;;
         *)
-            echo "Paramètre non reconnu. Utilisez 'percent', 'name', 'total', 'used'."
+            echo "Error : unknown parameter. Please, use 'percent', 'name', 'total', 'used'."
             return 1
             ;;
     esac
@@ -206,9 +207,9 @@ get_interface_name() { # Tim Lamour
 # Renvoie les bytes d'updload ou de download du réseau
 get_network() { # Tim Lamour & Jamel Bailleul
     # Vérifier le nombre de paramètres
-    test "$#" -ne 2 && echo "Usage : get_network [download | downloadPackets | downloadErr | upload | uploadPackets | uploadErr ] nom_interface_reseau" && return 1
+    test "$#" -ne 2 && echo "Error : 2 parameters are required. Usage : get_network [download | downloadPackets | downloadErr | upload | uploadPackets | uploadErr ] nom_interface_reseau" && return 1
     # Vérifier que le fichier /proc/net/dev existe
-    test ! -f /proc/net/dev && echo "Erreur : Le fichier /proc/net/dev n'existe pas" && return 2
+    test ! -f /proc/net/dev && echo "Error : file /proc/net/dev doest not exist and is required." && return 2
 
     local param="$1"
     local interface=$(grep "$2" /proc/net/dev)
@@ -234,7 +235,7 @@ get_network() { # Tim Lamour & Jamel Bailleul
             res=$(echo "$interface" | awk '{print $12}')
             ;;
         *)
-            echo "Paramètre non reconnu. Usage : get_network [download | downloadPackets | downloadErr | upload | uploadPackets | uploadErr ] nom_interface_reseau"
+            echo "Error : unknown parameter. Usage : get_network [download | downloadPackets | downloadErr | upload | uploadPackets | uploadErr] network_interface_name"
             return 1
             ;;
     esac

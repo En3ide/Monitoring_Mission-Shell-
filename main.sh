@@ -1,5 +1,5 @@
 #!/bin/bash
-. ./interface.sh
+. ./src/interface.sh
 
 # vérifie la présence d'un fichier de config
 if [ "$#" -eq 1 ]; then

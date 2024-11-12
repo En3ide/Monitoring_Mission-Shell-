@@ -1,10 +1,9 @@
 #!/bin/bash
 #pour les couleur tu peux aussi utiliser "\033[38;5<code couleurs>m" code en 256
-. ./recup_info.sh
-. ./update_log.sh
+. ./src/recup_info.sh
+. ./src/update_log.sh
 
 # Définir les valeurs par défaut
-os_default="ubuntu"
 
 bg_color="DARK_BLACK_BIS"
 font_color="DARK_WHITE"
@@ -31,7 +30,7 @@ empty_bar_char="unicode_light_shade"
 
 minimum_lines_width=30
 minimum_cols_height=70
-update_log_time=60
+update_log_time=1
 overwrite_log="true"
 
 # Couleurs sombres (Dark)
@@ -163,7 +162,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
 
         # Concatener dans le contenu à rajouter au logfile si demandé
         if [ "$logfile_enabled" == 1 ]; then
-            logfile_content="$logfile_content Memory => Used_memory : $used_memory'kb'      Total_memory : $max_memory'kb'      Usage : $percent%\n"
+            logfile_content="${logfile_content}Memory     : Used ${used_memory} MB / Total ${max_memory} MB (Usage ${percent}%)\n"
         fi
 
         # Afficher les informations de mémoire sous forme de texte
@@ -194,7 +193,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
 
         # Concatener dans le contenu à rajouter au logfile si demandé
         if [ "$logfile_enabled" == 1 ]; then
-            logfile_content="$logfile_content GPU => usage : $percent%\n"
+            logfile_content="${logfile_content}GPU        : Usage ${percent}%\n"
         fi
 
         # Afficher l'en-tête de la section GPU
@@ -225,7 +224,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
 
         # Concatener dans le contenu à rajouter au logfile si demandé
         if [ "$logfile_enabled" == 1 ]; then
-            logfile_content="$logfile_content GPU VRAM => Used_memory : $used_vram_gpu'Kb'      Total_memory : $max_vram_gpu'Kb'      Usage : $percent%\n"
+            logfile_content="${logfile_content}GPU VRAM   : Used ${used_vram_gpu} MB / Total ${max_vram_gpu} MB (Usage ${percent}%)\n"
         fi
 
         # Afficher l'en-tête de la section GPU
@@ -256,7 +255,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
 
         # Concatener dans le contenu à rajouter au logfile si demandé
         if [ "$logfile_enabled" == 1 ]; then
-            logfile_content="$logfile_content Disk => Used_disk : $used_disk'Mo'      Total_disk : $max_disk'Mo'      Usage : $percent%\n"
+            logfile_content="${logfile_content}Disk       : Used ${used_disk} GB / Total ${max_disk} GB (Usage ${percent}%)\n"
         fi
 
         # Afficher les informations de disque sous forme de texte
@@ -288,7 +287,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
 
         # Concatener dans le contenu à rajouter au logfile si demandé
         if [ "$logfile_enabled" == 1 ]; then
-            logfile_content="$logfile_content CPU => Usage : $percent%\n"
+            logfile_content="${logfile_content}CPU        : Total ${percent}%\n             "
         fi
 
         # Afficher le nom du CPU avec une longueur limitée par la largeur disponible
@@ -298,6 +297,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
         print_bar "${!bg_color}${!full_cpu_bar_color}" "$y" "$3" "$(( x + 1 ))" "$percent" "${empty_cpu_bar_color}"
     fi
 
+    # CPU CORE (%)
     local used_cpu=$(recup_cpu "cpu1" 2>/dev/null)
     if [[ -n "$used_cpu" && $(tput lines) > 20 ]]; then
         local position_tmp="$position"
@@ -305,6 +305,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
         local nb_core=$(recup_nb_core_cpu)
         local espace=1
         if [[ $(( $1 + (3 * (( $nb_core / 2 ) + $position )))) < $(tput lines) ]]; then
+            local count=0
             for (( j=1; j <= nb_core ; j++ )); do
                 if [[ $j == $((( $nb_core / 2 ) + 1 )) ]]; then
                     local i=2
@@ -328,7 +329,12 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
                     
                     # Concatener dans le contenu à rajouter au logfile si demandé
                     if [ "$logfile_enabled" == 1 ]; then
-                        logfile_content="$logfile_content CORE ${j} => Usage : $percent%\n"
+                        logfile_content="${logfile_content}Core $j : ${percent}% | "
+                        count=$((count + 1))
+                        if [[ "$count" -ge 6 && "$j" -ne "$nb_core" ]]; then
+                            logfile_content="${logfile_content}\n             "
+                            count=0
+                        fi
                     fi
 
                     # Afficher le nom du CPU avec une longueur limitée par la largeur disponible
@@ -343,6 +349,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
         fi
     fi
 
+    logfile_content="${logfile_content}\n"
     # Net
     local inter_name=$(get_interface_name 2>/dev/null)
     if [[ -n "$inter_name" && $(tput lines) > $(( $1 + (3 * position) + 9 )) ]]; then
@@ -357,9 +364,9 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
         for ((i=0; i < $3 ; i++)); do
             echo -en "${!bg_color}${!border_color}${!border_char}${reset}"
         done
-        nb_inter=$( echo $inter_name | awk '{print NF}')
+        local nb_inter=$( echo $inter_name | awk '{print NF}')
         for (( i=1 ; i <= $nb_inter ; i++)); do
-            name=$(echo $inter_name | awk -v var="$variable" '{print var, $1}')
+            local name=$(echo $inter_name | awk -v var="$variable" '{print var, $1}')
             # Calcul de la position pour afficher les informations de reseaux
             x=$(( $1 + (3 * position) - 2 ))  # Position en ligne ajustée selon la position actuelle
             y="$2"  # Position en colonne reçue en argument
@@ -368,12 +375,12 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
             position=$(( position + 1 ))
             
             # Calculer le pourcentage
-            download=$(get_network "download" $name)
-            upload=$(get_network "upload" $name)
+            local download=$(get_network "download" $name)
+            local upload=$(get_network "upload" $name)
 
             # Concatener dans le contenu à rajouter au logfile si demandé
             if [ "$logfile_enabled" == 1 ]; then
-                logfile_content="$logfile_content $name => Download : $download Bytes | Download/S : $download_s Bytes/S | Upload = $upload Bytes | Upload/S : $upload_s Bytes/S\n"
+                logfile_content="${logfile_content}Network    : Download ${download} Bytes | Download/S ${download_s} Bytes/S | Upload ${upload} Bytes | Upload/S ${upload_s} Bytes/S\n"
             fi
 
             # Placer le curseur aux coordonnées (x, y) pour l'affichage
@@ -391,6 +398,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
             echo -en "${!bg_color}${!font_color}Speed Download/s : ${download_s} Bytes/s${reset}"
             printf "\33[%d;%dH" "$(($x + 3))" "$y"
             echo -en "${!bg_color}${!font_color}Net Error Download : ${reset}"
+
             # Calculer le pourcentage
             percent=$(calculate_percent $(get_network "downloadErr" $name) $(get_network "downloadPackets" $name))
             print_bar "${!bg_color}${!full_net_bar_color}" "$y" "$(($fin_bar - $espace))" "$(( x + 4 ))" "$percent" "${empty_net_bar_color}"
@@ -398,6 +406,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
             echo -en "${!bg_color}${!font_color}Upload total : ${upload:0:$(( $3 - 7 ))} Bytes${reset}"
             printf "\33[%d;%dH" "$(($x + 6))" "$y"
             echo -en "${!bg_color}${!font_color}Upload/s : ${upload_s} Bytes/s${reset}"
+
             # Calculer le pourcentage
             printf "\33[%d;%dH" "$(($x + 7))" "$y"
             echo -en "${!bg_color}${!font_color}Net Error Upload : ${reset}"
@@ -410,7 +419,6 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
     if [ "$logfile_enabled" == 1 ]; then
         write_in_logfile "$logfile_content"
     fi
-    
 }
 
 info_scinder() { # Jamel Bailleul
@@ -502,18 +510,17 @@ config_file() {  # Jamel Bailleul
             # Supprime les espaces inutiles autour
             cle=$(echo "$cle" | xargs)
             valeur=$(echo "$valeur" | xargs)
-            echo $cle >> test.txt
-            echo $valeur >> test.txt
+
             # Ignore ligne vide et commentaire
             if [[ -z "$cle" || "$cle" == \#* ]]; then
                 continue
             fi
 
             if [ -z "$cle" ]; then
-                echo "Erreur de syntaxe le configfile : variable non reconnue." >&2
+                echo "Syntax error in config file : unknown variable." >&2
                 exit 2
             elif [ -z "$valeur" ]; then
-                echo "Erreur de syntaxe le configfile : valeur de variable reconnue." >&2
+                echo "Syntax error in config file : unknown variable value." >&2
                 exit 3
             else
                 export "$cle=$valeur" # Exporter chaque clé comme une variable d'environnement

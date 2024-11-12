@@ -1,8 +1,0 @@
-- tput cols : permet de recupérer le nombre colonne d'un shell
-- tput lines : permet de recup le nombre de lignes d'un shell
-
-- uniq : permet de retirer les lignes doublons
-- awk '{print $n}' : permet de print le nieme mot de la ligne (séparé par espace)
-- awk -F@ '{print $n}' : permet de print le nieme mot de la ligne (sépare par le caractere @)
-- ps aux : affiche les processus en cours
-- df -h : liste des partitions avec infos total et infos utilisés

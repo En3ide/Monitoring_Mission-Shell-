@@ -1,5 +1,3 @@
-os_default=ubuntu
-
 bg_color=DARK_BLACK_BIS
 font_color=DARK_WHITE
 border_color=DARK_RED
