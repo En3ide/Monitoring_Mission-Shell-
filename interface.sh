@@ -6,17 +6,17 @@
 # Définir les valeurs par défaut
 os_default="ubuntu"
 
-bg_color="DARK_BLACK"
-font_color="DARK_RED"
-border_color="DARK_BLUE"
-font_processus_color="BRIGHT_WHITE"
+bg_color="DARK_BLACK_BIS"
+font_color="DARK_WHITE"
+border_color="BRIGHT_MAGENTA"
+font_processus_color="DARK_WHITE"
 
-full_net_bar_color="DARK_RED"
-full_cpu_bar_color="DARK_GREEN"
-full_core_bar_color="DARK_GREEN"
+full_net_bar_color="DARK_BLUE"
+full_cpu_bar_color="DARK_BLUE"
+full_core_bar_color="BRIGHT_BLUE"
 full_gpu_bar_color="DARK_GREEN"
 full_memory_bar_color="DARK_GREEN"
-full_disk_bar_color="DARK_BLUE"
+full_disk_bar_color="DARK_RED"
 
 empty_net_bar_color="DARK_WHITE"
 empty_cpu_bar_color="DARK_WHITE"
@@ -32,7 +32,7 @@ empty_bar_char="unicode_light_shade"
 minimum_lines_width=30
 minimum_cols_height=70
 update_log_time=60
-overwrite_log=true
+overwrite_log="true"
 
 # Couleurs sombres (Dark)
 DARK_BLACK='\033[0;30m'      # Noir foncé
@@ -523,14 +523,6 @@ config_file() {  # Jamel Bailleul
     else
         echo "Le fichier '$fichier' n'existe pas." >&2
         exit 1
-    fi
-}
-
-install_bc_if_not_installed() {  # Jamel Bailleul
-    if ! command -v bc &> /dev/null; then # Vérifie si bc est installé
-        # Installation de bc
-        sudo "apt" "update" -y > /dev/null 2>&1
-        sudo "apt" "install" -y bc > /dev/null 2>&1
     fi
 }
 

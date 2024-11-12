@@ -12,7 +12,6 @@ create_logfile() { # Tim Lamour
       touch "logfile.txt"
       chmod 644 "logfile.txt"
    fi
-
 }
 
 # Ecrire ce qui donné en paramètre dans le log file
@@ -34,5 +33,4 @@ calculate_percent() { # Jamel Bailleul
    else
       echo $(($var1 * 99 / $var2))
    fi
-   
 }

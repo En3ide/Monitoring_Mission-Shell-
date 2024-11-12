@@ -31,11 +31,11 @@ border_color=DARK_BLUE
 font_processus_color=BRIGHT_WHITE
 ```
 
-Veuillez vous référer aux tableaux ci-dessous pour consulter les variables possibles ainsi que leurs valeurs.
+Veuillez-vous référer aux tableaux ci-dessous pour consulter les variables possibles ainsi que leurs valeurs.
 
 
 ####  Variables configurables avec une [couleur](#couleurs-disponibles-) :
-| Nom de la variable     | Signification                                       | Valeur par défaut ([couleurs](#couleurs-disponibles-)) |
+| Nom de la variable     | Signification                                       | Valeur par défaut ([couleurs](#couleurs-disponibles-))             |
 |------------------------|-----------------------------------------------------|--------------------------------------------------------------------|
 | bg_color               | Couleur de fond de l'interface                      | `DARK_BLACK`                                                       |
 | font_color             | Couleur de la police principale                     | `DARK_RED`                                                         |
@@ -53,7 +53,7 @@ Veuillez vous référer aux tableaux ci-dessous pour consulter les variables pos
 
 ####  Variables configurables avec un [caractère UNICODE](#caractères-unicode-disponibles-) :
 
-| Nom de la variable     | Signification                                         | Valeur par défaut ([caractère UNICODE](#caractères-unicode-disponibles-)) |
+| Nom de la variable     | Signification                                         | Valeur par défaut ([caractère UNICODE](#caractères-unicode-disponibles-))   |
 |------------------------|-------------------------------------------------------|-----------------------------------------------------------------------------|
 | border_char            | Caractère représentant les bordures des fenêtres      | `unicode_full_block`                                                        |
 | full_bar_char          | Caractère représentant la barre de progression pleine | `unicode_dark_shade`                                                        |

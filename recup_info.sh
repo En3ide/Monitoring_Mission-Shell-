@@ -234,7 +234,7 @@ get_network() { # Tim Lamour & Jamel Bailleul
             res=$(echo "$interface" | awk '{print $12}')
             ;;
         *)
-            echo "Paramètre non reconnu. Utilisez 'download' ou 'upload'."
+            echo "Paramètre non reconnu. Usage : get_network [download | downloadPackets | downloadErr | upload | uploadPackets | uploadErr ] nom_interface_reseau"
             return 1
             ;;
     esac
