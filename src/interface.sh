@@ -145,25 +145,28 @@ read_config_file() {  # Jamel Bailleul & Tim Lamour
                 exit 3
             fi
 
-            # Vérifier la clé est correcte
+            # Vérifier que la clé est correcte (vérifier la portée de la clé)
             if [[ -z "${!cle}" ]]; then
                 echo "Syntax error with '$saved_cle=$saved_valeur' in config file : unknown variable." >&2
                 exit 4
             fi
 
             case "$cle" in 
+                # Gestion des variables entier
                 "minimum_lines_width"|"minimum_cols_height"|"update_log_time")
                     if ! [[ "$valeur" =~ ^[0-9]+$ ]] || [[ "$valeur" -le 0 ]]; then
                     echo "Syntax error with '$saved_cle=$saved_valeur' in config file : need to be a positive number." >&2
                     exit 6
                     fi
                     ;;
+                # Gestion des variables boolens
                 "overwrite_log")
                     if [[ "$valeur" != "true" && "$valeur" != "false" ]]; then
                         echo "Syntax error with '$saved_cle=$saved_valeur' in config file : need to be true or false." >&2
                         exit 7
                     fi
                     ;;
+                # Gestion des variables prédéfinis en valeur (vérifier la portée de la valeur)
                 *_color|*_char)
                     if [[ "$cle" == "bg_color" ]]; then
                         valeur="BG_$valeur"
