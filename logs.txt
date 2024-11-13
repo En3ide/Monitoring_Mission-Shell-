@@ -1,9 +1,0 @@
------------------------------------------- 2024-11-13 11:27:03 ------------------------------------------
-Memory     : Used 4432648 MB / Total 15094620 MB (Usage 29%)
-GPU        : Usage 99%
-GPU VRAM   : Used 882753536 MB / Total 1073741824 MB (Usage 81%)
-Disk       : Used 33G GB / Total 96G GB (Usage 34%)
-CPU        : Total 3%
-             
-
-

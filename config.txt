@@ -1,6 +1,5 @@
 bg_color=WHITE
 
-# FONT
 font_color=BLACK
 border_color=BLACK
 font_processus_color=BRIGHT_BLACK

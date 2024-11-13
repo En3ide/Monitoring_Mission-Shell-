@@ -136,38 +136,49 @@ read_config_file() {  # Jamel Bailleul & Tim Lamour
                 continue
             fi
 
-            # Gérer les couleurs
-            if [[ ${#cle} -gt 6 && "${cle: -6}" == "_color" ]]; then
-                if [[ "$cle" == "bg_color" ]]; then
-                    valeur="BG_$valeur"
-                else 
-                    valeur="FONT_$valeur"
-                fi
-
-            # Gérer les variables d'entier
-            elif [[ "$cle" == "minimum_lines_width" || "$cle" == "minimum_cols_height" || "$cle" == "update_log_time" ]]; then
-                if ! [[ "$valeur" =~ ^[0-9]+$ ]] || [[ "$valeur" -le 0 ]]; then
-                    echo "Syntax error with '$saved_cle=$saved_valeur' in config file : need to be a positive number." >&2
-                    exit 2
-                fi
-
-            # Gérer les variables booléennes
-            elif [[ "$cle" == "overwrite_log" ]]; then
-                if [[ "$valeur" != "true" && "$valeur" != "false" ]]; then
-                    echo "Syntax error with '$saved_cle=$saved_valeur' in config file : need to be true or false." >&2
-                    exit 3
-                fi
-
-            # Gérer les variables prédéfinies
-            elif [[ -z "${!cle}" ]]; then
-                echo "Syntax error with '$saved_cle=$saved_valeur' in config file : unknown variable." >&2
-                exit 4
-            elif [[ -z "${!valeur}" ]]; then
-                echo "Syntax error with '$saved_cle=$saved_valeur' in config file : unknown variable value." >&2
-                exit 5
+            # Vérifier qu'une clé et une valeur ont bien été lu
+            if [ -z "$cle" ]; then
+                echo "Syntax error with '$saved_cle' in config file : no affection." >&2
+                exit 2
+            elif [ -z "$valeur" ]; then
+                echo "Syntax error with '$saved_cle' in config file : no value." >&2
+                exit 3
             fi
 
-            export "$cle=$valeur" # Exporter chaque clé comme une variable d'environnement
+            # Vérifier la clé est correcte
+            if [[ -z "${!cle}" ]]; then
+                echo "Syntax error with '$saved_cle=$saved_valeur' in config file : unknown variable." >&2
+                exit 4
+            fi
+
+            case "$cle" in 
+                "minimum_lines_width"|"minimum_cols_height"|"update_log_time")
+                    if ! [[ "$valeur" =~ ^[0-9]+$ ]] || [[ "$valeur" -le 0 ]]; then
+                    echo "Syntax error with '$saved_cle=$saved_valeur' in config file : need to be a positive number." >&2
+                    exit 6
+                    fi
+                    ;;
+                "overwrite_log")
+                    if [[ "$valeur" != "true" && "$valeur" != "false" ]]; then
+                        echo "Syntax error with '$saved_cle=$saved_valeur' in config file : need to be true or false." >&2
+                        exit 7
+                    fi
+                    ;;
+                *_color|*_char)
+                    if [[ "$cle" == "bg_color" ]]; then
+                        valeur="BG_$valeur"
+                    else 
+                        valeur="FONT_$valeur"
+                    fi
+
+                    if [[ -z "${!valeur}" ]]; then
+                        echo "Syntax error with '$saved_cle=$saved_valeur' in config file : unknown variable value." >&2
+                        exit 5
+                    fi
+                    ;;
+            esac
+
+            export "$cle=$valeur"
         done < "$fichier"
     else
         echo "Le fichier '$fichier' n'existe pas." >&2
