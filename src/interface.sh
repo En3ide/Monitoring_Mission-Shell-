@@ -5,29 +5,38 @@
 
 # Définir les valeurs par défaut
 
-bg_color="DEFAULT_COLOR"
-font_color="DARK_WHITE"
-border_color="BRIGHT_MAGENTA"
-font_processus_color="DARK_WHITE"
+# bg
+bg_color="BG_BLACK"
 
-full_net_bar_color="DARK_BLUE"
-full_cpu_bar_color="DARK_BLUE"
-full_core_bar_color="BRIGHT_BLUE"
-full_gpu_bar_color="DARK_GREEN"
-full_memory_bar_color="DARK_GREEN"
-full_disk_bar_color="DARK_RED"
+# FONT
+font_color="FONT_WHITE"
+border_color="FONT_BRIGHT_MAGENTA"
+font_processus_color="FONT_WHITE"
 
-empty_net_bar_color="DARK_WHITE"
-empty_cpu_bar_color="DARK_WHITE"
-empty_core_bar_color="DARK_WHITE"
-empty_gpu_bar_color="DARK_WHITE"
-empty_memory_bar_color="DARK_WHITE"
-empty_disk_bar_color="DARK_WHITE"
+full_memory_bar_color="FONT_GREEN"
+empty_memory_bar_color="FONT_WHITE"
 
+full_gpu_bar_color="FONT_CYAN"
+empty_gpu_bar_color="FONT_WHITE"
+
+full_disk_bar_color="FONT_RED"
+empty_disk_bar_color="FONT_WHITE"
+
+full_cpu_bar_color="FONT_BLUE"
+empty_cpu_bar_color="FONT_WHITE"
+
+full_core_bar_color="FONT_BRIGHT_BLUE"
+empty_core_bar_color="FONT_WHITE"
+
+full_net_bar_color="FONT_YELLOW"
+empty_net_bar_color="FONT_WHITE"
+
+# CARACTERE
 border_char="unicode_full_block"
 full_bar_char="unicode_dark_shade"
 empty_bar_char="unicode_light_shade"
 
+# OTHERS
 minimum_lines_width=30
 minimum_cols_height=70
 update_log_time=1
@@ -62,7 +71,6 @@ FONT_BLUE="\033[34m"
 FONT_MAGENTA="\033[35m"
 FONT_CYAN="\033[36m"
 FONT_WHITE="\033[37m"
-FONT_RESET="\033[0m"
 
 # Variables pour les couleurs claires (bright foreground)
 FONT_BRIGHT_BLACK="\033[90m"
@@ -104,6 +112,63 @@ generate_random() {  # Jamel Bailleul
     local random_number=$((RANDOM % range + min))
 
     echo "$random_number"
+}
+
+read_config_file() {  # Jamel Bailleul & Tim Lamour
+    local fichier="$1"
+    # Vérifie si le fichier existe
+    if [ -f "$fichier" ]; then 
+        while IFS='=' read -r cle valeur; do # Boucle pour lire chaque ligne du fichier
+
+            # Supprime les espaces inutiles autour
+            cle=$(echo "$cle" | xargs)
+            valeur=$(echo "$valeur" | xargs)
+
+            saved_cle="$cle"
+            saved_valeur="$valeur"
+
+            # Ignore ligne vide et commentaire
+            if [[ -z "$cle" || "$cle" == \#* ]]; then
+                continue
+            fi
+
+            # Gérer les couleurs
+            if [[ ${#cle} -gt 6 && "${cle: -6}" == "_color" ]]; then
+                if [[ "$cle" == "bg_color" ]]; then
+                    valeur="BG_$valeur"
+                else 
+                    valeur="FONT_$valeur"
+                fi
+
+            # Gérer les variables d'entier
+            elif [[ "$cle" == "minimum_lines_width" || "$cle" == "minimum_cols_height" || "$cle" == "update_log_time" ]]; then
+                if ! [[ "$valeur" =~ ^[0-9]+$ ]] || [[ "$valeur" -le 0 ]]; then
+                    echo "Syntax error with '$saved_cle=$saved_valeur' in config file : need to be a positive number." >&2
+                    exit 2
+                fi
+
+            # Gérer les variables booléennes
+            elif [[ "$cle" == "overwrite_log" ]]; then
+                if [[ "$valeur" != "true" && "$valeur" != "false" ]]; then
+                    echo "Syntax error with '$saved_cle=$saved_valeur' in config file : need to be true or false." >&2
+                    exit 3
+                fi
+
+            # Gérer les variables prédéfinies
+            elif [[ -z "${!cle}" ]]; then
+                echo "Syntax error with '$saved_cle=$saved_valeur' in config file : unknown variable." >&2
+                exit 4
+            elif [[ -z "${!valeur}" ]]; then
+                echo "Syntax error with '$saved_cle=$saved_valeur' in config file : unknown variable value." >&2
+                exit 5
+            fi
+
+            export "$cle=$valeur" # Exporter chaque clé comme une variable d'environnement
+        done < "$fichier"
+    else
+        echo "Le fichier '$fichier' n'existe pas." >&2
+        exit 1
+    fi
 }
 
 clear_screen() { # Jamel Bailleul
@@ -399,7 +464,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
             printf "\33[%d;%dH" "$(($x + 2))" "$y"
             echo -en "${!bg_color}${!font_color}Speed Download/s : ${download_s} Bytes/s${reset}"
             printf "\33[%d;%dH" "$(($x + 3))" "$y"
-            echo -en "${!bg_color}${!font_color}Net Error Download : ${reset}"
+            echo -en "${!bg_color}${!font_color}Download Errors : ${reset}"
 
             # Calculer le pourcentage
             percent=$(calculate_percent $(recup_network "downloadErr" $name) $(recup_network "downloadPackets" $name))
@@ -411,7 +476,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
 
             # Calculer le pourcentage
             printf "\33[%d;%dH" "$(($x + 7))" "$y"
-            echo -en "${!bg_color}${!font_color}Net Error Upload : ${reset}"
+            echo -en "${!bg_color}${!font_color}Upload Errors : ${reset}"
             percent=$(calculate_percent $(recup_network "downloadErr" $name) $(recup_network "downloadPackets" $name))
             print_bar "${!bg_color}${!full_net_bar_color}" "$y" "$(($fin_bar - $espace))" "$(( x + 8 ))" "$percent" "${empty_net_bar_color}"
         done
@@ -504,36 +569,4 @@ print_bar() { # Jamel Bailleul
         percent="${percent}% "
     fi
     echo -en "${!bg_color}${!font_color}$res${!bg_color}${!font_color}$percent${reset}"
-}
-
-read_config_file() {  # Jamel Bailleul
-    local fichier="$1"
-
-    # Vérifie si le fichier existe
-    if [ -f "$fichier" ]; then 
-        while IFS='=' read -r cle valeur; do # Boucle pour lire chaque ligne du fichier
-
-            # Supprime les espaces inutiles autour
-            cle=$(echo "$cle" | xargs)
-            valeur=$(echo "$valeur" | xargs)
-
-            # Ignore ligne vide et commentaire
-            if [[ -z "$cle" || "$cle" == \#* ]]; then
-                continue
-            fi
-
-            if [ -z "$cle" ]; then
-                echo "Syntax error in config file : unknown variable." >&2
-                exit 2
-            elif [ -z "$valeur" ]; then
-                echo "Syntax error in config file : unknown variable value." >&2
-                exit 3
-            else
-                export "$cle=$valeur" # Exporter chaque clé comme une variable d'environnement
-            fi
-        done < "$fichier"
-    else
-        echo "Le fichier '$fichier' n'existe pas." >&2
-        exit 1
-    fi
 }

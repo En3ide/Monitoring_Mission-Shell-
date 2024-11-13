@@ -1,28 +1,26 @@
-bg_color=DARK_BLACK_BIS
-font_color=DARK_WHITE
+bg_color=WHITE
 
-border_color=BRIGHT_MAGENTA
-font_processus_color=DARK_WHITE
+# FONT
+font_color=BLACK
+border_color=BLACK
+font_processus_color=BRIGHT_BLACK
 
-full_net_bar_color=DARK_BLUE
-full_cpu_bar_color=DARK_BLUE
+full_net_bar_color=BLUE
+empty_net_bar_color=BRIGHT_WHITE
+
+full_cpu_bar_color=BLUE
+empty_cpu_bar_color=BRIGHT_WHITE
+
 full_core_bar_color=BRIGHT_BLUE
-full_gpu_bar_color=DARK_GREEN
-full_memory_bar_color=DARK_GREEN
-full_disk_bar_color=DARK_RED
+empty_core_bar_color=BRIGHT_WHITE
 
-empty_net_bar_color=DARK_WHITE
-empty_cpu_bar_color=DARK_WHITE
-empty_core_bar_color=DARK_WHITE
-empty_gpu_bar_color=DARK_WHITE
-empty_memory_bar_color=DARK_WHITE
-empty_disk_bar_color=DARK_WHITE
+full_gpu_bar_color=GREEN
+empty_gpu_bar_color=BRIGHT_WHITE
 
-border_char=unicode_full_block
-full_bar_char=unicode_dark_shade
-empty_bar_char=unicode_light_shade
+full_memory_bar_color=BLACK
+empty_memory_bar_color=BRIGHT_WHITE
 
-minimum_lines_width=30
-minimum_cols_height=70
-update_log_time=1
-overwrite_log=true
+full_disk_bar_color=RED
+empty_disk_bar_color=BRIGHT_WHITE
+
+update_log_time=60

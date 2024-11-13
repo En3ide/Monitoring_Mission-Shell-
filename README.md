@@ -30,35 +30,38 @@ font_color=DARK_RED
 border_color=DARK_BLUE
 font_processus_color=BRIGHT_WHITE
 border_char=unicode_full_block
+overwrite_log=true
 ```
 
 Veuillez vous référer aux tableaux ci-dessous pour consulter les variables possibles ainsi que leurs valeurs.
 
 
 ####  Variables configurables avec une [couleur](#couleurs-disponibles-) :
-| Nom de la variable     | Signification                                       | Valeur par défaut ([couleurs](#couleurs-disponibles-))             |
-|------------------------|-----------------------------------------------------|--------------------------------------------------------------------|
-| bg_color               | Couleur de fond de l'interface                      | `DARK_BLACK`                                                       |
-| font_color             | Couleur de la police principale                     | `DARK_RED`                                                         |
-| border_color           | Couleur de la bordure                               | `DARK_BLUE`                                                        |
-| font_processus_color   | Couleur de la police pour les processus affichés    | `BRIGHT_WHITE`                                                     |
-| full_cpu_bar_color     | Couleur de la barre de progression CPU (pleine)     | `DARK_YELLOW`                                                      |
-| full_gpu_bar_color     | Couleur de la barre de progression GPU (pleine)     | `DARK_GREEN`                                                       |
-| full_memory_bar_color  | Couleur de la barre de progression mémoire (pleine) | `DARK_MAGENTA`                                                     |
-| full_disk_bar_color    | Couleur de la barre de progression disque (pleine)  | `DARK_BLUE`                                                        |
-| empty_cpu_bar_color    | Couleur de la barre de progression CPU (vide)       | `BRIGHT_YELLOW`                                                    |
-| empty_gpu_bar_color    | Couleur de la barre de progression GPU (vide)       | `BRIGHT_GREEN`                                                     |
-| empty_memory_bar_color | Couleur de la barre de progression mémoire (vide)   | `BRIGHT_MAGENTA`                                                   |
-| empty_disk_bar_color   | Couleur de la barre de progression disque (vide)    | `BRIGHT_BLUE`                                                      |
+| Nom de la variable     | Signification                                          | Valeur par défaut ([couleurs](#couleurs-disponibles-)) |
+|------------------------|--------------------------------------------------------|--------------------------------------------------------|
+| bg_color               | Couleur de fond de l'interface                         | `BLACK`                                                |
+| font_color             | Couleur de la police principale                        | `WHITE`                                                |
+| border_color           | Couleur de la bordure                                  | `MAGENTA`                                              |
+| font_processus_color   | Couleur de la police pour les processus affichés       | `BRIGHT_WHITE`                                         |
+| full_cpu_bar_color     | Couleur de la barre de progression CPU (pleine)        | `BLUE`                                                 |
+| full_core_bar_color    | Couleur de la barre de progression coeurs CPU (pleine) | `BRIGHT_BLUE`                                          |
+| full_gpu_bar_color     | Couleur de la barre de progression GPU (pleine)        | `CYAN`                                                 |
+| full_memory_bar_color  | Couleur de la barre de progression mémoire (pleine)    | `GREEN`                                                |
+| full_disk_bar_color    | Couleur de la barre de progression disque (pleine)     | `RED`                                                  |
+| empty_cpu_bar_color    | Couleur de la barre de progression CPU (vide)          | `WHITE`                                                |
+| empty_core_bar_color   | Couleur de la barre de progression coeurs CPU (vide)   | `WHITE`                                                |
+| empty_gpu_bar_color    | Couleur de la barre de progression GPU (vide)          | `WHITE`                                                |
+| empty_memory_bar_color | Couleur de la barre de progression mémoire (vide)      | `WHITE`                                                |
+| empty_disk_bar_color   | Couleur de la barre de progression disque (vide)       | `WHITE`                                                |
 
 
 ####  Variables configurables avec un [caractère UNICODE](#caractères-unicode-disponibles-) :
 
-| Nom de la variable     | Signification                                         | Valeur par défaut ([caractère UNICODE](#caractères-unicode-disponibles-))   |
-|------------------------|-------------------------------------------------------|-----------------------------------------------------------------------------|
-| border_char            | Caractère représentant les bordures des fenêtres      | `unicode_full_block`                                                        |
-| full_bar_char          | Caractère représentant la barre de progression pleine | `unicode_dark_shade`                                                        |
-| empty_bar_char         | Caractère représentant la barre de progression vide   | `unicode_light_shade`                                                       |
+| Nom de la variable     | Signification                                         | Valeur par défaut ([caractère UNICODE](#caractères-unicode-disponibles-)) |
+|------------------------|-------------------------------------------------------|---------------------------------------------------------------------------|
+| border_char            | Caractère représentant les bordures des fenêtres      | `unicode_full_block`                                                      |
+| full_bar_char          | Caractère représentant la barre de progression pleine | `unicode_dark_shade`                                                      |
+| empty_bar_char         | Caractère représentant la barre de progression vide   | `unicode_light_shade`                                                     |
 
 
 ####  Autres variables configurables :
@@ -74,40 +77,24 @@ Veuillez vous référer aux tableaux ci-dessous pour consulter les variables pos
 
 #### Couleurs disponibles :
 
-| Nom de la couleur        | Code hexadécimal |  Signification            |
-|--------------------------|------------------|---------------------------|
-| DARK_BLACK               | `#000000`        | Noir foncé                |
-| DARK_RED                 | `#800000`        | Rouge foncé               |
-| DARK_GREEN               | `#008000`        | Vert foncé                |
-| DARK_YELLOW              | `#808000`        | Jaune foncé               |
-| DARK_BLUE                | `#000080`        | Bleu foncé                |
-| DARK_MAGENTA             | `#800080`        | Magenta foncé             |
-| DARK_CYAN                | `#008080`        | Cyan foncé                |
-| DARK_WHITE               | `#C0C0C0`        | Blanc/gris foncé          |
-| BRIGHT_BLACK             | `#808080`        | Noir clair (gris foncé)   |
-| BRIGHT_RED               | `#FF0000`        | Rouge clair               |
-| BRIGHT_GREEN             | `#00FF00`        | Vert clair                |
-| BRIGHT_YELLOW            | `#FFFF00`        | Jaune clair               |
-| BRIGHT_BLUE              | `#0000FF`        | Bleu clair                |
-| BRIGHT_MAGENTA           | `#FF00FF`        | Magenta clair             |
-| BRIGHT_CYAN              | `#00FFFF`        | Cyan clair                |
-| BRIGHT_WHITE             | `#FFFFFF`        | Blanc/gris clair          |
-| BRIGHT_BLACK_BIS         | `#555555`        | Noir clair bis            |
-| BRIGHT_RED_BIS           | `#FF5555`        | Rouge clair bis           |
-| BRIGHT_GREEN_BIS         | `#55FF55`        | Vert clair bis            |
-| BRIGHT_YELLOW_BIS        | `#FFFF55`        | Jaune clair bis           |
-| BRIGHT_BLUE_BIS          | `#5555FF`        | Bleu clair bis            |
-| BRIGHT_MAGENTA_BIS       | `#FF55FF`        | Magenta clair bis         |
-| BRIGHT_CYAN_BIS          | `#55FFFF`        | Cyan clair bis            |
-| BRIGHT_WHITE_BIS         | `#E5E5E5`        | Blanc/gris clair bis      |
-| DARK_BLACK_BIS           | `#800000`        | Rouge foncé bis           |
-| DARK_RED_BIS             | `#800000`        | Rouge foncé bis           |
-| DARK_GREEN_BIS           | `#008000`        | Vert foncé bis            |
-| DARK_YELLOW_BIS          | `#808000`        | Jaune foncé bis           |
-| DARK_BLUE_BIS            | `#000080`        | Bleu foncé bis            |
-| DARK_MAGENTA_BIS         | `#800080`        | Magenta foncé bis         |
-| DARK_CYAN_BIS            | `#008080`        | Cyan foncé bis            |
-| DARK_WHITE_BIS           | `#C0C0C0`        | Blanc/gris foncé          |
+| Nom de la couleur     | Code hexadécimal | Signification             |
+|-----------------------|------------------|---------------------------|
+| BLACK                 | `#000000`        | Noir                      |
+| RED                   | `#800000`        | Rouge                     |
+| GREEN                 | `#008000`        | Vert                      |
+| YELLOW                | `#808000`        | Jaune                     |
+| BLUE                  | `#000080`        | Bleu                      |
+| MAGENTA               | `#800080`        | Magenta                   |
+| CYAN                  | `#008080`        | Cyan                      |
+| WHITE                 | `#C0C0C0`        | Blanc/gris clair          |
+| BRIGHT_BLACK          | `#808080`        | Noir clair (gris foncé)   |
+| BRIGHT_RED            | `#FF0000`        | Rouge clair               |
+| BRIGHT_GREEN          | `#00FF00`        | Vert clair                |
+| BRIGHT_YELLOW         | `#FFFF00`        | Jaune clair               |
+| BRIGHT_BLUE           | `#0000FF`        | Bleu clair                |
+| BRIGHT_MAGENTA        | `#FF00FF`        | Magenta clair             |
+| BRIGHT_CYAN           | `#00FFFF`        | Cyan clair                |
+| BRIGHT_WHITE          | `#FFFFFF`        | Blanc                     |
 
 
 #### Caractères UNICODE disponibles :

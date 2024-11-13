@@ -5,12 +5,12 @@ create_logfile() { # Tim Lamour
    # On rewrite par défaut le logfile
    # Si il y a un argument et qu'il vaut "true", on supprime le fichier log s'il existe
    if [[ "$#" -eq 0 || "$1" == "true" ]]; then
-      if [[ -f "log.txt" ]]; then
-         rm "log.txt"
+      if [[ -f "logs.txt" ]]; then
+         rm "logs.txt"
       fi
       # On le crééer si un fichier log n'existe pas
-      touch "log.txt"
-      chmod 644 "log.txt"
+      touch "logs.txt"
+      chmod 644 "logs.txt"
    fi
 }
 
@@ -18,7 +18,7 @@ create_logfile() { # Tim Lamour
 write_in_logfile() { # Tim Lamour
    local deco="------------------------------------------"
    local content="$1"
-   echo -e "$deco $(date '+%Y-%m-%d %H:%M:%S') $deco\n$content\n" >> log.txt
+   echo -e "$deco $(date '+%Y-%m-%d %H:%M:%S') $deco\n$content\n" >> logs.txt
 }
 
 # Calculer le pourcentage entre 2 valeurs

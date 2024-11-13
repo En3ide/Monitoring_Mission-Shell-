@@ -172,6 +172,7 @@ font_color=DARK_RED
 border_color=DARK_BLUE
 font_processus_color=BRIGHT_WHITE
 border_char=unicode_full_block
+overwrite_log=true
 \end{verbatim}
 
 
@@ -196,29 +197,33 @@ On pourrait également effecturer des petits ajouts comme donner la possibilité
         \hline
         \textbf{Nom de la variable} & \textbf{Signification} & \textbf{Valeur par défaut (couleur)} \\
         \hline
-        bg\_color & Couleur de fond de l'interface & DARK\_BLACK \\
+        bg\_color & Couleur de fond de l'interface & BLACK \\
         \hline
-        font\_color & Couleur de la police principale & DARK\_RED \\
+        font\_color & Couleur de la police principale & WHITE \\
         \hline
-        border\_color & Couleur de la bordure & DARK\_BLUE \\
+        border\_color & Couleur de la bordure & MAGENTA \\
         \hline
         font\_processus\_color & Couleur de la police pour les processus affichés & BRIGHT\_WHITE \\
         \hline
-        full\_cpu\_bar\_color & Couleur de la barre de progression CPU (pleine) & DARK\_YELLOW \\
+        full\_cpu\_bar\_color & Couleur de la barre de progression CPU (pleine) & BLUE \\
         \hline
-        full\_gpu\_bar\_color & Couleur de la barre de progression GPU (pleine) & DARK\_GREEN \\
+        full\_core\_bar\_color & Couleur de la barre de progression CPU (pleine) & BRIGHT\_BLUE \\
         \hline
-        full\_memory\_bar\_color & Couleur de la barre de progression mémoire (pleine) & DARK\_MAGENTA \\
+        full\_gpu\_bar\_color & Couleur de la barre de progression coeurs GPU (pleine) & CYAN \\
         \hline
-        full\_disk\_bar\_color & Couleur de la barre de progression disque (pleine) & DARK\_BLUE \\
+        full\_memory\_bar\_color & Couleur de la barre de progression mémoire (pleine) & GREEN \\
         \hline
-        empty\_cpu\_bar\_color & Couleur de la barre de progression CPU (vide) & BRIGHT\_YELLOW \\
+        full\_disk\_bar\_color & Couleur de la barre de progression disque (pleine) & RED \\
         \hline
-        empty\_gpu\_bar\_color & Couleur de la barre de progression GPU (vide) & BRIGHT\_GREEN \\
+        empty\_cpu\_bar\_color & Couleur de la barre de progression CPU (vide) & WHITE \\
         \hline
-        empty\_memory\_bar\_color & Couleur de la barre de progression mémoire (vide) & BRIGHT\_MAGENTA \\
+        empty\_cpu\_bar\_color & Couleur de la barre de progression coeurs CPU (vide) & WHITE \\
         \hline
-        empty\_disk\_bar\_color & Couleur de la barre de progression disque (vide) & BRIGHT\_BLUE \\
+        empty\_gpu\_bar\_color & Couleur de la barre de progression GPU (vide) & WHITE \\
+        \hline
+        empty\_memory\_bar\_color & Couleur de la barre de progression mémoire (vide) & WHITE \\
+        \hline
+        empty\_disk\_bar\_color & Couleur de la barre de progression disque (vide) & WHITE \\
         \hline
     \end{tabular}
     \label{tab:configable_color_var}
@@ -279,21 +284,21 @@ On pourrait également effecturer des petits ajouts comme donner la possibilité
         \hline
         \textbf{Nom de la couleur} & \textbf{Code hexadécimal} & \textbf{Signification} \\
         \hline
-        DARK\_BLACK & \cellcolor[HTML]{000000}\textcolor{white}{\#000000} & Noir foncé \\
+        BLACK & \cellcolor[HTML]{000000}\textcolor{white}{\#000000} & Noir \\
         \hline
-        DARK\_RED & \cellcolor[HTML]{800000}\textcolor{white}{\#800000} & Rouge foncé \\
+        RED & \cellcolor[HTML]{800000}\textcolor{white}{\#800000} & Rouge \\
         \hline
-        DARK\_GREEN & \cellcolor[HTML]{008000}\textcolor{white}{\#008000} & Vert foncé \\
+        GREEN & \cellcolor[HTML]{008000}\textcolor{white}{\#008000} & Vert \\
         \hline
-        DARK\_YELLOW & \cellcolor[HTML]{808000}\textcolor{black}{\#808000} & Jaune foncé \\
+        YELLOW & \cellcolor[HTML]{808000}\textcolor{black}{\#808000} & Jaune \\
         \hline
-        DARK\_BLUE & \cellcolor[HTML]{000080}\textcolor{white}{\#000080} & Bleu foncé \\
+        BLUE & \cellcolor[HTML]{000080}\textcolor{white}{\#000080} & Bleu \\
         \hline
-        DARK\_MAGENTA & \cellcolor[HTML]{800080}\textcolor{white}{\#800080} & Magenta foncé \\
+        MAGENTA & \cellcolor[HTML]{800080}\textcolor{white}{\#800080} & Magenta \\
         \hline
-        DARK\_CYAN & \cellcolor[HTML]{008080}\textcolor{white}{\#008080} & Cyan foncé \\
+        CYAN & \cellcolor[HTML]{008080}\textcolor{white}{\#008080} & Cyan \\
         \hline
-        DARK\_WHITE & \cellcolor[HTML]{C0C0C0}\textcolor{black}{\#C0C0C0} & Blanc/gris foncé \\
+        WHITE & \cellcolor[HTML]{C0C0C0}\textcolor{black}{\#C0C0C0} & Blanc/gris clair \\
         \hline
         BRIGHT\_BLACK & \cellcolor[HTML]{808080}\textcolor{white}{\#808080} & Noir clair (gris foncé) \\
         \hline
@@ -309,37 +314,7 @@ On pourrait également effecturer des petits ajouts comme donner la possibilité
         \hline
         BRIGHT\_CYAN & \cellcolor[HTML]{00FFFF}\textcolor{black}{\#00FFFF} & Cyan clair \\
         \hline
-        BRIGHT\_WHITE & \cellcolor[HTML]{FFFFFF}\textcolor{black}{\#FFFFFF} & Blanc/gris clair \\
-        \hline
-        BRIGHT\_BLACK\_BIS & \cellcolor[HTML]{555555}\textcolor{white}{\#555555} & Noir clair bis \\
-        \hline
-        BRIGHT\_RED\_BIS & \cellcolor[HTML]{FF5555}\textcolor{black}{\#FF5555} & Rouge clair bis \\
-        \hline
-        BRIGHT\_GREEN\_BIS & \cellcolor[HTML]{55FF55}\textcolor{black}{\#55FF55} & Vert clair bis \\
-        \hline
-        BRIGHT\_YELLOW\_BIS & \cellcolor[HTML]{FFFF55}\textcolor{black}{\#FFFF55} & Jaune clair bis \\
-        \hline
-        BRIGHT\_BLUE\_BIS & \cellcolor[HTML]{5555FF}\textcolor{white}{\#5555FF} & Bleu clair bis \\
-        \hline
-        BRIGHT\_MAGENTA\_BIS & \cellcolor[HTML]{FF55FF}\textcolor{black}{\#FF55FF} & Magenta clair bis \\
-        \hline
-        BRIGHT\_CYAN\_BIS & \cellcolor[HTML]{55FFFF}\textcolor{black}{\#55FFFF} & Cyan clair bis \\
-        \hline
-        BRIGHT\_WHITE\_BIS & \cellcolor[HTML]{E5E5E5}\textcolor{black}{\#E5E5E5} & Blanc/gris clair bis \\
-        \hline
-        DARK\_RED\_BIS & \cellcolor[HTML]{800000}\textcolor{white}{\#800000} & Fond rouge foncé \\
-        \hline
-        DARK\_GREEN\_BIS & \cellcolor[HTML]{008000}\textcolor{white}{\#008000} & Fond vert foncé \\
-        \hline
-        DARK\_YELLOW\_BIS & \cellcolor[HTML]{808000}\textcolor{black}{\#808000} & Fond jaune foncé \\
-        \hline
-        DARK\_BLUE\_BIS & \cellcolor[HTML]{000080}\textcolor{white}{\#000080} & Fond bleu foncé \\
-        \hline
-        DARK\_MAGENTA\_BIS & \cellcolor[HTML]{800080}\textcolor{white}{\#800080} & Fond magenta foncé \\
-        \hline
-        DARK\_CYAN\_BIS & \cellcolor[HTML]{008080}\textcolor{white}{\#008080} & Fond cyan foncé \\
-        \hline
-        DARK\_WHITE\_BIS & \cellcolor[HTML]{C0C0C0}\textcolor{black}{\#C0C0C0} & Fond blanc/gris foncé \\
+        BRIGHT\_WHITE & \cellcolor[HTML]{FFFFFF}\textcolor{black}{\#FFFFFF} & Blanc \\
         \hline
     \end{tabular}
     \label{tab:couleur}
