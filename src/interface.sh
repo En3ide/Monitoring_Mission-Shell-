@@ -85,6 +85,10 @@ FONT_BRIGHT_WHITE="\033[97m"
 # Réinitialiser les couleurs
 DEFAULT_COLOR='\033[0m'                 # Réinitialiser les couleurs
 
+# Caractères Unicode random
+unicode_up_row="\u2191"                 # fleche vers le haut
+unicode_down_row="\u2193"               # fleche vers le bas
+
 # Caractères Unicode de type carré
 unicode_full_block="\u2588"             # Bloc complet (Full Block)
 unicode_upper_half_block="\u2580"       # Demi-bloc supérieur (Upper Half Block)
@@ -212,7 +216,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
     local used_memory=$(recup_mem "used" 2>/dev/null)
     if [ -n "$used_memory" ]; then
         # Calcul de la position pour afficher les informations de mémoire
-        x=$(( $1 + (3 * position) ))  # Position en ligne ajustée selon la position
+        x=$(( $1 + ( 3 * position ) ))  # Position en ligne ajustée selon la position
         y="$2"  # Position en colonne reçue en argument
 
         # Incrémenter la position pour la prochaine section
@@ -243,7 +247,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
     local used_gpu=$(recup_gpu "percent" 2>/dev/null)
     if [ -n "$used_gpu" ]; then
         # Calcul de la position pour afficher les informations de GPU
-        x=$(( $1 + (3 * position) ))  # Position en ligne ajustée selon la position actuelle
+        x=$(( $1 + ( 3 * position ) ))  # Position en ligne ajustée selon la position actuelle
         y="$2"  # Position en colonne reçue en argument
 
         # Incrémenter la position pour la prochaine section
@@ -305,7 +309,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
     local used_disk=$(recup_disk "used" 2>/dev/null)
     if [ -n "$used_disk" ]; then
         # Calcul de la position pour afficher les informations de disque
-        x=$(( $1 + (3 * position) ))  # Position en ligne ajustée selon la position actuelle
+        x=$(( $1 + ( 3 * position ) ))  # Position en ligne ajustée selon la position actuelle
         y="$2"  # Position en colonne reçue en argument
 
         # Incrémenter la position pour la prochaine section
@@ -337,7 +341,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
     local used_cpu=$(recup_cpu "cpu" 2>/dev/null)
     if [[ -n "$cpu_name" && -n "$used_cpu" ]]; then
         # Calcul de la position pour afficher les informations de CPU
-        x=$(( $1 + (3 * position) ))  # Position en ligne ajustée selon la position actuelle
+        x=$(( $1 + ( 3 * position ) ))  # Position en ligne ajustée selon la position actuelle
         y="$2"  # Position en colonne reçue en argument
 
         # Incrémenter la position pour la prochaine section
@@ -368,10 +372,10 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
     local used_cpu=$(recup_cpu "cpu1" 2>/dev/null)
     if [[ -n "$used_cpu" && $(tput lines) > 20 ]]; then
         local position_tmp="$position"
-        local fin_bar=$(($3 /2))
+        local fin_bar=$(($3 / 2 ))
         local nb_core=$(recup_nb_core_cpu)
         local espace=1
-        if [[ $(( $1 + (3 * (( $nb_core / 2 ) + $position )))) < $(tput lines) ]]; then
+        if [[ $(( $1 + ( 3 * (( $nb_core / 2 ) + $position )))) < $(tput lines) ]]; then
             local count=0
             for (( j=1; j <= nb_core ; j++ )); do
                 if [[ $j == $((( $nb_core / 2 ) + 1 )) ]]; then
@@ -383,7 +387,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
                 fi
                 used_cpu=$(recup_cpu "cpu$((j))" 2>/dev/null)
                 if [[ -n "$used_cpu" ]]; then
-                    x=$(( $1 + (3 * position) ))  # Position en ligne ajustée selon la position
+                    x=$(( $1 + ( 3 * position ) ))  # Position en ligne ajustée selon la position
 
                     # Incrémenter la position pour la prochaine section
                     position=$(( position + 1 ))
@@ -397,7 +401,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
                     # Concatener dans le contenu à rajouter au logfile si demandé
                     if [ "$logfile_enabled" == 1 ]; then
                         logfile_content="${logfile_content}Core $j : ${percent}% | "
-                        count=$((count + 1))
+                        count=$(( count + 1 ))
                         if [[ "$count" -ge 6 && "$j" -ne "$nb_core" ]]; then
                             logfile_content="${logfile_content}\n             "
                             count=0
@@ -419,9 +423,9 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
     logfile_content="${logfile_content}\n"
     # Net
     local inter_name=$(get_interface_name 2>/dev/null)
-    if [[ -n "$inter_name" && $(tput lines) > $(( $1 + (3 * position) + 9 )) ]]; then
+    if [[ -n "$inter_name" && $(tput lines) > $(( $1 + ( 3 * position ) + 9 )) ]]; then
         # Calcul de la position pour afficher les informations de reseaux
-        x=$(( $1 + (3 * position) ))  # Position en ligne ajustée selon la position actuelle
+        x=$(( $1 + ( 3 * position ) ))  # Position en ligne ajustée selon la position actuelle
         y="$2"  # Position en colonne reçue en argument
 
         # Incrémenter la position pour la prochaine section
@@ -435,7 +439,7 @@ info_reduite() { # Jamel Bailleul & Tim Lamour
         for (( i=1 ; i <= $nb_inter ; i++)); do
             local name=$(echo $inter_name | awk -v var="$variable" '{print var, $1}')
             # Calcul de la position pour afficher les informations de reseaux
-            x=$(( $1 + (3 * position) - 2 ))  # Position en ligne ajustée selon la position actuelle
+            x=$(( $1 + ( 3 * position ) - 2 ))  # Position en ligne ajustée selon la position actuelle
             y="$2"  # Position en colonne reçue en argument
 
             # Incrémenter la position pour la prochaine section
@@ -495,8 +499,8 @@ info_scinder() { # Jamel Bailleul
 
     local max_cols=$(tput cols)
     local max_lines=$(tput lines)
-    local cols_proc=$(($max_cols / 2)) # Moitié des colonnes pour diviser la zone
-    local lines_proc=$(($max_lines / 2)) # Moitié des lignes pour diviser la zone
+    local cols_proc=$(($max_cols / 2 )) # Moitié des colonnes pour diviser la zone
+    local lines_proc=$(($max_lines / 2 )) # Moitié des lignes pour diviser la zone
 
     # Appel de la fonction info_reduite avec les paramètres ajustés
     info_reduite "$cols" "$lines" "$((($max_cols / 2) - 2))" "$logfile_enabled"
