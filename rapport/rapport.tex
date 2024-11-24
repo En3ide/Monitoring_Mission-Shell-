@@ -38,7 +38,7 @@
 % 0. Membres du groupe
 \section{Membres du groupe}
 \begin{itemize}
-    \item \textbf{Tim Lamour} : développement des fonctions de récupération des informations, création, écriture et mise à jour des logs, optimisations, mise en forme du code, documentation et rédaction.
+    \item \textbf{Tim Lamour} : développement des fonctions de récupération des informations, création, écriture et mise à jour des logs, gestion des erreurs lors de la lecture du fichier de configuration, optimisations, mise en forme du code, documentation et rédaction.
     \item \textbf{Jamel Bailleul} : développement du programme principal (interface graphique, affichage responsive, scinder les informations à l'écran..), lecture du fichier de configuration.
 
 \end{itemize}
@@ -153,6 +153,9 @@ Pour exécuter l'outil, vous pouvez utiliser la commande suivante dans le termin
 \subsection{Fichier de configuration}
 Le \textbf{configfile} est un fichier de configuration permettant de définir les couleurs de l'interface, l'intervalle pour l'écriture et la réinitialisation (ou non) du fichier de logs.
   
+Celui-ci est optionnel car le programme a des valeurs par défaut. Il n'est donc pas nécessaire de préciser toutes les variables, vous pouvez uniquement configurer celles qui vous intéresse.
+\vspace{1em}
+  
 Il doit respecter la syntaxe suivante : \texttt{nom\_variable=valeur}, avec une affectation par ligne. Si cette syntaxe n'est pas respectée, le processus ne se lance pas.
 \vspace{1em}
 
@@ -173,6 +176,7 @@ border_color=DARK_BLUE
 font_processus_color=BRIGHT_WHITE
 border_char=unicode_full_block
 overwrite_log=true
+update_log_time=60
 \end{verbatim}
 
 
@@ -183,6 +187,9 @@ et de la manière dont les informations sont récupérées et mises à jour.
 Des possibles améliorations seraient par exemple d'utiliser des processus asynchrones (multi-processing), ou adapter les nombres de colonnes des processus à la taille du terminal.
   
 On pourrait également effecturer des petits ajouts comme donner la possibilité à l'utilisateur de choisir les unités de mesure via le fichier de configuration.
+\vspace{1em}
+  
+Les principales difficultés rencontrés ont été de 
 
 % 7. Annexe
 \newpage
@@ -217,7 +224,7 @@ On pourrait également effecturer des petits ajouts comme donner la possibilité
         \hline
         empty\_cpu\_bar\_color & Couleur de la barre de progression CPU (vide) & WHITE \\
         \hline
-        empty\_cpu\_bar\_color & Couleur de la barre de progression coeurs CPU (vide) & WHITE \\
+        empty\_core\_bar\_color & Couleur de la barre de progression coeurs CPU (vide) & WHITE \\
         \hline
         empty\_gpu\_bar\_color & Couleur de la barre de progression GPU (vide) & WHITE \\
         \hline
@@ -236,7 +243,7 @@ On pourrait également effecturer des petits ajouts comme donner la possibilité
     \centering
     \renewcommand{\arraystretch}{1.5}
     \footnotesize
-    \begin{tabular}{|>{\centering\arraybackslash}m{3cm}|>{\centering\arraybackslash}m{3cm}|>{\centering\arraybackslash}m{3cm}|}
+    \begin{tabular}{|>{\centering\arraybackslash}m{3cm}|>{\centering\arraybackslash}m{3cm}|>{\centering\arraybackslash}m{3.5cm}|}
         \hline
         \textbf{Nom de la variable} & \textbf{Signification} & \textbf{Valeur par défaut (caractère UNICODE)} \\
         \hline
@@ -267,12 +274,14 @@ On pourrait également effecturer des petits ajouts comme donner la possibilité
         \hline
         update\_log\_time & number & Fréquence de mise à jour du fichier de logs en secondes & 60 \\
         \hline
-        overwrite\_log & true ou false & Indique si le fichier de logs \texttt{readconfigfile.txt} doit être écrasé & true \\
+        overwrite\_log & true ou false & Indique si le fichier de logs doit être écrasé & true \\
         \hline
     \end{tabular}
     \label{tab:configable_other_var}
     \caption{Autres variables configurables}
 \end{table}
+
+Il n'est pas recommandé de modifier les valeurs par défaut de  \texttt{minimum\_lines\_width} et \texttt{minimum\_lines\_width} car cela pourrait provoquer des problèmes d'affichage.
 
 \newpage
 \subsection{Couleurs disponibles :}
@@ -280,7 +289,7 @@ On pourrait également effecturer des petits ajouts comme donner la possibilité
     \centering
     \renewcommand{\arraystretch}{1.5}
     \footnotesize
-    \begin{tabular}{|>{\centering\arraybackslash}m{4cm}|>{\centering\arraybackslash}m{3cm}|>{\centering\arraybackslash}m{3cm}|}
+    \begin{tabular}{|>{\centering\arraybackslash}m{3.5cm}|>{\centering\arraybackslash}m{3cm}|>{\centering\arraybackslash}m{3cm}|}
         \hline
         \textbf{Nom de la couleur} & \textbf{Code hexadécimal} & \textbf{Signification} \\
         \hline

@@ -10,7 +10,7 @@ Il permet de surveiller en temps réel les ressources et les perfomances du syst
 - Ouvrir un terminal dans le répertoire du projet.
 
 ## Utilisation 
-1. Utilisez la commande suivante pour lancer l'applicaton : `./main.sh`
+1. Utilisez la commande suivante pour lancer l'applicaton avec les valeurs par défaut : `./main.sh`
 2. Pour lancer le processus avec un [fichier de configuration](#fichier-de-configuration) spécifique, utilisez : `./main.sh config.txt`
 
 ## Fichier de logs
@@ -19,6 +19,8 @@ La réinitialisation lors du lancement du processus et l'intervalle de temps d'�
 
 ## Fichier de configuration
 Le fichier de configuration `config.txt` permet de personnaliser certains aspects graphiques et techniques comme les [couleurs](#couleurs-disponibles-) de l'interface ou l'intervalle d'écriture dans le [fichier de logs](#fichier-de-logs).
+
+L'outil ayant des valeurs par défaut, vous pouvez uniquement configurer les valeurs qui vous intéresse.
 
 Il doit respecter la syntaxe suivante : `nom_variable=valeur`, avec une affectation par ligne. Si cette syntaxe n'est pas respectée, le processus ne se lance pas.  
 La majorité des variables doivent obligatoirement avec une [couleur](#couleurs-disponibles-) ou un [caractère UNICODE](#caractères-unicode-disponibles-) comme valeur parmi celles et ceux disponibles.
@@ -31,6 +33,7 @@ border_color=DARK_BLUE
 font_processus_color=BRIGHT_WHITE
 border_char=unicode_full_block
 overwrite_log=true
+update_log_time=60
 ```
 
 Veuillez vous référer aux tableaux ci-dessous pour consulter les variables possibles ainsi que leurs valeurs.
