@@ -1,6 +1,6 @@
 # Projet Shell - Outil de Monitoring
 
->Ce projet a été réalisé dans le cadre d'un programme universitaire en 3<sup>e</sup> année de licence en informatique.
+>Ce projet a été réalisé par Tim Lamour et Jamel Bailleul dans le cadre d'un programme universitaire en 3<sup>e</sup> année de licence en informatique.
 
 Il s'agit d'un moniteur de système écrit en *Bash*, qui s'exécute dans la console.  
 Il permet de surveiller en temps réel les ressources et les perfomances du système, telles que le processeur (CPU), la carte graphique (GPU), la mémoire (RAM), les disques, le réseau et les processus actifs.

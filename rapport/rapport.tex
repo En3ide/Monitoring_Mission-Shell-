@@ -179,17 +179,19 @@ overwrite_log=true
 update_log_time=60
 \end{verbatim}
 
-
+\newpage
 % 6. Conclusion
 \section{Conclusion}
-Dans l'ensemble, nous sommes assez satisfait du résultat. Cependant, il reste bien évidemment des possibilités d'optimisation, notamment au niveau de l'aspect graphique, qui n'est pas le plus esthétique,
-et de la manière dont les informations sont récupérées et mises à jour. 
-Des possibles améliorations seraient par exemple d'utiliser des processus asynchrones (multi-processing), ou adapter les nombres de colonnes des processus à la taille du terminal.
+Dans l'ensemble, nous sommes assez satisfait du résultat. Cependant, il reste bien évidemment des possibilités d'optimisation, notamment au niveau de l'aspect graphique, qui n'est pas le plus esthétique;
+ou encore la manière dont les informations sont récupérées et mises à jour. 
+Une des pistes serait notamment d'utiliser des processus asynchrones (multi-processing), même si cela ne réglerait pas vraiment le problème de mono-curseur sur la console.
   
-On pourrait également effecturer des petits ajouts comme donner la possibilité à l'utilisateur de choisir les unités de mesure via le fichier de configuration.
+On pourrait également adapter le nombre de colonnes des processus à la taille du terminal ou donner la possibilité à l'utilisateur de personnaliser plus d'aspects de l'outil via le fichier de configuration, comme par exemple les unités de mesures.
 \vspace{1em}
   
-Les principales difficultés rencontrés ont été de 
+Les principales difficultés rencontrées ont été de trouver ou et comment trouver les informations que l'on voulait afficher, il a fallut faire pas mal de recherche notamment dans les fichiers systèmes.
+Il a également était fastidieux de gérer le problème de mono-curseur, notre première version avait plusieurs secondes de latences, il a fallu ainsi optimiser nos algorithmes afin de rendre le tout le plus fluide possible visuellement.
+
 
 % 7. Annexe
 \newpage
